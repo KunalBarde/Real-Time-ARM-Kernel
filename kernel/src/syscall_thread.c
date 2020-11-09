@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include "syscall_thread.h"
 #include "syscall_mutex.h"
+#include "mpu.h"
 
 /** @brief      Initial XPSR value, all 0s except thumb bit. */
 #define XPSR_INIT 0x1000000
@@ -19,10 +20,12 @@
 /** @brief Interrupt return code to kernel mode using MSP.*/
 #define LR_RETURN_TO_KERNEL_MSP 0xFFFFFFF1
 
-/* TCB Buffer Size (14 Threads Max)*/
-#define MAX_THREADS 14
+/* TCB Buffer Size (16 Threads Max)*/
+#define MAX_THREADS 16
+#define BUFFER_SIZE MAX_THREADS+1
+#define WORD_SIZE 4
 #define K_BLOCK_SIZE (sizeof(k_threading_state_t))
-#define TCB_BUFFER_SIZE (sizeof(tcb_t) * (MAX_THREADS+1)) //Avoiding zero indexing
+#define TCB_BUFFER_SIZE (sizeof(tcb_t) * (BUFFER_SIZE)) //Avoiding zero indexing
 
 /**
  * @brief      Heap high and low pointers.
@@ -64,22 +67,34 @@ typedef struct {
   uint32_t xPSR; /** @brief Register value for xPSR */
 } interrupt_stack_frame;
 
-/* Kernel Data Structure */
+/* Kernel Data Structures */
 
 /* Global threading state */
 static volatile char kernel_threading_state[K_BLOCK_SIZE];
 
-/* Initially all threads should be in the wait set where on a PendSV interrupt the scheduler moves threads to running */
-static volatile char kernel_wait_set[MAX_THREADS] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
-static volatile char kernel_ready_set[MAX_THREADS];
-static volatile char kernel_running_set[MAX_THREADS];
-static volatile tcb_t tcb_buffer[TCB_BUFFER_SIZE];
+/* Initially all threads should be in the wait set */
+static volatile char kernel_wait_set[BUFFER_SIZE] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+
+/* Add threads to ready set once sys_thread_create is called */
+static volatile char kernel_ready_set[BUFFER_SIZE];
+
+/* PendSV handler moves threads to running */
+static volatile char kernel_running_set[BUFFER_SIZE];
+
+/* Thread specific state */
+static volatile char tcb_buffer[TCB_BUFFER_SIZE];
+
+/* Static global thread id assignment */
+static volatile int thread_idx = 1;
 
 void systick_c_handler() {
 }
 
 void *pendsv_c_handler(void *context_ptr){
   (void) context_ptr;
+
+  
+
   return NULL;
 }
 
@@ -94,16 +109,29 @@ int sys_thread_init(
   (void) memory_protection; (void) max_mutexes;
   k_threading_state_t *_kernel_state_block;
   
+  /* Check if proposed stack size can fit in kernel/user stack space */
+
+  uint32_t stack_size_bytes = mm_log2ceil_size(stack_size) * WORD_SIZE;
+  uint32_t user_stack_thresh = __thread_u_stacks_low - __thread_u_stacks_top;
+  uint32_t kernel_stack_thresh = __thread_k_stacks_low - __thread_k_stacks_top;
+
+  if(stack_size_bytes > user_stack_thresh || stack_size_bytes > kernel_stack_thresh)
+     return -1; 
+
   /* Initialize kernel data structures for threading */  
  
   _kernel_state_block = (k_threading_state_t *)kernel_threading_state;
   _kernel_state_block->wait_set = (uint8_t *)kernel_wait_set;
   _kernel_state_block->ready_set = (uint8_t *)kernel_ready_set;
   _kernel_state_block->running_set = (uint8_t *)kernel_running_set;
+  _kernel_state_block->sys_tick_ct = 0;
+  _kernel_state_block->stack_size = stack_size;
+  _kernel_state_block->max_threads = max_threads;
+  _kernel_state_block->max_mutexes = max_mutexes;
+  _kernel_state_block->idle_fn = idle_fn;
+  _kernel_state_block->mem_prot = memory_protection;
 
-  /* TODO: Initialize other state, need to look through requirements */   
-   
-  return -1;
+  return 0;
 }
 
 int sys_thread_create(
@@ -114,6 +142,12 @@ int sys_thread_create(
   void *vargp
 ){
   (void) fn; (void) prio; (void) C; (void) T; (void) vargp;
+  tcb_t *base_ptr;
+  (void) base_ptr;
+
+  base_ptr = (tcb_t*)((char *)tcb_buffer+(sizeof(tcb_t)*(thread_idx++)));
+  //TODO: Set TCB entry for particular thread id
+  
   return -1;
 }
 
