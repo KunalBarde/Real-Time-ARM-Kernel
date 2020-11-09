@@ -39,7 +39,7 @@ typedef struct {
   int lr;
   int pc;
 
-  /* TODO: Add more state regarding RMS scheduling algorithm */
+  /* TODO: Add more state for RMS scheduling algorithm */
   uint8_t thread_id;
   uint8_t thread_state;
   uint8_t priority;
@@ -47,9 +47,9 @@ typedef struct {
 
 
 typedef struct {
-  tcb_t *wait_set;
-  tcb_t *ready_set;
-  tcb_t *running_set;
+  uint8_t *wait_set;
+  uint8_t *ready_set;
+  uint8_t *running_set;
   uint32_t sys_tick_ct; //Used for time slicing and scheduling
   uint32_t stack_size; //Stack size per thread
   uint8_t max_threads;

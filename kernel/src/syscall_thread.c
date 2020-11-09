@@ -19,6 +19,11 @@
 /** @brief Interrupt return code to kernel mode using MSP.*/
 #define LR_RETURN_TO_KERNEL_MSP 0xFFFFFFF1
 
+/* TCB Buffer Size (14 Threads Max)*/
+#define MAX_THREADS 14
+#define K_BLOCK_SIZE (sizeof(k_threading_state_t))
+#define TCB_BUFFER_SIZE (sizeof(tcb_t) * (MAX_THREADS+1)) //Avoiding zero indexing
+
 /**
  * @brief      Heap high and low pointers.
  */
@@ -59,6 +64,17 @@ typedef struct {
   uint32_t xPSR; /** @brief Register value for xPSR */
 } interrupt_stack_frame;
 
+/* Kernel Data Structure */
+
+/* Global threading state */
+static volatile char kernel_threading_state[K_BLOCK_SIZE];
+
+/* Initially all threads should be in the wait set where on a PendSV interrupt the scheduler moves threads to running */
+static volatile char kernel_wait_set[MAX_THREADS] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
+static volatile char kernel_ready_set[MAX_THREADS];
+static volatile char kernel_running_set[MAX_THREADS];
+static volatile tcb_t tcb_buffer[TCB_BUFFER_SIZE];
+
 void systick_c_handler() {
 }
 
@@ -76,12 +92,17 @@ int sys_thread_init(
 ){
   (void) max_threads; (void) stack_size; (void) idle_fn;
   (void) memory_protection; (void) max_mutexes;
-
+  k_threading_state_t *_kernel_state_block;
   
   /* Initialize kernel data structures for threading */  
-  /* Initialize global threading state memory block */
-  /* Create max_threads TCB entries in global kernel data structure */
+ 
+  _kernel_state_block = (k_threading_state_t *)kernel_threading_state;
+  _kernel_state_block->wait_set = (uint8_t *)kernel_wait_set;
+  _kernel_state_block->ready_set = (uint8_t *)kernel_ready_set;
+  _kernel_state_block->running_set = (uint8_t *)kernel_running_set;
 
+  /* TODO: Initialize other state, need to look through requirements */   
+   
   return -1;
 }
 
