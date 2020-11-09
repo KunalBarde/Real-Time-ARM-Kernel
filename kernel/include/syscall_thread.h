@@ -19,6 +19,43 @@
  */
 typedef enum { PER_THREAD = 1, KERNEL_ONLY = 0 } protection_mode;
 
+
+typedef struct {
+  char *user_stack_ptr;
+  char *kernel_stack_ptr;
+  int tcb_r0;
+  int tcb_r1;
+  int tcb_r2;
+  int tcb_r3;
+  int tcb_r4;
+  int tcb_r5;
+  int tcb_r6;
+  int tcb_r7;
+  int tcb_r8;
+  int tcb_r9;
+  int tcb_r10;
+  int tcb_r11;
+  int tcb_r12;
+  int lr;
+  int pc;
+
+  /* TODO: Add more state regarding RMS scheduling algorithm */
+  uint8_t thread_id;
+  uint8_t thread_state;
+  uint8_t priority;
+}tcb_t;
+
+
+typedef struct {
+  tcb_t *wait_set;
+  tcb_t *ready_set;
+  tcb_t *running_set;
+  uint32_t sys_tick_ct; //Used for time slicing and scheduling
+  uint32_t stack_size; //Stack size per thread
+  uint8_t max_threads;
+
+}k_threading_state_t;
+
 /**
  * @brief      The SysTick interrupt handler.
  */

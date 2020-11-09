@@ -76,6 +76,12 @@ int sys_thread_init(
 ){
   (void) max_threads; (void) stack_size; (void) idle_fn;
   (void) memory_protection; (void) max_mutexes;
+
+  
+  /* Initialize kernel data structures for threading */  
+  /* Initialize global threading state memory block */
+  /* Create max_threads TCB entries in global kernel data structure */
+
   return -1;
 }
 
