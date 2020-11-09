@@ -1,26 +1,89 @@
-/**
- * @file
- *
- * @brief
- *
- * @date
- *
- * @author
- */
-
-#include "led_driver.h"
+#include <i2c.h>
+#include <led_driver.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 uint8_t hex_to_seven_segment(uint8_t hex);
 
-void led_driver_init(uint32_t addr) {
-  (void) addr;
+/** @brief Initialize led driver ic and initialize i2c as necessary.*/
+void led_driver_init(){
+  i2c_master_init(APBCLK_FREQ_CONFIG);
+  
+  uint8_t buf[17] = {0};
+  buf[0] = CMD_SYSSETUP;
+ 
+  //System setup and turn on oscillator
+  i2c_master_start();
+  i2c_master_write(buf, 1, HTK_ADDR);
+  i2c_master_stop();
+
+  buf[0] = CMD_DISSETUP;
+  
+  //Display setup
+  i2c_master_start();
+  i2c_master_write(buf, 1, HTK_ADDR);
+  i2c_master_stop();
+  
+  buf[0] = CMD_FULLDIM;
+ 
+  //Set to full brightness
+  i2c_master_start();
+  i2c_master_write(buf, 1, HTK_ADDR);
+  i2c_master_stop();
+ 
+  buf[0] = 0;
+ 
+  //Clear RAM
+  i2c_master_start();
+  i2c_master_write(buf, 17, HTK_ADDR);
+  i2c_master_stop();  
+ 
+  return;
 }
 
-
+/** @brief Set led display to a 16B hex value.*/
 void led_set_display(uint32_t input){
-  (void) input;
+  uint8_t buf[2] = {0};
+
+  buf[0] = 0x08;
+  buf[1] = hex_to_seven_segment(input & 0xF);
+  input = input >> 4;
+
+  i2c_master_start();
+  i2c_master_write(buf, 2, HTK_ADDR);
+  i2c_master_stop();
+
+  buf[0] = 0x06;
+  buf[1] = hex_to_seven_segment(input & 0xF);
+  input = input >> 4;
+
+
+  i2c_master_start();
+  i2c_master_write(buf, 2, HTK_ADDR);
+  i2c_master_stop();
+  
+  buf[0] = 0x02;
+  buf[1] = hex_to_seven_segment(input & 0xF);
+  input = input >> 4;
+
+
+  i2c_master_start();
+  i2c_master_write(buf, 2, HTK_ADDR);
+  i2c_master_stop();
+
+  buf[0] = 0x00;
+  buf[1] = hex_to_seven_segment(input & 0xF);
+
+  i2c_master_start();
+  i2c_master_write(buf, 2, HTK_ADDR);
+  i2c_master_stop();
+
+  return;
 }
 
+/** @brief Converts a hex value into the correct byte value to write to the led ic.
+    @param hex Value to be converted. */
 uint8_t hex_to_seven_segment(uint8_t hex){
   uint8_t result;
   switch (hex){
