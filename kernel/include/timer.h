@@ -10,6 +10,7 @@
 
 #ifndef _TIMER_H_
 #define _TIMER_H_
+#define CPU_CLK_FREQ 0XF42400
 #define SYS_TICK_BASE 0xE000E010
 #define COUNTER 1
 #define PROC_CLK (1 << 2)

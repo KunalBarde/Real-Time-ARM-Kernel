@@ -10,6 +10,5 @@ var searchData=
   ['stk_5fcalib',['stk_calib',['../structsys__tick__reg__map.html#acac1a4d4bd34b7114db8746c82e19be9',1,'sys_tick_reg_map']]],
   ['stk_5fctrl',['stk_ctrl',['../structsys__tick__reg__map.html#a8c6da5bc39020c41784c6444ec348f07',1,'sys_tick_reg_map']]],
   ['stk_5fload',['stk_load',['../structsys__tick__reg__map.html#aa4e08ecf9d937e5ee6613d91c413aadd',1,'sys_tick_reg_map']]],
-  ['stk_5fval',['stk_val',['../structsys__tick__reg__map.html#ade3aca02e1cbc2a4b7fe188c2f9df6f2',1,'sys_tick_reg_map']]],
-  ['sys_5fticks',['sys_ticks',['../timer_8c.html#a82ab3f608158ee2f51e449791e582412',1,'timer.c']]]
+  ['stk_5fval',['stk_val',['../structsys__tick__reg__map.html#ade3aca02e1cbc2a4b7fe188c2f9df6f2',1,'sys_tick_reg_map']]]
 ];

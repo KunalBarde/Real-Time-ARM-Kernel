@@ -1,16 +1,18 @@
 /** @file   syscall_thread.c
  *
- *  @brief  
+ *  @brief	System calls used for multithreading purposes.   
  *
  *  @date   
  *
- *  @author 
+ *  @author	Kunal Barde, Nick Toldalagi
  */
 
 #include <stdint.h>
 #include "syscall_thread.h"
 #include "syscall_mutex.h"
 #include "mpu.h"
+#include <timer.h>
+#include <arm.h>
 
 /** @brief      Initial XPSR value, all 0s except thumb bit. */
 #define XPSR_INIT 0x1000000
@@ -29,7 +31,7 @@
 #define I_THREAD_IDX 0 //Idle thread index into kernel buffers
 #define D_THREAD_IDX 1 //Default thread index into kernel buffers
 #define I_THREAD_PRIOR 15 //Lowest priority initially 
-#define WAITING 0
+#define WAITING 0 /**< Waiting state for a thread*/
 #define RUNNABLE 1
 #define RUNNING 2
 
@@ -83,16 +85,18 @@ static volatile char kernel_threading_state[K_BLOCK_SIZE];
 static volatile char kernel_wait_set[BUFFER_SIZE] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
 /* Add threads to ready set once sys_thread_create is called */
-static volatile char kernel_ready_set[BUFFER_SIZE];
+static volatile char kernel_ready_set[BUFFER_SIZE] = {0};
 
 /* PendSV handler moves threads to running */
-static volatile char kernel_running_set[BUFFER_SIZE];
+static volatile char kernel_running_set[BUFFER_SIZE] = {0};
 
 /* Thread specific state */
 static volatile tcb_t tcb_buffer[BUFFER_SIZE];
 
 /* Static global thread id assignment */
 static volatile int thread_idx = 0;
+
+uint32_t *icsr_reg = (uint32_t *)ICSR_ADDR;
 
 /**
 * @brief	Handler called in occassion of sys-tick interrupt
@@ -101,12 +105,17 @@ void systick_c_handler() {
   k_threading_state_t *_kernel_state_block = (k_threading_state_t *)kernel_threading_state;
 
   _kernel_state_block->sys_tick_ct++;
+
+  //Set PendSV to pending
+  pend_pendsv();
+
   return;
 
 }
 
 void *pendsv_c_handler(void *context_ptr){
-  (void) context_ptr;
+  thread_stack_frame *s = (thread_stack_frame *)context_ptr;
+  (void)s;
 
   return NULL;
 }
@@ -128,6 +137,7 @@ int sys_thread_init(
   
   /* Check if proposed stack size can fit in kernel/user stack space */
   uint32_t stack_size_bytes = (1<<(mm_log2ceil_size(stack_size*WORD_SIZE)));
+
   uint32_t user_stack_thresh = (uint32_t)(&__thread_u_stacks_low) - (uint32_t)(&__thread_u_stacks_top);
 
   uint32_t kernel_stack_thresh = (uint32_t)(&__thread_k_stacks_low) - (uint32_t)(&__thread_k_stacks_top);
@@ -231,8 +241,12 @@ int sys_thread_create(
 }
 
 int sys_scheduler_start( uint32_t frequency ){
-  (void) frequency;
-  return -1;
+  uint32_t timer_period = CPU_CLK_FREQ/frequency;
+  timer_start(timer_period);
+
+  pend_pendsv();
+  
+  return 0;
 }
 
 uint32_t sys_get_priority(){

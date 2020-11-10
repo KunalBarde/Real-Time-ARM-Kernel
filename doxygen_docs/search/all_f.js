@@ -24,9 +24,9 @@ var searchData=
   ['sys_5fservo_5fenable',['sys_servo_enable',['../servok_8c.html#a9d36b278ab88d4e5a32f7da0ac9d954d',1,'servok.c']]],
   ['sys_5fservo_5fset',['sys_servo_set',['../servok_8c.html#aab0a71094fd2dda9f507eaac8fd7c3af',1,'servok.c']]],
   ['sys_5ftick_5freg_5fmap',['sys_tick_reg_map',['../structsys__tick__reg__map.html',1,'']]],
-  ['sys_5fticks',['sys_ticks',['../timer_8c.html#a82ab3f608158ee2f51e449791e582412',1,'timer.c']]],
   ['sys_5fwrite',['sys_write',['../syscall_8c.html#a3577e240851e777f18919f91ba5d3a44',1,'syscall.c']]],
   ['syscall_2ec',['syscall.c',['../syscall_8c.html',1,'']]],
   ['syscall_5fthread_2ec',['syscall_thread.c',['../syscall__thread_8c.html',1,'']]],
-  ['system_5fcontrol_5fblock_5ft',['system_control_block_t',['../structsystem__control__block__t.html',1,'']]]
+  ['system_5fcontrol_5fblock_5ft',['system_control_block_t',['../structsystem__control__block__t.html',1,'']]],
+  ['systick_5fc_5fhandler',['systick_c_handler',['../syscall__thread_8c.html#abc96a6564aa346ba124293a6604a0427',1,'syscall_thread.c']]]
 ];

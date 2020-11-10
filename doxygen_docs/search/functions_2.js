@@ -6,5 +6,6 @@ var searchData=
   ['sys_5fsbrk',['sys_sbrk',['../syscall_8c.html#a6bfcf212a3d9602a29db52f5b87da6f8',1,'syscall.c']]],
   ['sys_5fservo_5fenable',['sys_servo_enable',['../servok_8c.html#a9d36b278ab88d4e5a32f7da0ac9d954d',1,'servok.c']]],
   ['sys_5fservo_5fset',['sys_servo_set',['../servok_8c.html#aab0a71094fd2dda9f507eaac8fd7c3af',1,'servok.c']]],
-  ['sys_5fwrite',['sys_write',['../syscall_8c.html#a3577e240851e777f18919f91ba5d3a44',1,'syscall.c']]]
+  ['sys_5fwrite',['sys_write',['../syscall_8c.html#a3577e240851e777f18919f91ba5d3a44',1,'syscall.c']]],
+  ['systick_5fc_5fhandler',['systick_c_handler',['../syscall__thread_8c.html#abc96a6564aa346ba124293a6604a0427',1,'syscall_thread.c']]]
 ];

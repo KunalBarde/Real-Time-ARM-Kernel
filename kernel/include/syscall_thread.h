@@ -13,6 +13,10 @@
 
 #include <unistd.h>
 
+#define ICSR_ADDR 0xE000ED04
+#define PENDSVSET (1 << 28)
+#define PENDSVCLR (1 << 27)
+
 /**
  * @enum protection_mode
  *
@@ -20,8 +24,11 @@
  */
 typedef enum { PER_THREAD = 1, KERNEL_ONLY = 0 } protection_mode;
 
+/**
+ * @struct	Thread control block struct. 	
+ */
 typedef struct {
-  uint32_t user_stack_ptr;
+  uint32_t user_stack_ptr; /**< User stack pointer */
   uint32_t kernel_stack_ptr;
   uint32_t priority;
   uint32_t C;
@@ -34,6 +41,20 @@ typedef struct {
 }tcb_t;
 
 typedef struct {
+  uint32_t r14;
+  uint32_t psp;
+  uint32_t r11;
+  uint32_t r10;
+  uint32_t r9;
+  uint32_t r8;
+  uint32_t r7;
+  uint32_t r6;
+  uint32_t r5;
+  uint32_t r4;
+}thread_stack_frame;
+
+/*
+typedef struct {
   uint32_t psp;
   uint32_t r4;
   uint32_t r5;
@@ -44,7 +65,7 @@ typedef struct {
   uint32_t r10;
   uint32_t r11;
   uint32_t r14;
-}thread_stack_frame;
+}thread_stack_frame;*/
 
 typedef struct {
   uint8_t *wait_set;

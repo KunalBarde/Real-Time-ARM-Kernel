@@ -14,6 +14,7 @@
 #include <debug.h>
 #include <printk.h>
 #include <syscall.h>
+#include <syscall_thread.h>
 #include <svc_num.h>
 
 /** Used for designating non-implemented portions of code for the compiler. */
@@ -88,7 +89,7 @@ void svc_c_handler(void *psp, int arg1, int arg2) {
       out = -1;
       break;
     case SVC_SCHD_START:
-      out = -1;
+      out = sys_scheduler_start(s->r0);
       break;
     case SVC_MUT_INIT:
       out = -1;
@@ -100,13 +101,13 @@ void svc_c_handler(void *psp, int arg1, int arg2) {
     case SVC_WAIT:
       break;
     case SVC_TIME: 
-      out = 0;
+      out = sys_get_time();
       break;
     case SVC_PRIORITY:
-      out = 0;
+      out = sys_get_priority();
       break;
     case SVC_THR_TIME:
-      out = 0;
+      out = sys_thread_time();
       break;
     case SVC_SERVO_ENABLE:
       out = sys_servo_enable((uint8_t)arg1, (unsigned char)arg2);

@@ -1,26 +1,33 @@
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:59: warning: Compound interrupt_stack_frame is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:66: warning: Compound interrupt_stack_frame is not documented.
 /home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/kmalloc.c:54: warning: argument 'kmalloc_t' of command @param is not found in the argument list of k_malloc_unaligned(UNUSED kmalloc_t *internals, UNUSED uint32_t size)
 /home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/kmalloc.c:63: warning: The following parameters of k_malloc_unaligned(UNUSED kmalloc_t *internals, UNUSED uint32_t size) are not documented:
   parameter 'internals'
 /home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/mpu.c:17: warning: Member UNUSED (macro definition) of file mpu.c is not documented.
 /home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/mpu.c:116: warning: Member mm_c_handler(void *psp) (function) of file mpu.c is not documented.
 /home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/servok.c:16: warning: Member UNUSED (macro definition) of file servok.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:24: warning: Member MAX_THREADS (macro definition) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:23: warning: Member MAX_TOTAL_THREADS (macro definition) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:24: warning: Member MAX_U_THREADS (macro definition) of file syscall_thread.c is not documented.
 /home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:25: warning: Member BUFFER_SIZE (macro definition) of file syscall_thread.c is not documented.
 /home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:26: warning: Member WORD_SIZE (macro definition) of file syscall_thread.c is not documented.
 /home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:27: warning: Member K_BLOCK_SIZE (macro definition) of file syscall_thread.c is not documented.
 /home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:28: warning: Member TCB_BUFFER_SIZE (macro definition) of file syscall_thread.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:90: warning: Member systick_c_handler() (function) of file syscall_thread.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:93: warning: Member pendsv_c_handler(void *context_ptr) (function) of file syscall_thread.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:101: warning: Member sys_thread_init(uint32_t max_threads, uint32_t stack_size, void *idle_fn, protection_mode memory_protection, uint32_t max_mutexes) (function) of file syscall_thread.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:137: warning: Member sys_thread_create(void *fn, uint32_t prio, uint32_t C, uint32_t T, void *vargp) (function) of file syscall_thread.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:154: warning: Member sys_scheduler_start(uint32_t frequency) (function) of file syscall_thread.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:159: warning: Member sys_get_priority() (function) of file syscall_thread.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:163: warning: Member sys_get_time() (function) of file syscall_thread.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:167: warning: Member sys_thread_time() (function) of file syscall_thread.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:171: warning: Member sys_thread_kill() (function) of file syscall_thread.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:174: warning: Member sys_wait_until_next_period() (function) of file syscall_thread.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:177: warning: Member sys_mutex_init(uint32_t max_prio) (function) of file syscall_thread.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:182: warning: Member sys_mutex_lock(kmutex_t *mutex) (function) of file syscall_thread.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:186: warning: Member sys_mutex_unlock(kmutex_t *mutex) (function) of file syscall_thread.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:60: warning: Member r0 (variable) of class interrupt_stack_frame is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:29: warning: Member I_THREAD_IDX (macro definition) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:30: warning: Member D_THREAD_IDX (macro definition) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:31: warning: Member I_THREAD_PRIOR (macro definition) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:32: warning: Member WAITING (macro definition) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:33: warning: Member RUNNABLE (macro definition) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:34: warning: Member RUNNING (macro definition) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:108: warning: Member pendsv_c_handler(void *context_ptr) (function) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:114: warning: Member sys_thread_init(uint32_t max_threads, uint32_t stack_size, void *idle_fn, protection_mode memory_protection, uint32_t max_mutexes) (function) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:184: warning: Member thread_kill(void) (function) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:186: warning: Member sys_thread_create(void *fn, uint32_t prio, uint32_t C, uint32_t T, void *vargp) (function) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:233: warning: Member sys_scheduler_start(uint32_t frequency) (function) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:238: warning: Member sys_get_priority() (function) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:242: warning: Member sys_get_time() (function) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:246: warning: Member sys_thread_time() (function) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:250: warning: Member sys_thread_kill() (function) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:253: warning: Member sys_wait_until_next_period() (function) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:256: warning: Member sys_mutex_init(uint32_t max_prio) (function) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:261: warning: Member sys_mutex_lock(kmutex_t *mutex) (function) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:265: warning: Member sys_mutex_unlock(kmutex_t *mutex) (function) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:67: warning: Member r0 (variable) of class interrupt_stack_frame is not documented.

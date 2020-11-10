@@ -35,7 +35,6 @@ int kernel_main( void ) {
   init_349(); // DO NOT REMOVE THIS LINE
   uart_init(UART_BAUD);
   led_driver_init();
-  //timer_start(SERVO_BAUD);
   enter_user_mode();
   /* kernel main loop */
   return 0;
