@@ -1,4 +1,5 @@
 /** @file syscall_thread.h
+
  *
  *  @brief  Custom syscalls to support thread library.
  *
@@ -18,7 +19,6 @@
  * @brief      Enums for protection mode, PER_THREAD and KERNEL_ONLY.
  */
 typedef enum { PER_THREAD = 1, KERNEL_ONLY = 0 } protection_mode;
-
 
 typedef struct {
   uint32_t user_stack_ptr;

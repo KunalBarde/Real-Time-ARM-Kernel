@@ -44,7 +44,8 @@ static volatile char transmit_buffer[BUFFER_SIZE];
 
 * @ param	The baud at which to initialize UART. 
 */
-void uart_init( int baud){
+void uart_init(UNUSED int baud){
+    
     //Init PA_2 UART_2 TX
     gpio_init(GPIO_A, 2, MODE_ALT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT7);
 

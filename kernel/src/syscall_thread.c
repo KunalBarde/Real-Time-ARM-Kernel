@@ -98,8 +98,9 @@ static volatile int thread_idx = 0;
 * @brief	Handler called in occassion of sys-tick interrupt
 */
 void systick_c_handler() {
-  k_threading_state_t *_kernel_state_block;
-  kernel_state_block->sys_tick_ct++;
+  k_threading_state_t *_kernel_state_block = (k_threading_state_t *)kernel_threading_state;
+
+  _kernel_state_block->sys_tick_ct++;
   return;
 
 }
@@ -153,7 +154,7 @@ int sys_thread_init(
   uint32_t kernel_stack_brk = (uint32_t)&__thread_k_stacks_top;
   
   /* Divide Up User & Kernel Space Stacks For User Threads */
-  for(int i = 0; i < max_threads; i++) {
+  for(size_t i = 0; i < max_threads; i++) {
      tcb_buffer[i].user_stack_ptr = user_stack_brk;
      user_stack_brk = user_stack_brk - stack_size_bytes;
      tcb_buffer[i].kernel_stack_ptr = kernel_stack_brk;
@@ -173,9 +174,14 @@ int sys_thread_init(
   tcb_buffer[D_THREAD_IDX].thread_state = RUNNABLE;
   tcb_buffer[D_THREAD_IDX].svc_state = 0;
   tcb_buffer[D_THREAD_IDX].U = 0;
-  sys_thread_create(fn, I_THREAD_PRIOR, 0, 1, NULL);
+
+  /* Move idle thread to runnable*/
+  sys_thread_create(idle_fn, I_THREAD_PRIOR, 0, 1, NULL);
+
   return 0;
 }
+
+extern void thread_kill(void);
 
 int sys_thread_create(
   void *fn,
@@ -186,11 +192,12 @@ int sys_thread_create(
 ){
   (void) fn; (void) prio; (void) C; (void) T; (void) vargp;
    
-  extern void thread_kill(void);
+//  extern void thread_kill(void);
+
   uint32_t user_stack_ptr = tcb_buffer[prio].user_stack_ptr - sizeof(interrupt_stack_frame);
   interrupt_stack_frame *interrupt_frame = (interrupt_stack_frame *)user_stack_ptr;
 
-  uint32_t kernel_stack_ptr = tcb_buffer[prio].kernel_stack_ptr = sizeof(thread_stack_frame);
+  uint32_t kernel_stack_ptr = tcb_buffer[prio].kernel_stack_ptr - sizeof(thread_stack_frame);
   thread_stack_frame *thread_frame = (thread_stack_frame *)kernel_stack_ptr;
   
   interrupt_frame->r0 = (unsigned int)vargp;
@@ -198,21 +205,21 @@ int sys_thread_create(
   interrupt_frame->r2 = 0;
   interrupt_frame->r3 = 0;
   interrupt_frame->r12 = 0;
-  interrupt_frame->lr = (unsigned int)&thread_kill;
+//  interrupt_frame->lr = (unsigned int)&thread_kill;
   interrupt_frame->pc = (uint32_t)fn;
-  interrupt_frame->XPSR = XPSR_INIT;
+  interrupt_frame->xPSR = XPSR_INIT;
 
   tcb_buffer[prio].user_stack_ptr = user_stack_ptr;
   
-  thread_stack_frame->r4 = 0;
-  thread_stack_frame->r5 = 0;
-  thread_stack_frame->r6 = 0;
-  thread_stack_frame->r7 = 0;
-  thread_stack_frame->r8 = 0;
-  thread_stack_frame->r9 = 0;
-  thread_stack_frame->r10 = 0;
-  thread_stack_frame->r11 = 0;
-  thread_stack_frame->r14 = LR_RETURN_TO_USER_PSP;
+  thread_frame->r4 = 0;
+  thread_frame->r5 = 0;
+  thread_frame->r6 = 0;
+  thread_frame->r7 = 0;
+  thread_frame->r8 = 0;
+  thread_frame->r9 = 0;
+  thread_frame->r10 = 0;
+  thread_frame->r11 = 0;
+  thread_frame->r14 = LR_RETURN_TO_USER_PSP;
 
   /* Mark thread as runnable */
   kernel_ready_set[prio] = RUNNABLE;
