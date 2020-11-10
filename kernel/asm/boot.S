@@ -131,13 +131,13 @@ _pend_sv_ :
   stmdb r0!, {r4-r11}
   stmdb r0!, {r1}
   stmdb r0!, {lr}
-  b pendsv_c_handler
+  bl pendsv_c_handler
   stmdb r0!, {lr}
   ldmia r0!, {r1}
   ldmia r0!, {r4-r11}
   msr psp, r1
   msr msp, r0 
-   
+  bx lr
   bkpt
 
 .thumb_func

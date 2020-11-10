@@ -88,7 +88,7 @@ static volatile char kernel_wait_set[BUFFER_SIZE] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 
 static volatile char kernel_ready_set[BUFFER_SIZE] = {0};
 
 /* PendSV handler moves threads to running */
-static volatile char kernel_running_set[BUFFER_SIZE] = {0};
+//static volatile char kernel_running_set[BUFFER_SIZE] = {0};
 
 /* Thread specific state */
 static volatile tcb_t tcb_buffer[BUFFER_SIZE];
@@ -113,9 +113,23 @@ void systick_c_handler() {
 
 }
 
-void *pendsv_c_handler(void *context_ptr){
-  thread_stack_frame *s = (thread_stack_frame *)context_ptr;
-  (void)s;
+void *round_robin() {
+  _kernel_state_block = (k_threading_state_t *)kernel_threading_state;
+
+  int8_t running = _kernel_state_block->running_thread;
+  int8_t tries = 0;
+  do {
+    tries++;
+    running = (running == 
+    if(tries == MAX_U_THREADS) { //Nothing to run, return to default
+      
+    } 
+  } while ( );
+}
+
+void *pendsv_c_handler(void *context_ptr) {
+  thread_stack_frame *context = (thread_stack_frame *)context_ptr;
+  context = round_robin();
 
   return NULL;
 }
@@ -152,7 +166,8 @@ int sys_thread_init(
   _kernel_state_block = (k_threading_state_t *)kernel_threading_state;
   _kernel_state_block->wait_set = (uint8_t *)kernel_wait_set;
   _kernel_state_block->ready_set = (uint8_t *)kernel_ready_set;
-  _kernel_state_block->running_set = (uint8_t *)kernel_running_set;
+  //_kernel_state_block->running_set = (uint8_t *)kernel_running_set; 
+  _kernel_state_block->running_thread = -1;
   _kernel_state_block->sys_tick_ct = 0;
   _kernel_state_block->stack_size = stack_size;
   _kernel_state_block->max_threads = max_threads;

@@ -70,7 +70,7 @@ typedef struct {
 typedef struct {
   uint8_t *wait_set;
   uint8_t *ready_set;
-  uint8_t *running_set;
+  int8_t running_thread;
   uint32_t sys_tick_ct; //Used for time slicing and scheduling
   uint32_t stack_size; //Stack size per thread
   uint32_t u_thread_ct;
