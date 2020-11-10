@@ -21,35 +21,30 @@ typedef enum { PER_THREAD = 1, KERNEL_ONLY = 0 } protection_mode;
 
 
 typedef struct {
-  char *user_stack_ptr;
-  char *kernel_stack_ptr;
-  void *fn;
-  void *vargp;
-  int tcb_r0;
-  int tcb_r1;
-  int tcb_r2;
-  int tcb_r3;
-  int tcb_r4;
-  int tcb_r5;
-  int tcb_r6;
-  int tcb_r7;
-  int tcb_r8;
-  int tcb_r9;
-  int tcb_r10;
-  int tcb_r11;
-  int tcb_r12;
-  int lr;
-  int pc;
-
-
-  /* TODO: Add more state for RMS scheduling algorithm */
+  uint32_t user_stack_ptr;
+  uint32_t kernel_stack_ptr;
   uint32_t priority;
   uint32_t C;
   uint32_t T;
+  uint32_t duration;
+  uint32_t period_ct;
+  float U;
+  uint32_t svc_state;
   uint8_t thread_state;
-
 }tcb_t;
 
+typedef struct {
+  uint32_t psp;
+  uint32_t r4;
+  uint32_t r5;
+  uint32_t r6;
+  uint32_t r7;
+  uint32_t r8;
+  uint32_t r9;
+  uint32_t r10;
+  uint32_t r11;
+  uint32_t r14;
+}thread_stack_frame;
 
 typedef struct {
   uint8_t *wait_set;
@@ -57,9 +52,9 @@ typedef struct {
   uint8_t *running_set;
   uint32_t sys_tick_ct; //Used for time slicing and scheduling
   uint32_t stack_size; //Stack size per thread
+  uint32_t u_thread_ct;
   uint32_t max_threads;
   uint32_t max_mutexes;
-  void *idle_fn;
   protection_mode mem_prot;
 }k_threading_state_t;
 
