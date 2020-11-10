@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include "syscall_thread.h"
 #include "syscall_mutex.h"
+#include "syscall.h"
 #include "mpu.h"
 #include <timer.h>
 #include <arm.h>
@@ -32,9 +33,10 @@
 #define D_THREAD_IDX 1 //Default thread index into kernel buffers
 #define I_THREAD_PRIOR 14 //Lowest priority initially 
 #define D_THREAD_PRIOR 15 //Not really lowest priority, not a normal thread
-#define WAITING 0 /**< Waiting state for a thread*/
-#define RUNNABLE 1
-#define RUNNING 2
+#define INIT 0
+#define WAITING 1 /**< Waiting state for a thread*/
+#define RUNNABLE 2
+#define RUNNING 3
 
 
 /**
@@ -99,6 +101,18 @@ static volatile int thread_idx = 0;
 
 uint32_t *icsr_reg = (uint32_t *)ICSR_ADDR;
 
+int ub_test(float T, float C) {
+   k_threading_state_t *kcb = (k_threading_state_t *)kernel_threading_state;
+   float u_tot = C/T;
+   for(int i = 0; i < MAX_U_THREADS; i++) {
+      if(tcb_buffer[i].thread_state != INIT) {
+         u_tot += tcb_buffer[i].U;
+      }
+   }
+   if(u_tot <= ub_table[kcb->u_thread_ct+1]) return -1;
+   return 0;
+}
+
 /**
 * @brief	Handler called in occassion of sys-tick interrupt
 */
@@ -106,10 +120,27 @@ void systick_c_handler() {
   k_threading_state_t *_kernel_state_block = (k_threading_state_t *)kernel_threading_state;
 
   _kernel_state_block->sys_tick_ct++;
+  uint8_t curr_thread = _kernel_state_block->running_thread;
+  tcb_buffer[curr_thread].duration++;
+  
+  if(tcb_buffer[curr_thread].duration >= tcb_buffer[curr_thread].C) {
+    tcb_buffer[curr_thread].thread_state = WAITING;
+  }
 
+  for(int i = 0; i < MAX_U_THREADS; i++) {
+    if(tcb_buffer[i].thread_state != INIT) {
+       tcb_buffer[i].period_ct++;
+       if(tcb_buffer[i].period_ct >= tcb_buffer[i].T) {
+          tcb_buffer[i].period_ct = 0;
+          tcb_buffer[i].duration = 0;
+          tcb_buffer[i].thread_state = RUNNABLE;
+       }
+    }
+
+  }
+   
   //Set PendSV to pending
   pend_pendsv();
-
   return;
 
 }
@@ -185,9 +216,9 @@ int sys_thread_init(
   /* Check if proposed stack size can fit in kernel/user stack space */
   uint32_t stack_size_bytes = (1<<(mm_log2ceil_size(stack_size*WORD_SIZE)));
 
-  uint32_t user_stack_thresh = (uint32_t)(&__thread_u_stacks_low) - (uint32_t)(&__thread_u_stacks_top);
+  uint32_t user_stack_thresh = (uint32_t)(&__thread_u_stacks_top) - (uint32_t)(&__thread_u_stacks_low);
 
-  uint32_t kernel_stack_thresh = (uint32_t)(&__thread_k_stacks_low) - (uint32_t)(&__thread_k_stacks_top);
+  uint32_t kernel_stack_thresh = (uint32_t)(&__thread_k_stacks_top) - (uint32_t)(&__thread_k_stacks_low);
   
   uint32_t stack_consumption = (max_threads+1)*stack_size_bytes;
   
@@ -217,7 +248,7 @@ int sys_thread_init(
      user_stack_brk = user_stack_brk - stack_size_bytes;
      tcb_buffer[i].kernel_stack_ptr = kernel_stack_brk;
      kernel_stack_brk = kernel_stack_brk - stack_size_bytes;
-     tcb_buffer[i].thread_state = WAITING;
+     tcb_buffer[i].thread_state = INIT;
      tcb_buffer[i].svc_state = 0;
      tcb_buffer[i].U = 0;
   }
@@ -234,8 +265,11 @@ int sys_thread_init(
   tcb_buffer[D_THREAD_IDX].U = 0;
 
   /* Move idle thread to runnable*/
+  if(idle_fn == NULL) {
+    sys_thread_create(wait_for_interrupt, I_THREAD_PRIOR, 0, 1, NULL);
+    return 0;
+  }
   sys_thread_create(idle_fn, I_THREAD_PRIOR, 0, 1, NULL);
-
   return 0;
 }
 
@@ -333,13 +367,31 @@ uint32_t sys_get_time(){
 }
 
 uint32_t sys_thread_time(){
-  return 0U;
+  k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
+  return tcb_buffer[ksb->running_thread].duration;
 }
 
 void sys_thread_kill(){
+  k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
+  if(ksb->running_thread == I_THREAD_IDX) {
+    tcb_buffer[I_THREAD_IDX].thread_state = INIT;
+    sys_thread_create(wait_for_interrupt, I_THREAD_PRIOR, 0, 1, NULL);
+  }
+
+  if(ksb->running_thread == D_THREAD_IDX) {
+    sys_exit(0);
+    return;
+  }
+  tcb_buffer[ksb->running_thread].thread_state = INIT;
+  if(ksb->running_thread != I_THREAD_IDX) ksb->u_thread_ct++;
+  pend_pendsv();
+  return;
 }
 
 void sys_wait_until_next_period(){
+  k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
+  tcb_buffer[ksb->running_thread].thread_state = WAITING;
+  return;
 }
 
 kmutex_t *sys_mutex_init( uint32_t max_prio ) {
