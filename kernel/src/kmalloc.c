@@ -27,6 +27,7 @@
 #include <debug.h>
 #include <unistd.h>
 
+/** Used for designating non-implemented portions of code for the compiler. */
 #define UNUSED __attribute__((unused))
 
 /**
@@ -36,7 +37,7 @@
  * @param[in]  heap_low         The heap low
  * @param[in]  heap_top         The heap top
  * @param[in]  stack_size       The stack size
- * @param[in]  unaligned_alloc  This flags sets whether you can perform
+ * @param[in]  unaligned  This flags sets whether you can perform
  *                              unaligned allocations. If this flag is set,
  *                              then the stack size variable is ignored.
  *
@@ -47,16 +48,7 @@ void k_malloc_init( UNUSED kmalloc_t* internals,
                     UNUSED char* heap_top,
                     UNUSED uint32_t stack_size,
                     UNUSED uint32_t unaligned){
-  internals -> free_node = NULL;
-  internals -> allocated_size = 0;
-  internals -> unaligned = unaligned;
-  internals -> alignment = (unaligned) ? stack_size : 0;
-  internals -> curr_break = heap_low;
-  internals -> heap_low = heap_low;
-  internals -> heap_top = heap_top;
 }
-
-//char __heap_low = __heap_low;
 
 /**
  * @brief      This function lets you perform unaligned allocations. If the
@@ -124,7 +116,7 @@ void* k_malloc_aligned( UNUSED kmalloc_t* internals ){
  *             the buffer as a stack it must be the orignial pointer you
  *             obtained and not the current stack position.
  */
-void k_free( UNUSED kmalloc_t* internals, UNUSED void* buffer ){
+void k_free(kmalloc_t* internals, void* buffer ){
   ASSERT((int)buffer % internals -> alignment == 0)
   list_node *free_nodes = internals -> free_node;
   if(!free_nodes) {

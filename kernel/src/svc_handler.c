@@ -1,12 +1,13 @@
 /**
- * @file 
+ * @file svc_handler.c
  *
- * @brief      
+ * @brief      C SVC handler for redirecting asm svc calls to c implementations of those system calls. 
  *
  * @date       
  *
- * @author     
+ * @author Nick Toldalagi, Kunal Barde 
  */
+
 
 #include <stdint.h>
 #include <unistd.h>
@@ -17,27 +18,43 @@
 
 #define UNUSED __attribute__((unused))
 
+/**
+* Struct representing auto-saved stack frame. Includes r0-r3, r12, lr, pc, PSR. 
+*/
 typedef struct {
-uint32_t r0;
-uint32_t r1;
-uint32_t r2;
-uint32_t r3;
-uint32_t r12;
-uint32_t lr;
-uint32_t pc;
-uint32_t xPSR;
+  /**R0*/
+  uint32_t r0;
+  /**R1*/ 
+  uint32_t r1;
+  /**R2*/
+  uint32_t r2;
+  /**R3*/
+  uint32_t r3;
+  /**R12*/
+  uint32_t r12; 
+  /**LR*/
+  uint32_t lr;
+  /**program counter*/
+  uint32_t pc;
+  /**program status register*/
+  uint32_t xPSR;
 
 } stack_frame_t;
 
+/**
+* @brief	C handler of svc calls. Will map an svc asm call to the correct c sys call. 
+
+* @param	psp	The psp of the svc call. Will be used to access the svc instruction itself from the pc. As well as accessing for accessing arguments
+* @param	arg1	The first argument for the sys call. Passed for convenience. 
+* @param	arg2	The second argument from the sys call. Passed for convenience. 
+*/
 void svc_c_handler(void *psp, int arg1, int arg2) {
   stack_frame_t *s = (stack_frame_t *)psp;
   uint32_t *pc = (uint32_t *)(s -> pc -2);
   uint8_t svc_number = *(pc) & 0xFF;
-  //int svc_number = -1;
-  //printk("SVC Number %x\n", svc_number);
-  //svc_number = svc_number & 0xFF;
-  //while(1);
+
   int out;
+
   switch (svc_number) {
     case SVC_SBRK:
       out = (unsigned int)sys_sbrk(s -> r0);

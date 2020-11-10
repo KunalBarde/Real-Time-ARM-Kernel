@@ -1,12 +1,12 @@
 /**
 
- * @file UART Interrupt-Based Implementation 
+ * @file uart.c
  *
- * @brief
+ * @brief UART Interrupt-Based Implementation. Allows kernel user to enable or disable interrupt based UART function. 
  *
- * @date  
+ * @date  11/3/2020
  *
- * @author     
+ * @author Nick Toldalagi, Kunal Barde
  */
 
 #include <unistd.h>
@@ -17,16 +17,34 @@
 #include <nvic.h>
 #include <debug.h>
 
+/** Used for designating non-implemented portions of code for the compiler. */
 #define UNUSED __attribute__((unused))
+
+/**
+* UART irq number.
+*/
 #define UART_IRQ 38
+
+/**
+* Transmit and receive buffer max sizes. 
+*/
 #define BUFFER_SIZE 512
+
+/**
+* Maximum transmit or receive treshold for guaranteeing worst case interrupt handling time.  
+*/
 #define THRESHOLD 16
 
 /* Map portion of data section to kernel data structures */
 static volatile char recv_buffer[BUFFER_SIZE];
 static volatile char transmit_buffer[BUFFER_SIZE];
 
-void uart_init(UNUSED int baud){
+/**
+* @ brief	Initialize interrupt-based UART. 
+
+* @ param	The baud at which to initialize UART. 
+*/
+void uart_init( int baud){
     //Init PA_2 UART_2 TX
     gpio_init(GPIO_A, 2, MODE_ALT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT7);
 
@@ -52,6 +70,13 @@ void uart_init(UNUSED int baud){
     return;
 }
 
+/**
+* @brief	Put a single byte into the UART transmit buffer. 
+
+* @param	c	The char to be transmitted. 
+
+* @return	0 on success, -1 otherwise. 
+*/
 int uart_put_byte(UNUSED char c){
    struct uart_reg_map *uart = UART2_BASE;
    rbuf_t *ring_buffer = (rbuf_t *)transmit_buffer;
@@ -60,6 +85,13 @@ int uart_put_byte(UNUSED char c){
    return enq_result;
 }
 
+/**
+* @brief	Attempts to get a single byte from the UART receive buffer. 
+
+* @param[out]	c	The pointer meant for the char returned from a poll of the receive buffer. 
+
+* @return	0 on success or -1 if a poll of the ring buffer failed to retrieve a byte.  
+*/
 int uart_get_byte(UNUSED char *c){
    UNUSED struct uart_reg_map *uart = UART2_BASE;
    rbuf_t *ring_buffer = (rbuf_t *)recv_buffer;
@@ -72,6 +104,9 @@ int uart_get_byte(UNUSED char *c){
    return 0;
 }
 
+/**
+* @brief	Handles uart interrupts triggered both by receive or transmit readiness of the uart. 
+*/
 void uart_irq_handler(){
    struct uart_reg_map *uart =  UART2_BASE;
    /* Disable Interrupts (Entering Critical Section) */
@@ -113,6 +148,9 @@ void uart_irq_handler(){
    return;
 }
 
+/**
+* @brief	   Send all bytes remaining in transmit buffer
+*/
 void uart_flush(){
    /* Send all bytes remaining in transmit buffer */
    char transmit_byte;

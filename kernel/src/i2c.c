@@ -8,13 +8,13 @@ struct i2c_reg_map {
     volatile uint32_t CR1;   /**<  Control Register 1 */
     volatile uint32_t CR2;   /**<  Control Register 2 */
     volatile uint32_t OAR1;  /**<  Own Address register 1*/
-    volatile uint32_t OAR2;  /** Own address register 2 */
+    volatile uint32_t OAR2;  /**< Own address register 2 */
     volatile uint32_t DR;  /**<  Data Register */
     volatile uint32_t SR1;  /**< Status Register 1 */ 
     volatile uint32_t SR2; /**< Status Register 2 */
-    volatile uint32_t CCR; /** CLock control register */
-    volatile uint32_t TRISE; /** Rise time regsiter */
-    volatile uint32_t FLTR;  /** Filter Register */
+    volatile uint32_t CCR; /**< CLock control register */
+    volatile uint32_t TRISE; /**< Rise time regsiter */
+    volatile uint32_t FLTR;  /**< Filter Register */
 };
 
 /** @brief Initializes I2C1. 

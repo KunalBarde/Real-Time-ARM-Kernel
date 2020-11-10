@@ -4,7 +4,7 @@
  * @brief      Kernel entry point
  *
  * @date       
- * @author     
+ * @author     Nick Toldalagi, Kunal Barde
  */
 
 #include "arm.h"
@@ -17,9 +17,20 @@
 #include <stdio.h>
 #include <led_driver.h>
 #include <servok.h>
+
+/**
+* Period of the sys_tick interrupt firing. Configured to allow manual pwm control of the servo. 
+*/
 #define SERVO_BAUD 160
+
+/**
+* Precomputed value for configuring at 115200 baud. 
+*/
 #define UART_BAUD 0x8B
 
+/**
+*  @brief	Kernel main function
+*/
 int kernel_main( void ) {
   init_349(); // DO NOT REMOVE THIS LINE
   uart_init(UART_BAUD);
