@@ -88,48 +88,68 @@ _exit:
 .type thread_init, %function 
 .global thread_init 
 thread_init:
+  SVC SVC_THR_INIT
+  bx lr
   bkpt 
 
 .type thread_create, %function 
 .global thread_create 
 thread_create:
+  SVC SVC_THR_CREATE
+  bx lr
   bkpt 
 
 .type scheduler_start, %function 
 .global scheduler_start 
 scheduler_start:
+  SVC SVC_SCHD_START
+  bx lr
   bkpt 
 
 .type mutex_init, %function 
 .global mutex_init 
 mutex_init:
+  SVC SVC_MUT_INIT
+  bx lr
   bkpt 
 
 .type mutex_lock, %function 
 .global mutex_lock
 mutex_lock:
+  SVC SVC_MUT_LOK
+  bx lr
   bkpt 
 
 .type mutex_unlock, %function 
 .global mutex_unlock 
 mutex_unlock:
+  SVC SVC_MUT_ULK
+  bx lr
   bkpt 
 
 .type wait_until_next_period, %function 
 .global wait_until_next_period 
 wait_until_next_period:
+  SVC SVC_WAIT
+  bx lr
   bkpt 
 
 .global get_time 
 get_time:
+  SVC SVC_TIME
+  bx lr
   bkpt 
 
 .global get_priority
 get_priority:
+  SVC SVC_PRIORITY
+  bx lr
   bkpt
 
 .global thread_time 
 thread_time:
+  SVC SVC_THR_TIME
+  bx lr
   bkpt 
 
 .global servo_enable

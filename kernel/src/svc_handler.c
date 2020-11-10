@@ -16,6 +16,7 @@
 #include <syscall.h>
 #include <svc_num.h>
 
+/** Used for designating non-implemented portions of code for the compiler. */
 #define UNUSED __attribute__((unused))
 
 /**

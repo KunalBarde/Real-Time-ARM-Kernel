@@ -1,12 +1,12 @@
 /**
 
- * @file 
+ * @file syscall.c
  *
- * @brief      
+ * @brief      Implementation of kernel space syscalls. 
  *
- * @date       
+ * @date       11/3/2020
  *
- * @author     
+ * @author     Nick Toldalagi, Kunal Barde
  */
 
 #include <unistd.h>
@@ -18,12 +18,25 @@
 #include <arm.h>
 #include <debug.h>
 
+/** Used for designating non-implemented portions of code for the compiler. */
 #define UNUSED __attribute__((unused))
+
+/** Bottom of user heap */
 extern char __heap_low[];
+
+/** Top of user heap */
 extern char __heap_top[];
 
+/** Current heap brk */
 static char *heap_brk = 0;
 
+/**
+* @brief	sbrk system call implementation. Attempts to increase available heap size by an increment. 
+
+* @param	incr	Increment of bytes by which to increase the heap. 
+
+* @return	(void*)-1 if the heap cannot be extended by the requested increment, otherwise a void pointer to the newly designated memory of size incr.  
+*/
 void *sys_sbrk(UNUSED int incr){
   char *tmp;
   if(!heap_brk) {
@@ -39,6 +52,15 @@ void *sys_sbrk(UNUSED int incr){
   return (void *)tmp; 
 }
 
+/**
+* @brief	Implementation of sys call write. Maps to user calls of write. 
+
+* @param	file	File pointer to write to. Currently only 1, (stdout) is accepted. 
+* @param	ptr	String which should be written. 
+* @param	len	Number of bytes which should be written. 
+
+* @return	-1 on failure, otherwise the number of byte sucessfully written to stdout. 
+*/
 int sys_write(UNUSED int file, UNUSED char *ptr, UNUSED int len){
   if(file == 1) {
     int bytes = 0;
@@ -47,8 +69,7 @@ int sys_write(UNUSED int file, UNUSED char *ptr, UNUSED int len){
           bytes+=1;
        }
     }
-    //ASSERT(1 == 0);
-    //uart_flush();
+
     return bytes;
   }else{
     //Invalid file descriptor
@@ -56,7 +77,16 @@ int sys_write(UNUSED int file, UNUSED char *ptr, UNUSED int len){
   }
 }
 
-int sys_read(UNUSED int file, UNUSED char *ptr, UNUSED int len){
+/**
+* @brief	Implementation of system call read. Maps to user call of read(). 
+
+* @param	file	File from which to read. Currently only able to read from STDIN (0). 
+* @param	ptr	Pointer to buffer where bytes will be read to. 
+* @param	len	Number of bytes to read into ptr buffer. 
+
+* @return	-1 on failure, otherwise the number of bytes read into the buffer from stdin. This may be <= len. 
+*/
+int sys_read(int file, char *ptr, int len){
   if(file != 0) return -1;
   char c;
   int count = 0;
@@ -82,7 +112,12 @@ int sys_read(UNUSED int file, UNUSED char *ptr, UNUSED int len){
   return count;
 }
 
-void sys_exit(UNUSED int status){
+/**
+* @brief	Implementation of system exit. Will display exit status on the led display, write status to stdout, and flush the uart before sleeping indefinitely. 
+
+* @param	status	Exit status. 0 indicates normal (no error).
+*/
+void sys_exit(int status){
   led_set_display(status);
   printk("%d\n", status);
   uart_flush();

@@ -125,7 +125,7 @@ _usage_fault_ :
   bkpt
 
 .thumb_func
-_pend_sv_ :
+_pend_sv_ : 
   bkpt
 
 .thumb_func
@@ -177,9 +177,5 @@ _svc_asm_handler_:
   mov r1, r0
   mrs r0, psp
   b svc_c_handler
-  ;mrs r0, psp
-  ;ldr r0,[r0, #24]
-  ;ldr r0,[r0, #-2]
-  ;bkpt
-  ;b svc_c_handler
+
   bkpt
