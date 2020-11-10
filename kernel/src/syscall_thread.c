@@ -30,7 +30,8 @@
 #define TCB_BUFFER_SIZE (sizeof(tcb_t) * (BUFFER_SIZE)) //Avoiding zero indexing
 #define I_THREAD_IDX 0 //Idle thread index into kernel buffers
 #define D_THREAD_IDX 1 //Default thread index into kernel buffers
-#define I_THREAD_PRIOR 15 //Lowest priority initially 
+#define I_THREAD_PRIOR 14 //Lowest priority initially 
+#define D_THREAD_PRIOR 15 //Not really lowest priority, not a normal thread
 #define WAITING 0 /**< Waiting state for a thread*/
 #define RUNNABLE 1
 #define RUNNING 2
@@ -82,7 +83,7 @@ typedef struct {
 static volatile char kernel_threading_state[K_BLOCK_SIZE];
 
 /* Initially all threads should be in the wait set */
-static volatile char kernel_wait_set[BUFFER_SIZE] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+static volatile char kernel_wait_set[BUFFER_SIZE] = {0};
 
 /* Add threads to ready set once sys_thread_create is called */
 static volatile char kernel_ready_set[BUFFER_SIZE] = {0};
@@ -113,25 +114,43 @@ void systick_c_handler() {
 
 }
 
-void *round_robin() {
-  _kernel_state_block = (k_threading_state_t *)kernel_threading_state;
+/**
+ * @brief	Implementation of round robin scheduler
 
-  int8_t running = _kernel_state_block->running_thread;
+ * @param[in]	Context pointer of current thread
+
+ * @return	PSP of next context to load and run
+ */
+thread_stack_frame *round_robin(void *curr_context_ptr) {
+  k_threading_state_t *_kernel_state_block = (k_threading_state_t *)kernel_threading_state;
+
+  int8_t running_idx = _kernel_state_block->running_thread;
   int8_t tries = 0;
+
+  //Save current context and move back to ready set
+  tcb_buffer[running_idx].kernel_stack_ptr = (uint32_t) curr_context_ptr;
+  int8_t old_running_idx = running_idx;
+
   do {
     tries++;
-    running = (running == 
+    running_idx = (running_idx == I_THREAD_PRIOR-1) ? 0 : running_idx + 1;
     if(tries == MAX_U_THREADS) { //Nothing to run, return to default
-      
+      running_idx = D_THREAD_PRIOR;
     } 
-  } while ( );
+  } while (!(_kernel_state_block -> ready_set[running_idx]));
+  //Remove new 
+  _kernel_state_block -> ready_set[running_idx] = 0;
+  //Add old back to ready set
+  _kernel_state_block -> ready_set[old_running_idx] = 1;
+
+  return (thread_stack_frame *)tcb_buffer[running_idx].kernel_stack_ptr;
 }
 
 void *pendsv_c_handler(void *context_ptr) {
   thread_stack_frame *context = (thread_stack_frame *)context_ptr;
-  context = round_robin();
+  context = (thread_stack_frame *)round_robin(context_ptr);
 
-  return NULL;
+  return (void *)context;
 }
 
 int sys_thread_init(
@@ -167,7 +186,7 @@ int sys_thread_init(
   _kernel_state_block->wait_set = (uint8_t *)kernel_wait_set;
   _kernel_state_block->ready_set = (uint8_t *)kernel_ready_set;
   //_kernel_state_block->running_set = (uint8_t *)kernel_running_set; 
-  _kernel_state_block->running_thread = -1;
+  _kernel_state_block->running_thread = D_THREAD_PRIOR;
   _kernel_state_block->sys_tick_ct = 0;
   _kernel_state_block->stack_size = stack_size;
   _kernel_state_block->max_threads = max_threads;
