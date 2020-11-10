@@ -100,10 +100,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">syscall_thread.c File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>System calls used for multithreading purposes.  
+<a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
 <code>#include &quot;syscall_thread.h&quot;</code><br />
 <code>#include &quot;syscall_mutex.h&quot;</code><br />
 <code>#include &quot;mpu.h&quot;</code><br />
+<code>#include &lt;timer.h&gt;</code><br />
+<code>#include &lt;arm.h&gt;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
@@ -149,10 +154,12 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>D_THREAD_IDX</b>&#160;&#160;&#160;1</td></tr>
 <tr class="separator:a3abc26362c279b963e235620fb95e903"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7c2cce3d8ca2db5ff4dbf4036727951"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa7c2cce3d8ca2db5ff4dbf4036727951"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>I_THREAD_PRIOR</b>&#160;&#160;&#160;15</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>I_THREAD_PRIOR</b>&#160;&#160;&#160;14</td></tr>
 <tr class="separator:aa7c2cce3d8ca2db5ff4dbf4036727951"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a13ee57d95da6b6509d43bb1b3f67bb02"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a13ee57d95da6b6509d43bb1b3f67bb02"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>WAITING</b>&#160;&#160;&#160;0</td></tr>
+<tr class="memitem:a34b6bffb91603e89418a8d66549b9d33"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a34b6bffb91603e89418a8d66549b9d33"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>D_THREAD_PRIOR</b>&#160;&#160;&#160;15</td></tr>
+<tr class="separator:a34b6bffb91603e89418a8d66549b9d33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13ee57d95da6b6509d43bb1b3f67bb02"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a13ee57d95da6b6509d43bb1b3f67bb02">WAITING</a>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:a13ee57d95da6b6509d43bb1b3f67bb02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ccc5ca21a66634195c2d9964c7817e8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7ccc5ca21a66634195c2d9964c7817e8"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>RUNNABLE</b>&#160;&#160;&#160;1</td></tr>
@@ -167,26 +174,30 @@ Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#abc96a6564aa346ba124293a6604a0427">systick_c_handler</a> ()</td></tr>
 <tr class="memdesc:abc96a6564aa346ba124293a6604a0427"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handler called in occassion of sys-tick interrupt. <br /></td></tr>
 <tr class="separator:abc96a6564aa346ba124293a6604a0427"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab66dd67d5d707d20135483b2c17b3b89"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab66dd67d5d707d20135483b2c17b3b89"></a>
-void *&#160;</td><td class="memItemRight" valign="bottom"><b>pendsv_c_handler</b> (void *context_ptr)</td></tr>
+<tr class="memitem:a2fed305a1db91fb3bdc5d2479db0894a"><td class="memItemLeft" align="right" valign="top">thread_stack_frame *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a2fed305a1db91fb3bdc5d2479db0894a">round_robin</a> (void *curr_context_ptr)</td></tr>
+<tr class="memdesc:a2fed305a1db91fb3bdc5d2479db0894a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of round robin scheduler.  <a href="#a2fed305a1db91fb3bdc5d2479db0894a">More...</a><br /></td></tr>
+<tr class="separator:a2fed305a1db91fb3bdc5d2479db0894a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab66dd67d5d707d20135483b2c17b3b89"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#ab66dd67d5d707d20135483b2c17b3b89">pendsv_c_handler</a> (void *context_ptr)</td></tr>
+<tr class="memdesc:ab66dd67d5d707d20135483b2c17b3b89"><td class="mdescLeft">&#160;</td><td class="mdescRight">PendSV interrupt handler. Runs a scheduler and then dispatches a new thread for running.  <a href="#ab66dd67d5d707d20135483b2c17b3b89">More...</a><br /></td></tr>
 <tr class="separator:ab66dd67d5d707d20135483b2c17b3b89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7cf395a32723974af129b9bf11689e8a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7cf395a32723974af129b9bf11689e8a"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>sys_thread_init</b> (uint32_t max_threads, uint32_t stack_size, void *idle_fn, protection_mode memory_protection, uint32_t max_mutexes)</td></tr>
+<tr class="memitem:a7cf395a32723974af129b9bf11689e8a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a7cf395a32723974af129b9bf11689e8a">sys_thread_init</a> (uint32_t max_threads, uint32_t stack_size, void *idle_fn, protection_mode memory_protection, uint32_t max_mutexes)</td></tr>
+<tr class="memdesc:a7cf395a32723974af129b9bf11689e8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">System call to initialize a new thread.  <a href="#a7cf395a32723974af129b9bf11689e8a">More...</a><br /></td></tr>
 <tr class="separator:a7cf395a32723974af129b9bf11689e8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb03d48542c5c84a2c9d297267e3553a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeb03d48542c5c84a2c9d297267e3553a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>thread_kill</b> (void)</td></tr>
 <tr class="separator:aeb03d48542c5c84a2c9d297267e3553a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac54104218aaaba481bd42968a6045691"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac54104218aaaba481bd42968a6045691"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>sys_thread_create</b> (void *fn, uint32_t prio, uint32_t C, uint32_t T, void *vargp)</td></tr>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#ac54104218aaaba481bd42968a6045691">sys_thread_create</a> (void *fn, uint32_t prio, uint32_t C, uint32_t T, void *vargp)</td></tr>
+<tr class="memdesc:ac54104218aaaba481bd42968a6045691"><td class="mdescLeft">&#160;</td><td class="mdescRight">System call to spawn a new thread. <br /></td></tr>
 <tr class="separator:ac54104218aaaba481bd42968a6045691"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0726d2166701a485c555e6b7f7af3b60"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0726d2166701a485c555e6b7f7af3b60"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>sys_scheduler_start</b> (uint32_t frequency)</td></tr>
+<tr class="memitem:a0726d2166701a485c555e6b7f7af3b60"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a0726d2166701a485c555e6b7f7af3b60">sys_scheduler_start</a> (uint32_t frequency)</td></tr>
+<tr class="memdesc:a0726d2166701a485c555e6b7f7af3b60"><td class="mdescLeft">&#160;</td><td class="mdescRight">System call to begin the rtos scheduler. Pends a PendSV so this function will only return when all previously scheduled user threads have been killed or have terminated.  <a href="#a0726d2166701a485c555e6b7f7af3b60">More...</a><br /></td></tr>
 <tr class="separator:a0726d2166701a485c555e6b7f7af3b60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b4f86fe10ac2c90ce8158872aac7ce2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8b4f86fe10ac2c90ce8158872aac7ce2"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>sys_get_priority</b> ()</td></tr>
+<tr class="memitem:a8b4f86fe10ac2c90ce8158872aac7ce2"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a8b4f86fe10ac2c90ce8158872aac7ce2">sys_get_priority</a> ()</td></tr>
+<tr class="memdesc:a8b4f86fe10ac2c90ce8158872aac7ce2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns priority of current running thread.  <a href="#a8b4f86fe10ac2c90ce8158872aac7ce2">More...</a><br /></td></tr>
 <tr class="separator:a8b4f86fe10ac2c90ce8158872aac7ce2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a341334c885696457b6f66bb8acda5b22"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a341334c885696457b6f66bb8acda5b22"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>sys_get_time</b> ()</td></tr>
+<tr class="memitem:a341334c885696457b6f66bb8acda5b22"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a341334c885696457b6f66bb8acda5b22">sys_get_time</a> ()</td></tr>
+<tr class="memdesc:a341334c885696457b6f66bb8acda5b22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns number of system ticks since scheduler was initialized.  <a href="#a341334c885696457b6f66bb8acda5b22">More...</a><br /></td></tr>
 <tr class="separator:a341334c885696457b6f66bb8acda5b22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8933e910725546aa9e052369db9cf81"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa8933e910725546aa9e052369db9cf81"></a>
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>sys_thread_time</b> ()</td></tr>
@@ -212,6 +223,9 @@ Variables</h2></td></tr>
 <tr class="memitem:a187e79dd2a6a18d6bbbc4f2509eb668b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a187e79dd2a6a18d6bbbc4f2509eb668b">ub_table</a> []</td></tr>
 <tr class="memdesc:a187e79dd2a6a18d6bbbc4f2509eb668b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Precalculated values for UB test.  <a href="#a187e79dd2a6a18d6bbbc4f2509eb668b">More...</a><br /></td></tr>
 <tr class="separator:a187e79dd2a6a18d6bbbc4f2509eb668b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9789279e9ae3ab4973ceb88265200a4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac9789279e9ae3ab4973ceb88265200a4"></a>
+uint32_t *&#160;</td><td class="memItemRight" valign="bottom"><b>icsr_reg</b> = (uint32_t *)ICSR_ADDR</td></tr>
+<tr class="separator:ac9789279e9ae3ab4973ceb88265200a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:a965b457902b75612d5c4db04d78cb6e1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a965b457902b75612d5c4db04d78cb6e1"></a>
 char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a965b457902b75612d5c4db04d78cb6e1">__thread_u_stacks_low</a></td></tr>
@@ -231,9 +245,183 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
 <tr class="separator:a52f42f247ccf963d377b87cf4bc2ccca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><dl class="section date"><dt>Date</dt><dd></dd></dl>
-<dl class="section author"><dt>Author</dt><dd></dd></dl>
-</div><h2 class="groupheader">Variable Documentation</h2>
+<div class="textblock"><p>System calls used for multithreading purposes. </p>
+<dl class="section date"><dt>Date</dt><dd></dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Kunal Barde, Nick Toldalagi </dd></dl>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a class="anchor" id="a13ee57d95da6b6509d43bb1b3f67bb02"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define WAITING&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Waiting state for a thread </p>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="ab66dd67d5d707d20135483b2c17b3b89"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* pendsv_c_handler </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>context_ptr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>PendSV interrupt handler. Runs a scheduler and then dispatches a new thread for running. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">context_ptr</td><td>A pointer to the current thread's stack-saved context.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the next thread's stack-saved context. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a2fed305a1db91fb3bdc5d2479db0894a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">thread_stack_frame* round_robin </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>curr_context_ptr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Implementation of round robin scheduler. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">Context</td><td>pointer of current thread</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>PSP of next context to load and run. If there are no more user threads left to run, the default thread's context is returned. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a8b4f86fe10ac2c90ce8158872aac7ce2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t sys_get_priority </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns priority of current running thread. </p>
+<p>Priority of current running thread. </p>
+
+</div>
+</div>
+<a class="anchor" id="a341334c885696457b6f66bb8acda5b22"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t sys_get_time </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns number of system ticks since scheduler was initialized. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of system ticks since this scheduler was initialized. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a0726d2166701a485c555e6b7f7af3b60"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int sys_scheduler_start </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>frequency</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>System call to begin the rtos scheduler. Pends a PendSV so this function will only return when all previously scheduled user threads have been killed or have terminated. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">frequency</td><td>The frequency (in Hz) at which the the Systick interrupt should fire in order to re-run the scheduler to evaluate the current working pool of threads.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on succes -1 on failure. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a7cf395a32723974af129b9bf11689e8a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int sys_thread_init </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>max_threads</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>stack_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>idle_fn</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">protection_mode&#160;</td>
+          <td class="paramname"><em>memory_protection</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>max_mutexes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>System call to initialize a new thread. </p>
+<dl class="section return"><dt>Returns</dt><dd>0 on success -1 otherwise. </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
 <a class="anchor" id="a187e79dd2a6a18d6bbbc4f2509eb668b"></a>
 <div class="memitem">
 <div class="memproto">

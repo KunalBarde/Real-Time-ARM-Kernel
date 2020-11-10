@@ -36,7 +36,7 @@ typedef struct {
   uint32_t duration;
   uint32_t period_ct;
   float U;
-  uint32_t svc_state;
+  int svc_state;
   uint8_t thread_state;
 }tcb_t;
 
@@ -70,12 +70,15 @@ typedef struct {
   uint32_t r14;
 }thread_stack_frame;*/
 
+/**
+ * @struct	Struct representing current threading state of the kernel. 
+ */
 typedef struct {
   uint8_t *wait_set;
   uint8_t *ready_set;
   int8_t running_thread;
   uint32_t sys_tick_ct; //Used for time slicing and scheduling
-  uint32_t stack_size; //Stack size per thread
+  uint32_t stack_size; /**< Stack size per thread*/
   uint32_t u_thread_ct;
   uint32_t max_threads;
   uint32_t max_mutexes;

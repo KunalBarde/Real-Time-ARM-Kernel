@@ -126,6 +126,7 @@ _usage_fault_ :
 
 .thumb_func
 _pend_sv_ : 
+  bkpt
   mrs r0, msp
   mrs r1, psp
   stmdb r0!, {r4-r11}

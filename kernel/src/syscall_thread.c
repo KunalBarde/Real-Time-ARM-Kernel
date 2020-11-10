@@ -119,7 +119,7 @@ void systick_c_handler() {
 
  * @param[in]	Context pointer of current thread
 
- * @return	PSP of next context to load and run
+ * @return	PSP of next context to load and run. If there are no more user threads left to run, the default thread's context is returned. 
  */
 thread_stack_frame *round_robin(void *curr_context_ptr) {
   k_threading_state_t *_kernel_state_block = (k_threading_state_t *)kernel_threading_state;
@@ -129,11 +129,12 @@ thread_stack_frame *round_robin(void *curr_context_ptr) {
 
   //Save current context and move back to ready set
   tcb_buffer[running_idx].kernel_stack_ptr = (uint32_t) curr_context_ptr;
+  tcb_buffer[running_idx].svc_state = get_svc_status();
   int8_t old_running_idx = running_idx;
 
   do {
     tries++;
-    running_idx = (running_idx == I_THREAD_PRIOR-1) ? 0 : running_idx + 1;
+    running_idx = (running_idx >= I_THREAD_PRIOR-1) ? 0 : running_idx + 1;
     if(tries == MAX_U_THREADS) { //Nothing to run, return to default
       running_idx = D_THREAD_PRIOR;
     } 
@@ -142,10 +143,18 @@ thread_stack_frame *round_robin(void *curr_context_ptr) {
   _kernel_state_block -> ready_set[running_idx] = 0;
   //Add old back to ready set
   _kernel_state_block -> ready_set[old_running_idx] = 1;
-
+  
+  set_svc_status(tcb_buffer[running_idx].svc_state);
   return (thread_stack_frame *)tcb_buffer[running_idx].kernel_stack_ptr;
 }
 
+/**
+ * @brief	PendSV interrupt handler. Runs a scheduler and then dispatches a new thread for running. 
+
+ * @param[in]	context_ptr	A pointer to the current thread's stack-saved context. 
+
+ * @return	A pointer to the next thread's stack-saved context. 
+ */
 void *pendsv_c_handler(void *context_ptr) {
   thread_stack_frame *context = (thread_stack_frame *)context_ptr;
   context = (thread_stack_frame *)round_robin(context_ptr);
@@ -153,6 +162,11 @@ void *pendsv_c_handler(void *context_ptr) {
   return (void *)context;
 }
 
+/** 
+ * @brief	System call to initialize a new thread. 
+
+ * @return	0 on success -1 otherwise. 
+ */
 int sys_thread_init(
   uint32_t max_threads,
   uint32_t stack_size,
@@ -227,6 +241,9 @@ int sys_thread_init(
 
 extern void thread_kill(void);
 
+/**
+ * @brief	System call to spawn a new thread. 
+ */
 int sys_thread_create(
   void *fn,
   uint32_t prio,
@@ -234,7 +251,6 @@ int sys_thread_create(
   uint32_t T,
   void *vargp
 ){
-  (void) fn; (void) prio; (void) C; (void) T; (void) vargp;
    
 //  extern void thread_kill(void);
 
@@ -254,6 +270,8 @@ int sys_thread_create(
   interrupt_frame->xPSR = XPSR_INIT;
 
   tcb_buffer[prio].user_stack_ptr = user_stack_ptr;
+  tcb_buffer[prio].C = C;
+  tcb_buffer[prio].T = T;
   
   thread_frame->r4 = 0;
   thread_frame->r5 = 0;
@@ -274,8 +292,17 @@ int sys_thread_create(
   return -1;
 }
 
+/**
+ * @brief	System call to begin the rtos scheduler. Pends a PendSV so this function will only return when all previously scheduled user threads have been killed or have terminated.  
+
+ * @param[in]	frequency	The frequency (in Hz) at which the the Systick interrupt should fire in order to re-run the scheduler to evaluate the current working pool of threads. 
+
+ * @return	0 on succes -1 on failure. 
+ */
 int sys_scheduler_start( uint32_t frequency ){
   uint32_t timer_period = CPU_CLK_FREQ/frequency;
+  k_threading_state_t *_kernel_state_block = (k_threading_state_t *)kernel_threading_state;
+  _kernel_state_block -> sys_tick_ct = 0;
   timer_start(timer_period);
 
   pend_pendsv();
@@ -283,12 +310,26 @@ int sys_scheduler_start( uint32_t frequency ){
   return 0;
 }
 
+/**
+ * @brief	Returns priority of current running thread. 
+
+ * @brief	Priority of current running thread. 
+ */
 uint32_t sys_get_priority(){
-  return 0U;
+  k_threading_state_t *_kernel_state_block = (k_threading_state_t *)kernel_threading_state;
+
+  return _kernel_state_block->running_thread;
 }
 
+/** 
+ * @brief	Returns number of system ticks since scheduler was initialized. 
+
+ * @return	The number of system ticks since this scheduler was initialized. 
+ */
 uint32_t sys_get_time(){
-  return 0U;
+   k_threading_state_t *_kernel_state_block = (k_threading_state_t *)kernel_threading_state;
+
+  return _kernel_state_block->sys_tick_ct;
 }
 
 uint32_t sys_thread_time(){
