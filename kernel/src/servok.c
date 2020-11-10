@@ -40,6 +40,8 @@ uint8_t servo1_en = 0;
 * @return	0 on success, -1 on failure (most likely for requesting an incorrect channel).
 */
 int sys_servo_enable(UNUSED uint8_t channel, UNUSED uint8_t enabled){
+  return -1;
+  /**
   if(channel > 1) return -1;
   gpio_port port = (channel == 0) ? GPIO_B : GPIO_A;
   uint32_t pin_num = (channel == 0) ? SERVO0_PIN : SERVO1_PIN;
@@ -57,7 +59,7 @@ int sys_servo_enable(UNUSED uint8_t channel, UNUSED uint8_t enabled){
       servo1_en = 0;
     }
   } 
-  return 0;
+  return 0;*/
 }
 
 /**
@@ -69,6 +71,8 @@ int sys_servo_enable(UNUSED uint8_t channel, UNUSED uint8_t enabled){
 * @return	0 on success, -1 on failure if the servo channel is not enabled. 
 */
 int sys_servo_set(UNUSED uint8_t channel, UNUSED uint8_t angle){
+  return -1;
+  /**
   if(channel == 0) {
     if(!servo0_en) return -1;
     servo0_tick_num = (uint32_t)(((float)angle/100.0 + SERVO_MIN_WIDTH)/.01);
@@ -78,5 +82,5 @@ int sys_servo_set(UNUSED uint8_t channel, UNUSED uint8_t angle){
   } else {
     return -1;
   }
-  return 0;
+  return 0;*/
 }

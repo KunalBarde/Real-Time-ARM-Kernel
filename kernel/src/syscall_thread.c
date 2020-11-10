@@ -87,6 +87,14 @@ static volatile char tcb_buffer[TCB_BUFFER_SIZE];
 /* Static global thread id assignment */
 static volatile int thread_idx = 1;
 
+/**
+* Count of systick interrupt fires. 
+*/
+volatile uint32_t sys_ticks = 0;
+
+/**
+* @brief	Handler called in occassion of sys-tick interrupt
+*/
 void systick_c_handler() {
 }
 
@@ -94,7 +102,6 @@ void *pendsv_c_handler(void *context_ptr){
   (void) context_ptr;
 
   
-
   return NULL;
 }
 

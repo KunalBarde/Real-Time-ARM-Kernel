@@ -29,12 +29,6 @@ typedef struct {
   volatile uint32_t stk_calib;
 } sys_tick_reg_map;
 
-
-/**
-* Count of systick interrupt fires. 
-*/
-volatile uint32_t sys_ticks = 0;
-
 /**
 *  @brief	Initialize systick timer to utilize the cpu clock and fire with specified precomputed frequency. 
 
@@ -72,23 +66,4 @@ void timer_stop(){
   reg_map->stk_ctrl &= ~INTERRUPT;
 }
 
-/**
-* @brief	Handler called in occassion of sys-tick interrupt
-*/
-/**void systick_c_handler(){
-  sys_ticks++;
-  if(sys_ticks == servo0_tick_num) {
-    gpio_clr(GPIO_B, 10);
-  }
-
-  if(sys_ticks == servo1_tick_num) {
-    gpio_clr(GPIO_A, 8);
-  }
-
-  if(sys_ticks == 2000) {
-    sys_ticks = 0;
-    gpio_set(GPIO_B, 10);
-    gpio_set(GPIO_A, 8);
-  }
-}*/
 

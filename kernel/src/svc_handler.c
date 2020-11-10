@@ -54,7 +54,7 @@ void svc_c_handler(void *psp, int arg1, int arg2) {
   uint32_t *pc = (uint32_t *)(s -> pc -2);
   uint8_t svc_number = *(pc) & 0xFF;
 
-  int out;
+  int out = 0;
 
   switch (svc_number) {
     case SVC_SBRK:
@@ -77,6 +77,36 @@ void svc_c_handler(void *psp, int arg1, int arg2) {
       break;
     case SVC_EXIT:
       sys_exit(s->r0);
+      break;
+    case SVC_THR_INIT:
+      out = -1;
+      break;
+    case SVC_THR_CREATE:
+      out = -1;
+      break;
+    case SVC_THR_KILL:
+      out = -1;
+      break;
+    case SVC_SCHD_START:
+      out = -1;
+      break;
+    case SVC_MUT_INIT:
+      out = -1;
+      break;
+    case SVC_MUT_LOK:
+      break;
+    case SVC_MUT_ULK:
+      break;
+    case SVC_WAIT:
+      break;
+    case SVC_TIME: 
+      out = 0;
+      break;
+    case SVC_PRIORITY:
+      out = 0;
+      break;
+    case SVC_THR_TIME:
+      out = 0;
       break;
     case SVC_SERVO_ENABLE:
       out = sys_servo_enable((uint8_t)arg1, (unsigned char)arg2);
