@@ -34,12 +34,10 @@
 
 #define TCB_BUFFER_SIZE (sizeof(tcb_t) * (BUFFER_SIZE)) /**< Thread control block buffer size (in bytes)*/
 
-#define I_THREAD_SET_IDX 14 //Idle thread index into kernel buffers
-#define D_THREAD_SET_IDX I_THREAD_SET_IDX+1 //Default thread index into kernel buffers
+#define I_THREAD_SET_IDX 14 /**<Idle thread index into kernel buffers*/
+#define D_THREAD_SET_IDX 15 /**<Default thread index into kernel buffers*/
 
-#define I_THREAD_PRIORITY 14 //Lowest priority initially 
-#define D_THREAD_PRIORITY 15 //Not really lowest priority, not a normal thread
-
+#define I_THREAD_PRIORITY 14 /**<Priority of idle thread*/ 
 #define INIT 0 /**< Initialization state for a thread */
 #define WAITING 1 /**< Waiting state for a thread*/
 #define RUNNABLE 2 /**< Runnable state for a thread*/
@@ -199,7 +197,7 @@ void systick_c_handler() {
 /**
  * @brief	Implementation of round robin scheduler
 
- * @param[in]	Context pointer of current thread
+ * @param[in]	curr_context_ptr	Context pointer of current thread
 
  * @return	PSP of next context to load and run. If there are no more user threads left to run, the default thread's context is returned. 
  */
@@ -365,6 +363,7 @@ int sys_thread_init(
   return 0;
 }
 
+/**Method to kill current thread */
 extern void thread_kill(void);
 
 /**
@@ -403,7 +402,7 @@ int sys_thread_create(
 
   thread_stack_frame *thread_frame = (thread_stack_frame *)kernel_stack_ptr;
   
-  
+  breakpoint();
   interrupt_frame->r0 = (unsigned int)vargp;
   interrupt_frame->r1 = 0;
   interrupt_frame->r2 = 0;
@@ -522,15 +521,24 @@ void sys_wait_until_next_period(){
   return;
 }
 
+/**
+ * @brief	TODO ADD Description
+ */ 
 kmutex_t *sys_mutex_init( uint32_t max_prio ) {
   (void) max_prio;
   return NULL;
 }
 
+/**
+ * @brief	TODO Add description
+ */
 void sys_mutex_lock( kmutex_t *mutex ) {
   (void) mutex;
 }
 
+/**
+ * @brief	TODO Add description
+ */ 
 void sys_mutex_unlock( kmutex_t *mutex ) {
   (void) mutex;
 }

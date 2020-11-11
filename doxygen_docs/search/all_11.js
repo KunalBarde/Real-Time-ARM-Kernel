@@ -10,6 +10,6 @@ var searchData=
   ['uart_5fput_5fbyte',['uart_put_byte',['../uart_8c.html#a6982c93fbd669e14ac9256eb1337bdd5',1,'uart.c']]],
   ['ub_5ftable',['ub_table',['../syscall__thread_8c.html#a187e79dd2a6a18d6bbbc4f2509eb668b',1,'syscall_thread.c']]],
   ['ub_5ftest',['ub_test',['../syscall__thread_8c.html#a25ba3ad8a12b82367579d5895804211f',1,'syscall_thread.c']]],
-  ['unused',['UNUSED',['../kmalloc_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;kmalloc.c'],['../svc__handler_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;svc_handler.c'],['../syscall_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;syscall.c'],['../uart_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;uart.c']]],
+  ['unused',['UNUSED',['../kmalloc_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;kmalloc.c'],['../mpu_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;mpu.c'],['../servok_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;servok.c'],['../svc__handler_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;svc_handler.c'],['../syscall_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;syscall.c'],['../uart_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;uart.c']]],
   ['update_5fkernel_5fsets',['update_kernel_sets',['../syscall__thread_8c.html#ac2b092cdef9377874d2a424271fd8e4c',1,'syscall_thread.c']]]
 ];

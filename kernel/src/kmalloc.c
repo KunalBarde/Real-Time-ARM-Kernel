@@ -55,7 +55,7 @@ void k_malloc_init( UNUSED kmalloc_t* internals,
  *             unaligned flag has not be set, you should fall into a
  *             breakpoint look at debug.h to see how to do this.
  *
- * @param[in]  kmalloc_t  The kmalloc t
+ * @param[in]  internals The kmalloc_t struct of internal info used for memory management. 
  * @param[in]  size       The allocation size.
  *
  * @return     Returns the pointer to the allocated buffer.

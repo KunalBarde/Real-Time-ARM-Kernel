@@ -2,6 +2,7 @@ var searchData=
 [
   ['max_5ftotal_5fthreads',['MAX_TOTAL_THREADS',['../syscall__thread_8c.html#a45f1a9a85716813c62bc2cfaaf1a88df',1,'syscall_thread.c']]],
   ['max_5fu_5fthreads',['MAX_U_THREADS',['../syscall__thread_8c.html#aba34e0374496611ed0ad1d6c12c69840',1,'syscall_thread.c']]],
+  ['mm_5fc_5fhandler',['mm_c_handler',['../mpu_8c.html#a91bea6c5bee9301515785e2d8a754b82',1,'mpu.c']]],
   ['mm_5flog2ceil_5fsize',['mm_log2ceil_size',['../mpu_8c.html#aef45fdec219c3ac6237f90b805ea6bff',1,'mpu.c']]],
   ['mm_5fregion_5fdisable',['mm_region_disable',['../mpu_8c.html#af59a5684ba88f773a08878c311160bef',1,'mpu.c']]],
   ['mm_5fregion_5fenable',['mm_region_enable',['../mpu_8c.html#aa911f88ae5abc2cf28a3ff0c2de2e395',1,'mpu.c']]],

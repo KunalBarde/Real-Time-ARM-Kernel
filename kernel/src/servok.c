@@ -13,6 +13,8 @@
 #include <gpio.h>
 #include <servok.h>
 #include <debug.h>
+
+/**< Macro for compiler to ignore unused attributes as need */
 #define UNUSED __attribute__((unused))
 
 /**

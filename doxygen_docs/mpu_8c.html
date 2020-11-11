@@ -119,8 +119,7 @@ Data Structures</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:addf5ec070e9499d36b7f2009ce736076"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="addf5ec070e9499d36b7f2009ce736076"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>UNUSED</b>&#160;&#160;&#160;__attribute__((unused))</td></tr>
+<tr class="memitem:addf5ec070e9499d36b7f2009ce736076"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#addf5ec070e9499d36b7f2009ce736076">UNUSED</a>&#160;&#160;&#160;__attribute__((unused))</td></tr>
 <tr class="separator:addf5ec070e9499d36b7f2009ce736076"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0805ccd2bc4e42d63adb0618d2af571"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa0805ccd2bc4e42d63adb0618d2af571"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#aa0805ccd2bc4e42d63adb0618d2af571">MPU_BASE</a>&#160;&#160;&#160;( ( <a class="el" href="structmpu__t.html">mpu_t</a> * )0xE000ED90 );</td></tr>
@@ -210,7 +209,8 @@ Macros</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a91bea6c5bee9301515785e2d8a754b82"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a91bea6c5bee9301515785e2d8a754b82"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>mm_c_handler</b> (void *psp)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#a91bea6c5bee9301515785e2d8a754b82">mm_c_handler</a> (void *psp)</td></tr>
+<tr class="memdesc:a91bea6c5bee9301515785e2d8a754b82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Memory managment interrupt c handler. <br /></td></tr>
 <tr class="separator:a91bea6c5bee9301515785e2d8a754b82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa911f88ae5abc2cf28a3ff0c2de2e395"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#aa911f88ae5abc2cf28a3ff0c2de2e395">mm_region_enable</a> (uint32_t region_number, void *base_address, uint8_t size_log2, int execute, int user_write_access)</td></tr>
 <tr class="memdesc:aa911f88ae5abc2cf28a3ff0c2de2e395"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables a memory protection region. Regions must be aligned!  <a href="#aa911f88ae5abc2cf28a3ff0c2de2e395">More...</a><br /></td></tr>
@@ -227,7 +227,21 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 <div class="textblock"><p>MPU interface implementation for thread-wise memory protection. </p>
 <dl class="section date"><dt>Date</dt><dd>30 Mar 2020</dd></dl>
 <dl class="section author"><dt>Author</dt><dd>Benjamin Huang <a href="#" onclick="location.href='mai'+'lto:'+'zem'+'in'+'gbh'+'@a'+'ndr'+'ew'+'.cm'+'u.'+'edu'; return false;">zemin<span style="display: none;">.nosp@m.</span>gbh@<span style="display: none;">.nosp@m.</span>andre<span style="display: none;">.nosp@m.</span>w.cm<span style="display: none;">.nosp@m.</span>u.edu</a> </dd></dl>
-</div><h2 class="groupheader">Function Documentation</h2>
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a class="anchor" id="addf5ec070e9499d36b7f2009ce736076"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define UNUSED&#160;&#160;&#160;__attribute__((unused))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Compiler macro used to indicate arguments which should be temporarily ignored as they are unused </p>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="af59a5684ba88f773a08878c311160bef"></a>
 <div class="memitem">
 <div class="memproto">

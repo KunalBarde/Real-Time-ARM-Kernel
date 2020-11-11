@@ -136,18 +136,12 @@ Macros</h2></td></tr>
 <tr class="separator:a6087150729ad1310e03aad022827c1c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc3b22f32fd639dd22bbb76ca248b9f8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#adc3b22f32fd639dd22bbb76ca248b9f8">TCB_BUFFER_SIZE</a>&#160;&#160;&#160;(sizeof(tcb_t) * (<a class="el" href="uart_8c.html#a6b20d41d6252e9871430c242cb1a56e7">BUFFER_SIZE</a>))</td></tr>
 <tr class="separator:adc3b22f32fd639dd22bbb76ca248b9f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7fe78fd82e092286cded01150a302b2e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7fe78fd82e092286cded01150a302b2e"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>I_THREAD_SET_IDX</b>&#160;&#160;&#160;14</td></tr>
+<tr class="memitem:a7fe78fd82e092286cded01150a302b2e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a7fe78fd82e092286cded01150a302b2e">I_THREAD_SET_IDX</a>&#160;&#160;&#160;14</td></tr>
 <tr class="separator:a7fe78fd82e092286cded01150a302b2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c653106823557e94a6a201319056ed7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c653106823557e94a6a201319056ed7"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>D_THREAD_SET_IDX</b>&#160;&#160;&#160;I_THREAD_SET_IDX+1</td></tr>
+<tr class="memitem:a3c653106823557e94a6a201319056ed7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a3c653106823557e94a6a201319056ed7">D_THREAD_SET_IDX</a>&#160;&#160;&#160;15</td></tr>
 <tr class="separator:a3c653106823557e94a6a201319056ed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41816ab1942f7d02b1bf9cce2d621a80"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a41816ab1942f7d02b1bf9cce2d621a80"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>I_THREAD_PRIORITY</b>&#160;&#160;&#160;14</td></tr>
+<tr class="memitem:a41816ab1942f7d02b1bf9cce2d621a80"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a41816ab1942f7d02b1bf9cce2d621a80">I_THREAD_PRIORITY</a>&#160;&#160;&#160;14</td></tr>
 <tr class="separator:a41816ab1942f7d02b1bf9cce2d621a80"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac41cde0035942afb6226f9ceaad4fcf9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac41cde0035942afb6226f9ceaad4fcf9"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>D_THREAD_PRIORITY</b>&#160;&#160;&#160;15</td></tr>
-<tr class="separator:ac41cde0035942afb6226f9ceaad4fcf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5889105dcd019008c9448dff61323f6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#ab5889105dcd019008c9448dff61323f6">INIT</a>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:ab5889105dcd019008c9448dff61323f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13ee57d95da6b6509d43bb1b3f67bb02"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a13ee57d95da6b6509d43bb1b3f67bb02">WAITING</a>&#160;&#160;&#160;1</td></tr>
@@ -179,8 +173,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
 <tr class="memitem:a7cf395a32723974af129b9bf11689e8a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a7cf395a32723974af129b9bf11689e8a">sys_thread_init</a> (uint32_t max_threads, uint32_t stack_size, void *idle_fn, protection_mode memory_protection, uint32_t max_mutexes)</td></tr>
 <tr class="memdesc:a7cf395a32723974af129b9bf11689e8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">System call to initialize a new thread.  <a href="#a7cf395a32723974af129b9bf11689e8a">More...</a><br /></td></tr>
 <tr class="separator:a7cf395a32723974af129b9bf11689e8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb03d48542c5c84a2c9d297267e3553a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeb03d48542c5c84a2c9d297267e3553a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>thread_kill</b> (void)</td></tr>
+<tr class="memitem:aeb03d48542c5c84a2c9d297267e3553a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#aeb03d48542c5c84a2c9d297267e3553a">thread_kill</a> (void)</td></tr>
 <tr class="separator:aeb03d48542c5c84a2c9d297267e3553a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7456217e2b43c86404a72acac2df684f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a7456217e2b43c86404a72acac2df684f">sys_thread_create</a> (void *fn, uint32_t priority, uint32_t C, uint32_t T, void *vargp)</td></tr>
 <tr class="memdesc:a7456217e2b43c86404a72acac2df684f"><td class="mdescLeft">&#160;</td><td class="mdescRight">System call to spawn a new thread.  <a href="#a7456217e2b43c86404a72acac2df684f">More...</a><br /></td></tr>
@@ -206,13 +199,16 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
 <tr class="memdesc:a2a3a3fb472158a93e59df836b9935b54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Have the current thread wait until the next period of execution. <br /></td></tr>
 <tr class="separator:a2a3a3fb472158a93e59df836b9935b54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12d3058e8c4464d614c9506562710e91"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a12d3058e8c4464d614c9506562710e91"></a>
-kmutex_t *&#160;</td><td class="memItemRight" valign="bottom"><b>sys_mutex_init</b> (uint32_t max_prio)</td></tr>
+kmutex_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a12d3058e8c4464d614c9506562710e91">sys_mutex_init</a> (uint32_t max_prio)</td></tr>
+<tr class="memdesc:a12d3058e8c4464d614c9506562710e91"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO ADD Description. <br /></td></tr>
 <tr class="separator:a12d3058e8c4464d614c9506562710e91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a14ccbc1e43d61617b97ecd06cf65b9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6a14ccbc1e43d61617b97ecd06cf65b9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>sys_mutex_lock</b> (kmutex_t *mutex)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a6a14ccbc1e43d61617b97ecd06cf65b9">sys_mutex_lock</a> (kmutex_t *mutex)</td></tr>
+<tr class="memdesc:a6a14ccbc1e43d61617b97ecd06cf65b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO Add description. <br /></td></tr>
 <tr class="separator:a6a14ccbc1e43d61617b97ecd06cf65b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55db4294dd5ed35ee5b2b1b1043ddbdd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a55db4294dd5ed35ee5b2b1b1043ddbdd"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>sys_mutex_unlock</b> (kmutex_t *mutex)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a55db4294dd5ed35ee5b2b1b1043ddbdd">sys_mutex_unlock</a> (kmutex_t *mutex)</td></tr>
+<tr class="memdesc:a55db4294dd5ed35ee5b2b1b1043ddbdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO Add description. <br /></td></tr>
 <tr class="separator:a55db4294dd5ed35ee5b2b1b1043ddbdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
@@ -253,6 +249,45 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
       </table>
 </div><div class="memdoc">
 <p>Thread control block buffer size (in number of tcbs) </p>
+
+</div>
+</div>
+<a class="anchor" id="a3c653106823557e94a6a201319056ed7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define D_THREAD_SET_IDX&#160;&#160;&#160;15</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Default thread index into kernel buffers </p>
+
+</div>
+</div>
+<a class="anchor" id="a41816ab1942f7d02b1bf9cce2d621a80"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define I_THREAD_PRIORITY&#160;&#160;&#160;14</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Priority of idle thread </p>
+
+</div>
+</div>
+<a class="anchor" id="a7fe78fd82e092286cded01150a302b2e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define I_THREAD_SET_IDX&#160;&#160;&#160;14</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Idle thread index into kernel buffers </p>
 
 </div>
 </div>
@@ -416,7 +451,7 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
 <p>Implementation of round robin scheduler. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">Context</td><td>pointer of current thread</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">curr_context_ptr</td><td>Context pointer of current thread</td></tr>
   </table>
   </dd>
 </dl>
@@ -594,6 +629,23 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
 
 <p>Returns the amount of actual execution time consumed by a the current thread. </p>
 <dl class="section return"><dt>Returns</dt><dd>The duration of execution of the current thread. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aeb03d48542c5c84a2c9d297267e3553a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void thread_kill </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Method to kill current thread </p>
 
 </div>
 </div>

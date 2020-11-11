@@ -14,6 +14,7 @@
 #include "syscall.h"
 #include "mpu.h"
 
+/**Compiler macro used to indicate arguments which should be temporarily ignored as they are unused*/
 #define UNUSED __attribute__((unused))
 
 /**
@@ -113,6 +114,9 @@ typedef struct {
 /**@brief Indicates the MMFAR is valid.*/
 #define MMARVALID 0x1 << 7
 
+/**
+ * @brief	Memory managment interrupt c handler
+ */ 
 void mm_c_handler( void *psp ) {
 
   system_control_block_t *scb = ( system_control_block_t * )SCB_BASE;
