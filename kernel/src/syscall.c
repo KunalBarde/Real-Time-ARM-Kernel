@@ -63,14 +63,12 @@ void *sys_sbrk(UNUSED int incr){
 */
 int sys_write(UNUSED int file, UNUSED char *ptr, UNUSED int len){
   if(file == 1) {
-    int bytes = 0;
+
     for(int i = 0; i < len; i++) {
-       if(uart_put_byte(ptr[i]) == 0) {
-          bytes+=1;
-       }
+       while(uart_put_byte(ptr[i]));
     }
 
-    return bytes;
+    return len;
   }else{
     //Invalid file descriptor
     return -1;

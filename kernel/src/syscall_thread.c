@@ -432,13 +432,14 @@ int sys_thread_create(
 
  * @param[in]	frequency	The frequency (in Hz) at which the the Systick interrupt should fire in order to re-run the scheduler to evaluate the current working pool of threads. 
 
- * @return	0 on succes -1 on failure. 
+ * @return	0 on success -1 on failure. 
  */
 int sys_scheduler_start( uint32_t frequency ){
   uint32_t timer_period = CPU_CLK_FREQ/frequency;
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
   ksb -> sys_tick_ct = 0;
   timer_start(timer_period);
+  breakpoint();
 
   pend_pendsv(); //Begin first thread
   
