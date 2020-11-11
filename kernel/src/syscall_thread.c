@@ -202,18 +202,20 @@ void systick_c_handler() {
 
  * @return	PSP of next context to load and run. If there are no more user threads left to run, the default thread's context is returned. 
  */
-thread_stack_frame *round_robin(void *curr_context_ptr) {
+void *round_robin(void *curr_context_ptr) {
 
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
 
-  int8_t running_buf_idx = ksb->running_thread;
+  int32_t running_buf_idx = ksb->running_thread;
 
   //Save current context
-  tcb_buffer[running_buf_idx].kernel_stack_ptr = (uint32_t) curr_context_ptr;
+  tcb_buffer[running_buf_idx].kernel_stack_ptr = curr_context_ptr;
   tcb_buffer[running_buf_idx].svc_state = get_svc_status();
-  int8_t old_running_buf_idx = running_buf_idx;
+
+  int32_t old_running_buf_idx = running_buf_idx;
 
   uint32_t running_ready_set_idx = tcb_buffer[running_buf_idx].priority;
+
   uint32_t old_running_ready_set_idx = running_ready_set_idx;
 
   running_ready_set_idx = (running_ready_set_idx >= I_THREAD_SET_IDX-1) ? 0 : running_ready_set_idx + 1;
@@ -221,7 +223,7 @@ thread_stack_frame *round_robin(void *curr_context_ptr) {
   while (1) {
     if(running_ready_set_idx == old_running_ready_set_idx) {
       //Done we just go back to the old thread
-      return (thread_stack_frame *)tcb_buffer[old_running_buf_idx].kernel_stack_ptr;
+      return tcb_buffer[old_running_buf_idx].kernel_stack_ptr;
     }
 
     int curr_buf_idx = ksb -> ready_set[running_ready_set_idx];
@@ -247,8 +249,8 @@ thread_stack_frame *round_robin(void *curr_context_ptr) {
 
   //Restore status and return new context pointer
   set_svc_status(tcb_buffer[running_buf_idx].svc_state);
-  breakpoint();
-  return (thread_stack_frame *)tcb_buffer[running_buf_idx].kernel_stack_ptr;
+  //breakpoint();
+  return tcb_buffer[running_buf_idx].kernel_stack_ptr;
 }
 
 /**
@@ -259,13 +261,13 @@ thread_stack_frame *round_robin(void *curr_context_ptr) {
  * @return	A pointer to the next thread's stack-saved context. 
  */
 void *pendsv_c_handler(void *context_ptr) {
-  thread_stack_frame *context = (thread_stack_frame *)context_ptr;
-  breakpoint();
+  //thread_stack_frame *context = (thread_stack_frame *)context_ptr;
+
   update_kernel_sets(); //Update waiting and ready sets
-  
-  context = (thread_stack_frame *)round_robin(context_ptr);
-  breakpoint();
-  return (void *)context;
+
+  context_ptr = round_robin(context_ptr);
+
+  return context_ptr;
 }
 
 /** 
@@ -323,10 +325,10 @@ int sys_thread_init(
   
   /* Divide Up User & Kernel Space Stacks For User Threads */
   for(size_t i = 0; i < max_threads; i++) {
-     tcb_buffer[i].user_stack_ptr = user_stack_brk;
+     tcb_buffer[i].user_stack_ptr = (void *)user_stack_brk;
      breakpoint();
      user_stack_brk = user_stack_brk - stack_size_bytes;
-     tcb_buffer[i].kernel_stack_ptr = kernel_stack_brk;
+     tcb_buffer[i].kernel_stack_ptr = (void *)kernel_stack_brk;
      kernel_stack_brk = kernel_stack_brk - stack_size_bytes;
      tcb_buffer[i].thread_state = INIT;
      tcb_buffer[i].svc_state = 0;
@@ -336,8 +338,8 @@ int sys_thread_init(
   uint8_t i_thread_buf_idx = ksb->max_threads;
   uint8_t d_thread_buf_idx = ksb->max_threads+1;
   /* Set kernel state for idle thread 14 */
-  tcb_buffer[i_thread_buf_idx].user_stack_ptr = user_stack_brk;
-  tcb_buffer[i_thread_buf_idx].kernel_stack_ptr = kernel_stack_brk;
+  tcb_buffer[i_thread_buf_idx].user_stack_ptr = (void *)user_stack_brk;
+  tcb_buffer[i_thread_buf_idx].kernel_stack_ptr = (void *)kernel_stack_brk;
   tcb_buffer[i_thread_buf_idx].U = 0;
   tcb_buffer[i_thread_buf_idx].thread_state = WAITING;
   
@@ -386,11 +388,11 @@ int sys_thread_create(
 
   
   
-  uint32_t user_stack_ptr = tcb_buffer[new_buf_idx].user_stack_ptr - sizeof(interrupt_stack_frame);
+  uint32_t user_stack_ptr = (uint32_t)tcb_buffer[new_buf_idx].user_stack_ptr - sizeof(interrupt_stack_frame);
   
   interrupt_stack_frame *interrupt_frame = (interrupt_stack_frame *)user_stack_ptr;
 
-  uint32_t kernel_stack_ptr = tcb_buffer[new_buf_idx].kernel_stack_ptr - sizeof(thread_stack_frame);
+  uint32_t kernel_stack_ptr = (uint32_t)tcb_buffer[new_buf_idx].kernel_stack_ptr - sizeof(thread_stack_frame);
 
   thread_stack_frame *thread_frame = (thread_stack_frame *)kernel_stack_ptr;
   
@@ -404,8 +406,8 @@ int sys_thread_create(
   interrupt_frame->pc = (uint32_t)fn;
   interrupt_frame->xPSR = XPSR_INIT;
 
-  tcb_buffer[new_buf_idx].user_stack_ptr = user_stack_ptr;
-  tcb_buffer[new_buf_idx].kernel_stack_ptr = kernel_stack_ptr;
+  tcb_buffer[new_buf_idx].user_stack_ptr = (void *)user_stack_ptr;
+  tcb_buffer[new_buf_idx].kernel_stack_ptr = (void *)kernel_stack_ptr;
   tcb_buffer[new_buf_idx].C = C;
   tcb_buffer[new_buf_idx].T = T;
   tcb_buffer[new_buf_idx].thread_state = RUNNABLE;

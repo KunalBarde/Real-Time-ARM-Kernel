@@ -24,8 +24,8 @@ typedef enum { PER_THREAD = 1, KERNEL_ONLY = 0 } protection_mode;
  * @struct	Thread control block struct. 	
  */
 typedef struct {
-  uint32_t user_stack_ptr; /**< User stack pointer, probably not needed  */
-  uint32_t kernel_stack_ptr; /**< Kernel stack pointer. Points to context of the thread on the thread's stack*/
+  void *user_stack_ptr; /**< User stack pointer, probably not needed  */
+  void *kernel_stack_ptr; /**< Kernel stack pointer. Points to context of the thread on the thread's stack*/
   uint32_t priority;
   uint32_t C;
   uint32_t T;

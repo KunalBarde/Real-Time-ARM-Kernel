@@ -170,9 +170,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#abc96a6564aa346ba124293a6604a0427">systick_c_handler</a> ()</td></tr>
 <tr class="memdesc:abc96a6564aa346ba124293a6604a0427"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handler called in occassion of sys-tick interrupt. <br /></td></tr>
 <tr class="separator:abc96a6564aa346ba124293a6604a0427"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2fed305a1db91fb3bdc5d2479db0894a"><td class="memItemLeft" align="right" valign="top">thread_stack_frame *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a2fed305a1db91fb3bdc5d2479db0894a">round_robin</a> (void *curr_context_ptr)</td></tr>
-<tr class="memdesc:a2fed305a1db91fb3bdc5d2479db0894a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of round robin scheduler.  <a href="#a2fed305a1db91fb3bdc5d2479db0894a">More...</a><br /></td></tr>
-<tr class="separator:a2fed305a1db91fb3bdc5d2479db0894a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2fb597a83ed183c240fb7c9d6e1b3f7"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#ac2fb597a83ed183c240fb7c9d6e1b3f7">round_robin</a> (void *curr_context_ptr)</td></tr>
+<tr class="memdesc:ac2fb597a83ed183c240fb7c9d6e1b3f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of round robin scheduler.  <a href="#ac2fb597a83ed183c240fb7c9d6e1b3f7">More...</a><br /></td></tr>
+<tr class="separator:ac2fb597a83ed183c240fb7c9d6e1b3f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab66dd67d5d707d20135483b2c17b3b89"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#ab66dd67d5d707d20135483b2c17b3b89">pendsv_c_handler</a> (void *context_ptr)</td></tr>
 <tr class="memdesc:ab66dd67d5d707d20135483b2c17b3b89"><td class="mdescLeft">&#160;</td><td class="mdescRight">PendSV interrupt handler. Runs a scheduler and then dispatches a new thread for running.  <a href="#ab66dd67d5d707d20135483b2c17b3b89">More...</a><br /></td></tr>
 <tr class="separator:ab66dd67d5d707d20135483b2c17b3b89"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -399,12 +399,12 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
 
 </div>
 </div>
-<a class="anchor" id="a2fed305a1db91fb3bdc5d2479db0894a"></a>
+<a class="anchor" id="ac2fb597a83ed183c240fb7c9d6e1b3f7"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">thread_stack_frame* round_robin </td>
+          <td class="memname">void* round_robin </td>
           <td>(</td>
           <td class="paramtype">void *&#160;</td>
           <td class="paramname"><em>curr_context_ptr</em></td><td>)</td>
@@ -481,7 +481,7 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>0 on succes -1 on failure. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success -1 on failure. </dd></dl>
 
 </div>
 </div>
