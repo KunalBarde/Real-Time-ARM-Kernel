@@ -11,6 +11,5 @@ var searchData=
   ['ub_5ftable',['ub_table',['../syscall__thread_8c.html#a187e79dd2a6a18d6bbbc4f2509eb668b',1,'syscall_thread.c']]],
   ['ub_5ftest',['ub_test',['../syscall__thread_8c.html#a25ba3ad8a12b82367579d5895804211f',1,'syscall_thread.c']]],
   ['unused',['UNUSED',['../kmalloc_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;kmalloc.c'],['../svc__handler_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;svc_handler.c'],['../syscall_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;syscall.c'],['../uart_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;uart.c']]],
-  ['update_5fkernel_5fsets',['update_kernel_sets',['../syscall__thread_8c.html#ac2b092cdef9377874d2a424271fd8e4c',1,'syscall_thread.c']]],
-  ['user_5fstack_5fframe',['user_stack_frame',['../structuser__stack__frame.html',1,'']]]
+  ['update_5fkernel_5fsets',['update_kernel_sets',['../syscall__thread_8c.html#ac2b092cdef9377874d2a424271fd8e4c',1,'syscall_thread.c']]]
 ];

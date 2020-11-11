@@ -131,6 +131,7 @@ _pend_sv_ :
   mrs r1, psp
   stmdb r0!, {r1, r4-r11, lr}
   bl pendsv_c_handler
+  bkpt
   ldmia r0!, {r1, r4-r11, lr}
   msr psp, r1
   msr msp, r0 

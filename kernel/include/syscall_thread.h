@@ -67,6 +67,22 @@ typedef struct {
 }thread_stack_frame;
 
 /**
+ * @struct user_stack_frame
+ *
+ * @brief  Stack frame upon exception.
+ */
+typedef struct {
+  uint32_t r0;   /** @brief Register value for r0 */
+  uint32_t r1;   /** @brief Register value for r1 */
+  uint32_t r2;   /** @brief Register value for r2 */
+  uint32_t r3;   /** @brief Register value for r3 */
+  uint32_t r12;  /** @brief Register value for r12 */
+  uint32_t lr;   /** @brief Register value for lr*/
+  uint32_t pc;   /** @brief Register value for pc */
+  uint32_t xPSR; /** @brief Register value for xPSR */
+} interrupt_stack_frame;
+
+/**
  * @struct	Struct representing current threading state of the kernel. 
  */
 typedef struct {

@@ -1,4 +1,3 @@
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:78: warning: Compound interrupt_stack_frame is not documented.
 /home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/kmalloc.c:54: warning: argument 'kmalloc_t' of command @param is not found in the argument list of k_malloc_unaligned(UNUSED kmalloc_t *internals, UNUSED uint32_t size)
 /home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/kmalloc.c:63: warning: The following parameters of k_malloc_unaligned(UNUSED kmalloc_t *internals, UNUSED uint32_t size) are not documented:
   parameter 'internals'
@@ -9,11 +8,10 @@
 /home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:38: warning: Member D_THREAD_SET_IDX (macro definition) of file syscall_thread.c is not documented.
 /home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:40: warning: Member I_THREAD_PRIORITY (macro definition) of file syscall_thread.c is not documented.
 /home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:41: warning: Member D_THREAD_PRIORITY (macro definition) of file syscall_thread.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:372: warning: Member thread_kill(void) (function) of file syscall_thread.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:524: warning: Member sys_mutex_init(uint32_t max_prio) (function) of file syscall_thread.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:529: warning: Member sys_mutex_lock(kmutex_t *mutex) (function) of file syscall_thread.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:533: warning: Member sys_mutex_unlock(kmutex_t *mutex) (function) of file syscall_thread.c is not documented.
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:214: warning: argument 'Context' of command @param is not found in the argument list of round_robin(void *curr_context_ptr)
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:220: warning: The following parameters of round_robin(void *curr_context_ptr) are not documented:
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:359: warning: Member thread_kill(void) (function) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:514: warning: Member sys_mutex_init(uint32_t max_prio) (function) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:519: warning: Member sys_mutex_lock(kmutex_t *mutex) (function) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:523: warning: Member sys_mutex_unlock(kmutex_t *mutex) (function) of file syscall_thread.c is not documented.
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:199: warning: argument 'Context' of command @param is not found in the argument list of round_robin(void *curr_context_ptr)
+/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:205: warning: The following parameters of round_robin(void *curr_context_ptr) are not documented:
   parameter 'curr_context_ptr'
-/home/vm349/Desktop/349/Lab_4/f20-lab4-kbarde-ntoldala-lab4/kernel/src/syscall_thread.c:79: warning: Member r0 (variable) of class interrupt_stack_frame is not documented.

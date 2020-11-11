@@ -70,21 +70,6 @@ float ub_table[] = {
   .7012, .7009
 };
 
-/**
- * @struct user_stack_frame
- *
- * @brief  Stack frame upon exception.
- */
-typedef struct {
-  uint32_t r0;   /** @brief Register value for r0 */
-  uint32_t r1;   /** @brief Register value for r1 */
-  uint32_t r2;   /** @brief Register value for r2 */
-  uint32_t r3;   /** @brief Register value for r3 */
-  uint32_t r12;  /** @brief Register value for r12 */
-  uint32_t lr;   /** @brief Register value for lr*/
-  uint32_t pc;   /** @brief Register value for pc */
-  uint32_t xPSR; /** @brief Register value for xPSR */
-} interrupt_stack_frame;
 
 /* Kernel Data Structures */
 
@@ -262,6 +247,7 @@ thread_stack_frame *round_robin(void *curr_context_ptr) {
 
   //Restore status and return new context pointer
   set_svc_status(tcb_buffer[running_buf_idx].svc_state);
+  breakpoint();
   return (thread_stack_frame *)tcb_buffer[running_buf_idx].kernel_stack_ptr;
 }
 
@@ -408,7 +394,7 @@ int sys_thread_create(
 
   thread_stack_frame *thread_frame = (thread_stack_frame *)kernel_stack_ptr;
   
-  breakpoint();
+  
   interrupt_frame->r0 = (unsigned int)vargp;
   interrupt_frame->r1 = 0;
   interrupt_frame->r2 = 0;
@@ -419,10 +405,12 @@ int sys_thread_create(
   interrupt_frame->xPSR = XPSR_INIT;
 
   tcb_buffer[new_buf_idx].user_stack_ptr = user_stack_ptr;
+  tcb_buffer[new_buf_idx].kernel_stack_ptr = kernel_stack_ptr;
   tcb_buffer[new_buf_idx].C = C;
   tcb_buffer[new_buf_idx].T = T;
   tcb_buffer[new_buf_idx].thread_state = RUNNABLE;
   
+  thread_frame->psp = user_stack_ptr;
   thread_frame->r4 = 0;
   thread_frame->r5 = 0;
   thread_frame->r6 = 0;
@@ -432,6 +420,7 @@ int sys_thread_create(
   thread_frame->r10 = 0;
   thread_frame->r11 = 0;
   thread_frame->r14 = LR_RETURN_TO_USER_PSP;
+  breakpoint();
 
   if(priority != I_THREAD_PRIORITY) ksb->u_thread_ct++;
     
