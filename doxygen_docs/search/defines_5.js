@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['mmarvalid',['MMARVALID',['../mpu_8c.html#a49a795c37df53d736a30d36ac8a5c8ca',1,'mpu.c']]],
-  ['mpu_5fbase',['MPU_BASE',['../mpu_8c.html#aa0805ccd2bc4e42d63adb0618d2af571',1,'mpu.c']]],
-  ['mstkerr',['MSTKERR',['../mpu_8c.html#a9a934466ca47ca6102390fef1078cf85',1,'mpu.c']]],
-  ['munstkerr',['MUNSTKERR',['../mpu_8c.html#a3b380f684e8a18a6eba0f32a3e37ad3d',1,'mpu.c']]]
+  ['lr_5freturn_5fto_5fkernel_5fmsp',['LR_RETURN_TO_KERNEL_MSP',['../syscall__thread_8c.html#abf65de8424a7c25ac572b36b251eb976',1,'syscall_thread.c']]],
+  ['lr_5freturn_5fto_5fuser_5fpsp',['LR_RETURN_TO_USER_PSP',['../syscall__thread_8c.html#a8a6ea3d12a6db3f3a0b8afcb52881c2a',1,'syscall_thread.c']]]
 ];

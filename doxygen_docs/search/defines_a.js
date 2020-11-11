@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['waiting',['WAITING',['../syscall__thread_8c.html#a13ee57d95da6b6509d43bb1b3f67bb02',1,'syscall_thread.c']]]
+  ['uart_5fbaud',['UART_BAUD',['../kernel_8c.html#a1fac9153314479ad0ad495d752f0224a',1,'kernel.c']]],
+  ['uart_5firq',['UART_IRQ',['../uart_8c.html#a833c8df01544588f5a71e2cbff8aa266',1,'uart.c']]],
+  ['unused',['UNUSED',['../kmalloc_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;kmalloc.c'],['../svc__handler_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;svc_handler.c'],['../syscall_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;syscall.c'],['../uart_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;uart.c']]]
 ];

@@ -70,15 +70,14 @@ typedef struct {
  * @struct	Struct representing current threading state of the kernel. 
  */
 typedef struct {
-  uint8_t *wait_set;
-  uint8_t *ready_set;
-  uint8_t running_thread;
-  uint32_t sys_tick_ct; //Used for time slicing and scheduling
+  uint8_t *wait_set; /**< Priority ordered mapping of threads which are waiting to their tcb's. 0 is highest priority. Must be disjoint with the ready set.*/
+  uint8_t *ready_set; /**< Priority ordered mapping of threads which are ready for execution to their tcb's. 0 is highest priority. Must be disjoint with the waiting set. */
+  uint8_t running_thread; /**< Tbuf index of currently running thread*/
+  uint32_t sys_tick_ct; /**< Used for time slicing and scheduling*/
   uint32_t stack_size; /**< Stack size per thread*/
-  uint32_t u_thread_ct;
-  uint32_t max_threads;
+  uint32_t u_thread_ct; /**< Number of currently allocated user threads */
+  uint32_t max_threads; /**< Maximum number of allocatable user threads. Determined by user at thread initialization */
   uint32_t max_mutexes;
-  uint32_t next_free_thread; /** Tcb buf idx of next allocatable thread */
   protection_mode mem_prot;
 }k_threading_state_t;
 
