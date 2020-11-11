@@ -333,7 +333,7 @@ int sys_thread_init(
   /* Divide Up User & Kernel Space Stacks For User Threads */
   for(size_t i = 0; i < max_threads; i++) {
      tcb_buffer[i].user_stack_ptr = (void *)user_stack_brk;
-     breakpoint();
+     //breakpoint();
      user_stack_brk = user_stack_brk - stack_size_bytes;
      tcb_buffer[i].kernel_stack_ptr = (void *)kernel_stack_brk;
      kernel_stack_brk = kernel_stack_brk - stack_size_bytes;
@@ -380,7 +380,7 @@ int sys_thread_create(
   void *vargp
 ){
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
-  breakpoint();
+  //breakpoint();
   uint8_t new_buf_idx;
   if(priority == I_THREAD_PRIORITY) { //Idle thread alloc
 
@@ -430,7 +430,7 @@ int sys_thread_create(
   thread_frame->r10 = 0;
   thread_frame->r11 = 0;
   thread_frame->r14 = LR_RETURN_TO_USER_PSP;
-  breakpoint();
+  //breakpoint();
 
   if(priority != I_THREAD_PRIORITY) ksb->u_thread_ct++;
     
