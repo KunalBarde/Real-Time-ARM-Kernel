@@ -164,6 +164,7 @@ void update_kernel_sets() {
 
 /**
 * @brief	Handler called in occassion of sys-tick interrupt
+                Implements RMS Scheduling
 */
 void systick_c_handler() {
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
@@ -185,7 +186,6 @@ void systick_c_handler() {
           tcb_buffer[i].thread_state = RUNNABLE;
        }
     }
-
   }
    
   //Set PendSV to pending
@@ -253,6 +253,21 @@ void *round_robin(void *curr_context_ptr) {
   return tcb_buffer[running_buf_idx].kernel_stack_ptr;
 }
 
+int8_t get_next_thread() {
+  uint32_t min_prior = 0x8FFFFFFF; 
+  int8_t idx = -1;
+  for(size_t i = 0; i < MAX_U_THREADS; i++) {
+    if(tcb_buffer[i].thread_state == RUNNABLE) {
+      if(tcb_buffer[i].priority < min_prior) {
+        min_prior = tcb_buffer[i].priority;
+        idx = i;
+      }
+    }
+  }
+
+  return idx;
+}
+
 /**
  * @brief	PendSV interrupt handler. Runs a scheduler and then dispatches a new thread for running. 
 
@@ -260,14 +275,28 @@ void *round_robin(void *curr_context_ptr) {
 
  * @return	A pointer to the next thread's stack-saved context. 
  */
+
+
+
 void *pendsv_c_handler(void *context_ptr) {
-  //thread_stack_frame *context = (thread_stack_frame *)context_ptr;
-
   update_kernel_sets(); //Update waiting and ready sets
+//  context_ptr = round_robin(context_ptr);
 
-  context_ptr = round_robin(context_ptr);
+  k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
 
-  return context_ptr;
+  int32_t running_buf_idx = ksb->running_thread;
+
+  //Save current context
+  tcb_buffer[running_buf_idx].kernel_stack_ptr = context_ptr;
+  tcb_buffer[running_buf_idx].svc_state = get_svc_status();
+
+  int8_t chosen_thread_idx = get_next_thread();
+  tcb_t chosen_thread = tcb_buffer[chosen_thread_idx];
+  //Restore svc status 
+  set_svc_status(chosen_thread.svc_state);
+  //Return new context ptr
+  return (void *)chosen_thread.kernel_stack_ptr;
+//  return context_ptr;
 }
 
 /** 
@@ -331,7 +360,6 @@ int sys_thread_init(
   /* Divide Up User & Kernel Space Stacks For User Threads */
   for(size_t i = 0; i < max_threads; i++) {
      tcb_buffer[i].user_stack_ptr = (void *)user_stack_brk;
-     //breakpoint();
      user_stack_brk = user_stack_brk - stack_size_bytes;
      tcb_buffer[i].kernel_stack_ptr = (void *)kernel_stack_brk;
      kernel_stack_brk = kernel_stack_brk - stack_size_bytes;
@@ -408,7 +436,6 @@ int sys_thread_create(
   interrupt_frame->r2 = 0;
   interrupt_frame->r3 = 0;
   interrupt_frame->r12 = 0;
-//  interrupt_frame->lr = (unsigned int)&thread_kill;
   interrupt_frame->pc = (uint32_t)fn;
   interrupt_frame->xPSR = XPSR_INIT;
 
@@ -429,7 +456,6 @@ int sys_thread_create(
   thread_frame->r10 = 0;
   thread_frame->r11 = 0;
   thread_frame->r14 = LR_RETURN_TO_USER_PSP;
-  //breakpoint();
 
   if(priority != I_THREAD_PRIORITY) ksb->u_thread_ct++;
     
