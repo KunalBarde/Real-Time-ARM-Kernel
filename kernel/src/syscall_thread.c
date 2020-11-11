@@ -132,7 +132,7 @@ int ub_test(float T, float C) {
 void update_kernel_sets() {
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
 
-  for(int i = 0; i < ksb->u_thread_ct; i++) {
+  for(uint32_t i = 0; i < ksb->u_thread_ct; i++) {
     int8_t cur_set_idx = tcb_buffer[i].priority;
     switch(tcb_buffer[i].thread_state) {
       case WAITING:
@@ -167,14 +167,14 @@ void update_kernel_sets() {
   } 
 
   if(d_thread_state == WAITING) {
-    ksb->ready_set[D_THREAD_IDX] = -1;
-    ksb->wait_set[D_THREAD_IDX] = ksb->max_threads+1;
+    ksb->ready_set[D_THREAD_SET_IDX] = -1;
+    ksb->wait_set[D_THREAD_SET_IDX] = ksb->max_threads+1;
   } else if(i_thread_state) {
-    ksb->ready_set[D_THREAD_IDX] = ksb->max_threads+1;
-    ksb->wait_set[D_THREAD_IDX] = -1;
+    ksb->ready_set[D_THREAD_SET_IDX] = ksb->max_threads+1;
+    ksb->wait_set[D_THREAD_SET_IDX] = -1;
   } else {
-    ksb->ready_set[D_THREAD_IDX] = -1;
-    ksb->wait_set[D_THREAD_IDX] = -1;
+    ksb->ready_set[D_THREAD_SET_IDX] = -1;
+    ksb->wait_set[D_THREAD_SET_IDX] = -1;
   } 
 }
 
@@ -391,7 +391,7 @@ int sys_thread_create(
     //Idle thread idx is always upper bound
     new_buf_idx = ksb->max_threads;
   } else { //Normal user thread
-    new_buf_idx = = ksb->u_thread_ct;
+    new_buf_idx = ksb->u_thread_ct;
    
     //Attempted to allocate more threads than promised in init
     if(new_buf_idx == ksb->max_threads) return -1;
@@ -506,7 +506,7 @@ void sys_thread_kill(){
   }
 
   tcb_buffer[ksb->running_thread].thread_state = INIT;
-  if(ksb->running_thread != I_THREAD_IDX) ksb->u_thread_ct--;
+  if(ksb->running_thread != ksb->max_threads) ksb->u_thread_ct--;
   pend_pendsv();
   return;
 }
