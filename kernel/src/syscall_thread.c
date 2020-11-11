@@ -29,8 +29,8 @@
 #define WORD_SIZE 4
 #define K_BLOCK_SIZE (sizeof(k_threading_state_t))
 #define TCB_BUFFER_SIZE (sizeof(tcb_t) * (BUFFER_SIZE)) //Avoiding zero indexing
-#define I_THREAD_IDX 0 //Idle thread index into kernel buffers
-#define D_THREAD_IDX 1 //Default thread index into kernel buffers
+#define I_THREAD_IDX 14 //Idle thread index into kernel buffers
+#define D_THREAD_IDX 15 //Default thread index into kernel buffers
 #define I_THREAD_PRIOR 14 //Lowest priority initially 
 #define D_THREAD_PRIOR 15 //Not really lowest priority, not a normal thread
 #define INIT 0
@@ -99,8 +99,14 @@ static volatile tcb_t tcb_buffer[BUFFER_SIZE];
 /* Static global thread id assignment */
 static volatile int thread_idx = 0;
 
-uint32_t *icsr_reg = (uint32_t *)ICSR_ADDR;
+/**
+ * @brief	Performs a UB schedulability test on a new thread being added to the task set. 
 
+ * @param[in]	T	Period of new Thread.
+ * @param[in]	C	Worst case runtime of new thread. 
+
+ * @return	0 if schedulable, -1 otherwise.
+ */
 int ub_test(float T, float C) {
    k_threading_state_t *kcb = (k_threading_state_t *)kernel_threading_state;
    float u_tot = C/T;
@@ -155,28 +161,47 @@ void systick_c_handler() {
 thread_stack_frame *round_robin(void *curr_context_ptr) {
   k_threading_state_t *_kernel_state_block = (k_threading_state_t *)kernel_threading_state;
 
-  int8_t running_idx = _kernel_state_block->running_thread;
-  int8_t tries = 0;
+  int8_t running_buf_idx = _kernel_state_block->running_thread;
 
   //Save current context and move back to ready set
-  tcb_buffer[running_idx].kernel_stack_ptr = (uint32_t) curr_context_ptr;
-  tcb_buffer[running_idx].svc_state = get_svc_status();
-  int8_t old_running_idx = running_idx;
+  tcb_buffer[running_buf_idx].kernel_stack_ptr = (uint32_t) curr_context_ptr;
+  tcb_buffer[running_buf_idx].svc_state = get_svc_status();
+  int8_t old_running_buf_idx = running_buf_idx;
 
-  do {
-    tries++;
-    running_idx = (running_idx >= I_THREAD_PRIOR-1) ? 0 : running_idx + 1;
-    if(tries == MAX_U_THREADS) { //Nothing to run, return to default
-      running_idx = D_THREAD_PRIOR;
-    } 
-  } while (!(_kernel_state_block -> ready_set[running_idx]));
-  //Remove new 
-  _kernel_state_block -> ready_set[running_idx] = 0;
-  //Add old back to ready set
-  _kernel_state_block -> ready_set[old_running_idx] = 1;
+  uint32_t old_running_ready_set_idx = tcb_buffer[old_running_buf_idx].priority;
+  uint32_t running_ready_set_idx = tcb_buffer[running_buf_idx].priority;
+
+  running_ready_set_idx = (running_ready_set_idx >= I_THREAD_PRIOR-1) ? 0 : running_ready_set_idx + 1;
+
+  while (1) {
+    if(running_ready_set_idx == old_running_ready_set_idx) {
+      running_buf_idx = old_running_buf_idx;
+      break; //Done we just go back to the old thread
+    }
+
+    int curr_buf_idx = _kernel_state_block -> ready_set[running_ready_set_idx];
+
+    if(curr_buf_idx > -1) { //found next task to run
+      running_buf_idx = curr_buf_idx;
+      running_ready_set_idx = tcb_buffer[running_buf_idx].priority;
+      break;
+    }
+    
+      running_ready_set_idx = (running_ready_set_idx >= I_THREAD_PRIOR-1) ? 0 : running_ready_set_idx + 1;
+  }
+
+  //Remove new running task from ready set
+  _kernel_state_block -> ready_set[running_ready_set_idx] = -1;
   
-  set_svc_status(tcb_buffer[running_idx].svc_state);
-  return (thread_stack_frame *)tcb_buffer[running_idx].kernel_stack_ptr;
+  //Add old back task back to ready set
+  uint32_t old_priority = tcb_buffer[old_running_buf_idx].priority;
+  _kernel_state_block -> ready_set[old_priority] = old_running_buf_idx;
+ 
+  //Set new running thread 
+  _kernel_state_block->running_thread = running_buf_idx;
+
+  set_svc_status(tcb_buffer[running_buf_idx].svc_state);
+  return (thread_stack_frame *)tcb_buffer[running_buf_idx].kernel_stack_ptr;
 }
 
 /**
@@ -219,7 +244,7 @@ int sys_thread_init(
   uint32_t user_stack_thresh = (uint32_t)(&__thread_u_stacks_top) - (uint32_t)(&__thread_u_stacks_low);
 
   uint32_t kernel_stack_thresh = (uint32_t)(&__thread_k_stacks_top) - (uint32_t)(&__thread_k_stacks_low);
-  
+  breakpoint();
   uint32_t stack_consumption = (max_threads+1)*stack_size_bytes;
   
   if(stack_consumption > user_stack_thresh || stack_consumption > kernel_stack_thresh)
@@ -245,6 +270,7 @@ int sys_thread_init(
   /* Divide Up User & Kernel Space Stacks For User Threads */
   for(size_t i = 0; i < max_threads; i++) {
      tcb_buffer[i].user_stack_ptr = user_stack_brk;
+     breakpoint();
      user_stack_brk = user_stack_brk - stack_size_bytes;
      tcb_buffer[i].kernel_stack_ptr = kernel_stack_brk;
      kernel_stack_brk = kernel_stack_brk - stack_size_bytes;
@@ -253,13 +279,13 @@ int sys_thread_init(
      tcb_buffer[i].U = 0;
   }
   
-  /* Set kernel state for idle thread 0 */
+  /* Set kernel state for idle thread 14 */
   tcb_buffer[I_THREAD_IDX].user_stack_ptr = user_stack_brk;
   tcb_buffer[I_THREAD_IDX].kernel_stack_ptr = kernel_stack_brk;
   tcb_buffer[I_THREAD_IDX].U = 0;
   tcb_buffer[I_THREAD_IDX].thread_state = WAITING;
   
-  /* Set kernel state for default thread 1 */
+  /* Set kernel state for default thread 15 */
   tcb_buffer[D_THREAD_IDX].thread_state = RUNNABLE;
   tcb_buffer[D_THREAD_IDX].svc_state = 0;
   tcb_buffer[D_THREAD_IDX].U = 0;
@@ -269,6 +295,7 @@ int sys_thread_init(
     sys_thread_create(wait_for_interrupt, I_THREAD_PRIOR, 0, 1, NULL);
     return 0;
   }
+  breakpoint();
   sys_thread_create(idle_fn, I_THREAD_PRIOR, 0, 1, NULL);
   return 0;
 }
@@ -277,16 +304,16 @@ extern void thread_kill(void);
 
 /**
  * @brief	System call to spawn a new thread. 
+
+ * @return	0 on success -1 otherwise. 
  */
 int sys_thread_create(
   void *fn,
-  uint32_t prio,
+  uint32_t priortiy,
   uint32_t C,
   uint32_t T,
   void *vargp
 ){
-   
-//  extern void thread_kill(void);
 
   uint32_t user_stack_ptr = tcb_buffer[prio].user_stack_ptr - sizeof(interrupt_stack_frame);
   interrupt_stack_frame *interrupt_frame = (interrupt_stack_frame *)user_stack_ptr;
@@ -294,6 +321,7 @@ int sys_thread_create(
   uint32_t kernel_stack_ptr = tcb_buffer[prio].kernel_stack_ptr - sizeof(thread_stack_frame);
   thread_stack_frame *thread_frame = (thread_stack_frame *)kernel_stack_ptr;
   
+  breakpoint();
   interrupt_frame->r0 = (unsigned int)vargp;
   interrupt_frame->r1 = 0;
   interrupt_frame->r2 = 0;
@@ -320,10 +348,10 @@ int sys_thread_create(
   /* Mark thread as runnable */
   kernel_ready_set[prio] = RUNNABLE;
 
-  k_threading_state_t *kernel_state = (k_threading_state_t *)kernel_threading_state;
-  if(prio != I_THREAD_IDX) kernel_state->u_thread_ct++;
+  k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
+  if(prio != I_THREAD_IDX) ksb->u_thread_ct++;
     
-  return -1;
+  return 0;
 }
 
 /**
@@ -335,11 +363,11 @@ int sys_thread_create(
  */
 int sys_scheduler_start( uint32_t frequency ){
   uint32_t timer_period = CPU_CLK_FREQ/frequency;
-  k_threading_state_t *_kernel_state_block = (k_threading_state_t *)kernel_threading_state;
-  _kernel_state_block -> sys_tick_ct = 0;
+  k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
+  ksb -> sys_tick_ct = 0;
   timer_start(timer_period);
 
-  pend_pendsv();
+  pend_pendsv(); //Begin first thread
   
   return 0;
 }
@@ -350,9 +378,9 @@ int sys_scheduler_start( uint32_t frequency ){
  * @brief	Priority of current running thread. 
  */
 uint32_t sys_get_priority(){
-  k_threading_state_t *_kernel_state_block = (k_threading_state_t *)kernel_threading_state;
+  k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
 
-  return _kernel_state_block->running_thread;
+  return tcb_buffer[ksb->running_thread].priority;
 }
 
 /** 
@@ -361,11 +389,16 @@ uint32_t sys_get_priority(){
  * @return	The number of system ticks since this scheduler was initialized. 
  */
 uint32_t sys_get_time(){
-   k_threading_state_t *_kernel_state_block = (k_threading_state_t *)kernel_threading_state;
+   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
 
-  return _kernel_state_block->sys_tick_ct;
+  return ksb->sys_tick_ct;
 }
 
+/** 
+ * @brief	Returns the amount of actual execution time consumed by a the current thread. 
+
+ * @return	The duration of execution of the current thread. 
+ */ 
 uint32_t sys_thread_time(){
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
   return tcb_buffer[ksb->running_thread].duration;

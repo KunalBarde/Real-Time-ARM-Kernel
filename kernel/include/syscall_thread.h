@@ -13,10 +13,6 @@
 
 #include <unistd.h>
 
-#define ICSR_ADDR 0xE000ED04
-#define PENDSVSET (1 << 28)
-#define PENDSVCLR (1 << 27)
-
 /**
  * @enum protection_mode
  *
@@ -82,6 +78,7 @@ typedef struct {
   uint32_t u_thread_ct;
   uint32_t max_threads;
   uint32_t max_mutexes;
+  uint32_t next_free_thread; /** Tcb buf idx of next allocatable thread */
   protection_mode mem_prot;
 }k_threading_state_t;
 
