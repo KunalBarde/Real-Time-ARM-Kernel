@@ -39,9 +39,8 @@ typedef struct {
 /** 
  * @struct	Struct representing stack-saved thread context. 
  */ 
-typedef struct {
-  uint32_t r14; /**< LR */
-  uint32_t psp;
+/*typedef struct {
+  uint32_t r14; < LR 
   uint32_t r11;
   uint32_t r10;
   uint32_t r9;
@@ -50,9 +49,10 @@ typedef struct {
   uint32_t r6;
   uint32_t r5;
   uint32_t r4;
-}thread_stack_frame;
+  uint32_t psp;
+}thread_stack_frame;*/
 
-/*
+
 typedef struct {
   uint32_t psp;
   uint32_t r4;
@@ -64,7 +64,7 @@ typedef struct {
   uint32_t r10;
   uint32_t r11;
   uint32_t r14;
-}thread_stack_frame;*/
+}thread_stack_frame;
 
 /**
  * @struct	Struct representing current threading state of the kernel. 

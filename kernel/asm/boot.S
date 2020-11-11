@@ -129,13 +129,9 @@ _pend_sv_ :
   bkpt
   mrs r0, msp
   mrs r1, psp
-  stmdb r0!, {r4-r11}
-  stmdb r0!, {r1}
-  stmdb r0!, {lr}
+  stmdb r0!, {r1, r4-r11, lr}
   bl pendsv_c_handler
-  stmdb r0!, {lr}
-  ldmia r0!, {r1}
-  ldmia r0!, {r4-r11}
+  ldmia r0!, {r1, r4-r11, lr}
   msr psp, r1
   msr msp, r0 
   bx lr

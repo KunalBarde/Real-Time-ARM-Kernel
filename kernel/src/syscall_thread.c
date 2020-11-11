@@ -274,10 +274,11 @@ thread_stack_frame *round_robin(void *curr_context_ptr) {
  */
 void *pendsv_c_handler(void *context_ptr) {
   thread_stack_frame *context = (thread_stack_frame *)context_ptr;
-
+  breakpoint();
   update_kernel_sets(); //Update waiting and ready sets
+  
   context = (thread_stack_frame *)round_robin(context_ptr);
-
+  breakpoint();
   return (void *)context;
 }
 
@@ -307,7 +308,7 @@ int sys_thread_init(
   uint32_t user_stack_thresh = (uint32_t)(&__thread_u_stacks_top) - (uint32_t)(&__thread_u_stacks_low);
 
   uint32_t kernel_stack_thresh = (uint32_t)(&__thread_k_stacks_top) - (uint32_t)(&__thread_k_stacks_low);
-  breakpoint();
+
   uint32_t stack_consumption = (max_threads+1)*stack_size_bytes;
   
   if(stack_consumption > user_stack_thresh || stack_consumption > kernel_stack_thresh)
