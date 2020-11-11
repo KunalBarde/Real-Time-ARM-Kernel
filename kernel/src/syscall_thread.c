@@ -77,10 +77,10 @@ float ub_table[] = {
 static volatile char kernel_threading_state[K_BLOCK_SIZE];
 
 /* Initially all threads should be in the wait set */
-static volatile char kernel_wait_set[BUFFER_SIZE] = {0};
+static volatile signed char kernel_wait_set[BUFFER_SIZE] = {0};
 
 /* Add threads to ready set once sys_thread_create is called */
-static volatile char kernel_ready_set[BUFFER_SIZE] = {0};
+static volatile signed char kernel_ready_set[BUFFER_SIZE] = {0};
 
 /* PendSV handler moves threads to running */
 //static volatile char kernel_running_set[BUFFER_SIZE] = {0};
@@ -119,6 +119,7 @@ void update_kernel_sets() {
 
   for(uint32_t i = 0; i < ksb->u_thread_ct; i++) {
     int8_t cur_set_idx = tcb_buffer[i].priority;
+    //breakpoint();
     switch(tcb_buffer[i].thread_state) {
       case WAITING:
         ksb->ready_set[cur_set_idx] = -1;
@@ -219,10 +220,11 @@ void *round_robin(void *curr_context_ptr) {
   uint32_t old_running_ready_set_idx = running_ready_set_idx;
 
   running_ready_set_idx = (running_ready_set_idx >= I_THREAD_SET_IDX-1) ? 0 : running_ready_set_idx + 1;
-  
+  //breakpoint();
   while (1) {
     if(running_ready_set_idx == old_running_ready_set_idx) {
       //Done we just go back to the old thread
+    //  breakpoint();
       return tcb_buffer[old_running_buf_idx].kernel_stack_ptr;
     }
 
@@ -249,7 +251,7 @@ void *round_robin(void *curr_context_ptr) {
 
   //Restore status and return new context pointer
   set_svc_status(tcb_buffer[running_buf_idx].svc_state);
-  //breakpoint();
+ // breakpoint();
   return tcb_buffer[running_buf_idx].kernel_stack_ptr;
 }
 
@@ -306,8 +308,13 @@ int sys_thread_init(
  
   ksb = (k_threading_state_t *)kernel_threading_state;
 
-  ksb->wait_set = (uint8_t *)kernel_wait_set;
-  ksb->ready_set = (uint8_t *)kernel_ready_set;
+  for(int i = 0; i < BUFFER_SIZE; i++) {
+    kernel_wait_set[i] = -1;
+    kernel_ready_set[i] = -1;
+  }
+
+  ksb->wait_set = (signed char *)kernel_wait_set;
+  ksb->ready_set = (signed char *)kernel_ready_set;
 
   //Default thread idx is always +1 of the maximum number of max user threads
   ksb->running_thread = max_threads+1;
@@ -373,7 +380,7 @@ int sys_thread_create(
   void *vargp
 ){
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
-
+  breakpoint();
   uint8_t new_buf_idx;
   if(priority == I_THREAD_PRIORITY) { //Idle thread alloc
 
@@ -411,6 +418,7 @@ int sys_thread_create(
   tcb_buffer[new_buf_idx].C = C;
   tcb_buffer[new_buf_idx].T = T;
   tcb_buffer[new_buf_idx].thread_state = RUNNABLE;
+  tcb_buffer[new_buf_idx].priority = priority;
   
   thread_frame->psp = user_stack_ptr;
   thread_frame->r4 = 0;
