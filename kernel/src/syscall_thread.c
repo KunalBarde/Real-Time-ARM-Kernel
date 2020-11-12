@@ -201,6 +201,7 @@ void systick_c_handler() {
   ksb->sys_tick_ct++;
   uint8_t curr_thread = ksb->running_thread;
   tcb_buffer[curr_thread].duration++;
+  tcb_buffer[curr_thread].total_time++;
 
   update_thread_states(curr_thread);  
   
@@ -515,10 +516,12 @@ int sys_thread_create(
   tcb_buffer[new_buf_idx].kernel_stack_ptr = (void *)kernel_stack_ptr;
   tcb_buffer[new_buf_idx].C = C;
   tcb_buffer[new_buf_idx].T = T;
+  tcb_buffer[new_buf_idx].U = (float)C/(float)T;
   tcb_buffer[new_buf_idx].thread_state = RUNNABLE;
   tcb_buffer[new_buf_idx].priority = priority;
   tcb_buffer[new_buf_idx].period_ct = 0;
   tcb_buffer[new_buf_idx].duration = 0;
+  tcb_buffer[new_buf_idx].total_time = 0;
   tcb_buffer[new_buf_idx].svc_state = 0;
   
   thread_frame->psp = user_stack_ptr;
@@ -585,7 +588,7 @@ uint32_t sys_get_time(){
  */ 
 uint32_t sys_thread_time(){
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
-  return tcb_buffer[ksb->running_thread].duration;
+  return tcb_buffer[ksb->running_thread].total_time;
 }
 
 /** 
