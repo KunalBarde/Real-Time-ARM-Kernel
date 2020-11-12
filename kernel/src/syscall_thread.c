@@ -281,18 +281,20 @@ void *round_robin(void *curr_context_ptr) {
   return tcb_buffer[running_buf_idx].kernel_stack_ptr;
 }
 
-int8_t get_next_thread() {
+int8_t poll_next_thread() {
   uint32_t min_prior = 0x8FFFFFFF; 
   int8_t idx = -1;
+  
   for(size_t i = 0; i < MAX_U_THREADS; i++) {
     if(tcb_buffer[i].thread_state == RUNNABLE) {
       if(tcb_buffer[i].priority < min_prior) {
+        breakpoint();
         min_prior = tcb_buffer[i].priority;
         idx = i;
       }
     }
   }
-
+  breakpoint();
   return idx;
 }
 
@@ -369,22 +371,9 @@ void *rms(void *curr_context_ptr) {
 void *pendsv_c_handler(void *context_ptr) {
   update_kernel_sets(); //Update waiting and ready sets
 
-  //breakpoint();
-  //k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
   //context_ptr = round_robin(context_ptr);
   context_ptr = rms(context_ptr);
-  //int32_t running_buf_idx = ksb->running_thread;
-  //breakpoint();
-  //Save current context
- // tcb_buffer[running_buf_idx].kernel_stack_ptr = context_ptr;
- // tcb_buffer[running_buf_idx].svc_state = get_svc_status();
 
- // int8_t chosen_thread_idx = get_next_thread();
- // tcb_t chosen_thread = tcb_buffer[chosen_thread_idx];
-  //Restore svc status 
-//  set_svc_status(chosen_thread.svc_state);
-  //Return new context ptr
-  //return (void *)chosen_thread.kernel_stack_ptr;
   return context_ptr;
 }
 
@@ -496,6 +485,7 @@ int sys_thread_create(
   uint32_t T,
   void *vargp
 ){
+  if(!ub_test((float)T, (float)C)) return -1;
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
   //breakpoint();
   uint8_t new_buf_idx;
