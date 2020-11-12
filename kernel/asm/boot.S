@@ -126,13 +126,12 @@ _usage_fault_ :
 
 .thumb_func
 _pend_sv_ : 
-
+  
   mrs r0, msp
   mrs r1, psp
   stmdb r0!, {r1, r4-r11, lr}
   mov sp, r0
   bl pendsv_c_handler
-  bkpt
   ldmia r0!, {r1, r4-r11, lr}
   mov sp, r0
   msr psp, r1

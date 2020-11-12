@@ -31,7 +31,7 @@ typedef struct {
   uint32_t T;
   uint32_t duration;
   uint32_t period_ct;
-  float U;
+  float U; //TODO Check if needed 
   int svc_state;
   uint8_t thread_state;
 }tcb_t;
