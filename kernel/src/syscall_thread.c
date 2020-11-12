@@ -223,7 +223,6 @@ void *round_robin(void *curr_context_ptr) {
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
 
   int32_t running_buf_idx = ksb->running_thread;
-  //breakpoint();
   //Save current context
   tcb_buffer[running_buf_idx].kernel_stack_ptr = curr_context_ptr;
   tcb_buffer[running_buf_idx].svc_state = get_svc_status();
@@ -239,7 +238,6 @@ void *round_robin(void *curr_context_ptr) {
   while (1) {
     if(running_ready_set_idx == old_running_ready_set_idx) {
       //Done we just go back to the old thread
-      //breakpoint();
       return tcb_buffer[old_running_buf_idx].kernel_stack_ptr;
     }
 
