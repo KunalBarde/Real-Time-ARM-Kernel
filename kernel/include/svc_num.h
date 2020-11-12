@@ -48,7 +48,6 @@
 #define SVC_PRIORITY    19
 /** @brief SVC number for thread_time() */
 #define SVC_THR_TIME    20
-
 /** @brief SVC number for servo_enable() */
 #define SVC_SERVO_ENABLE   22
 /** @brief SVC number for servo_set() */

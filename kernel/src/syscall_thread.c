@@ -115,7 +115,7 @@ int ub_test(float T, float C) {
  */
 void update_kernel_sets() {
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
-
+  //breakpoint();
   for(uint32_t i = 0; i < ksb->u_thread_ct; i++) {
     int8_t cur_set_idx = tcb_buffer[i].priority;
     //breakpoint();
@@ -124,13 +124,14 @@ void update_kernel_sets() {
         ksb->ready_set[cur_set_idx] = -1;
         ksb->wait_set[cur_set_idx] = i;
         break;
-
+      
+      case RUNNING:
       case RUNNABLE:
         ksb->ready_set[cur_set_idx] = i;
         ksb->wait_set[cur_set_idx] = -1;
         break;
 
-      default: //Running or init
+      default: //init
         ksb->ready_set[cur_set_idx] = -1;
         ksb->wait_set[cur_set_idx] = -1;
         break;
@@ -173,14 +174,16 @@ void update_thread_states(uint8_t curr_thread) {
   
   //Yields upon finishing execution
   if(tcb_buffer[curr_thread].duration >= tcb_buffer[curr_thread].C) {
+    //breakpoint();
     tcb_buffer[curr_thread].thread_state = WAITING;
   }
-
+  //breakpoint();
   for(uint8_t i = 0; i < ksb->u_thread_ct; i++) {
     if(tcb_buffer[i].thread_state != INIT) {
       tcb_buffer[i].period_ct++;
       if(tcb_buffer[i].period_ct >= tcb_buffer[i].T) {
-        tcb_buffer[i].period_ct = 0;
+         //breakpoint();
+         tcb_buffer[i].period_ct = 0;
          tcb_buffer[i].duration = 0;
          tcb_buffer[i].thread_state = RUNNABLE;
       }
@@ -194,28 +197,14 @@ void update_thread_states(uint8_t curr_thread) {
 */
 void systick_c_handler() {
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
-
+  //breakpoint();
   ksb->sys_tick_ct++;
   uint8_t curr_thread = ksb->running_thread;
   tcb_buffer[curr_thread].duration++;
 
   update_thread_states(curr_thread);  
   
-  /*
-  if(tcb_buffer[curr_thread].duration >= tcb_buffer[curr_thread].C) {
-    tcb_buffer[curr_thread].thread_state = WAITING;
-  }
-
-  for(int i = 0; i < MAX_U_THREADS; i++) {
-    if(tcb_buffer[i].thread_state != INIT) {
-       tcb_buffer[i].period_ct++;
-       if(tcb_buffer[i].period_ct >= tcb_buffer[i].T) {
-          tcb_buffer[i].period_ct = 0;
-          tcb_buffer[i].duration = 0;
-          tcb_buffer[i].thread_state = RUNNABLE;
-       }
-    }
-  }*/
+  //breakpoint();
   
   //Set PendSV to pending
   pend_pendsv();
@@ -306,6 +295,7 @@ int8_t poll_next_thread() {
  * @return	A pointer to the stack-saved context of the next thread to be run as determined by the RMS algorithm. 
  */
 void *rms(void *curr_context_ptr) { 
+  
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
 
   int32_t running_buf_idx = ksb->running_thread;
@@ -339,9 +329,11 @@ void *rms(void *curr_context_ptr) {
     }
     
     if(!waiting) { //Swap to default thread
-      running_buf_idx = ksb->max_threads;
-    } else { //Swap to idle
+      breakpoint();
       running_buf_idx = ksb->max_threads+1;
+    } else { //Swap to idle
+      //breakpoint();
+      running_buf_idx = ksb->max_threads;
     } 
   }
 
@@ -357,7 +349,8 @@ void *rms(void *curr_context_ptr) {
     
   //Restore status and return new context pointer
   set_svc_status(tcb_buffer[running_buf_idx].svc_state);
-
+  //ASSERT(0);
+  //breakpoint();
   return tcb_buffer[running_buf_idx].kernel_stack_ptr;
 }
 
@@ -369,11 +362,12 @@ void *rms(void *curr_context_ptr) {
  * @return	A pointer to the next thread's stack-saved context. 
  */
 void *pendsv_c_handler(void *context_ptr) {
+  //breakpoint();
   update_kernel_sets(); //Update waiting and ready sets
-
-  //context_ptr = round_robin(context_ptr);
+  
+//  context_ptr = round_robin(context_ptr);
   context_ptr = rms(context_ptr);
-
+  //breakpoint();
   return context_ptr;
 }
 
@@ -600,6 +594,7 @@ uint32_t sys_thread_time(){
  * @brief	Kill the currently running thread.
  */
 void sys_thread_kill(){
+  breakpoint();
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
 
   //Check if idle thread

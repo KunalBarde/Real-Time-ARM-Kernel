@@ -145,6 +145,7 @@ void mm_c_handler( void *psp ) {
   // TODO: You decide how to kill the thread.
   // Set the pc? Call a syscall? Context swap?
   (void) psp;
+  (void) status;
 }
 
 /**

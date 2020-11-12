@@ -79,10 +79,12 @@ void uart_init(UNUSED int baud){
 * @return	0 on success, -1 otherwise. 
 */
 int uart_put_byte(UNUSED char c){
+   //int state = save_interrupt_state_and_disable();
    struct uart_reg_map *uart = UART2_BASE;
    rbuf_t *ring_buffer = (rbuf_t *)transmit_buffer;
    int enq_result = put(ring_buffer, c); 
    uart->CR1 |= UART_TXE;
+   //restore_interrupt_state(state);
    return enq_result;
 }
 
