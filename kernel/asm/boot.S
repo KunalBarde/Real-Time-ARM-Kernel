@@ -134,7 +134,6 @@ _pend_sv_ :
   bl pendsv_c_handler
   
   ldmia r0!, {r1, r4-r11, lr}
-  mov sp, r0
   msr psp, r1
   msr msp, r0 
   bx lr
@@ -185,8 +184,8 @@ _sys_tick_asm_:
 .thumb_func
 .global _svc_asm_handler_
 _svc_asm_handler_:
-  mov r2, r1
-  mov r1, r0
+  
+  
   mrs r0, psp
   b svc_c_handler
 

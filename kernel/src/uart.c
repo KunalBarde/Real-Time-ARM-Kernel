@@ -35,9 +35,12 @@
 */
 #define THRESHOLD 16
 
+
 /* Map portion of data section to kernel data structures */
-static volatile char recv_buffer[BUFFER_SIZE];
-static volatile char transmit_buffer[BUFFER_SIZE];
+static volatile char recv_buffer[RBUF_SIZE];
+static volatile char transmit_buffer[RBUF_SIZE];
+static volatile char recv_buffer_payload[BUFFER_SIZE]= {0};
+static volatile char transmit_buffer_payload[BUFFER_SIZE] = {0};
 
 /**
 * @ brief	Initialize interrupt-based UART. 
@@ -56,8 +59,8 @@ void uart_init(UNUSED int baud){
     nvic_irq(UART_IRQ, IRQ_ENABLE); 
 
     /* Initialize kernel buffers */
-    kernel_buffer_init((rbuf_t *)recv_buffer, BUFFER_SIZE);
-    kernel_buffer_init((rbuf_t *)transmit_buffer, BUFFER_SIZE);
+    kernel_buffer_init((rbuf_t *)recv_buffer, BUFFER_SIZE, recv_buffer_payload);
+    kernel_buffer_init((rbuf_t *)transmit_buffer, BUFFER_SIZE, transmit_buffer_payload);
     
     struct uart_reg_map *uart = UART2_BASE;
     struct rcc_reg_map *rcc = RCC_BASE;

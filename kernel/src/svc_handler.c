@@ -52,7 +52,7 @@ typedef struct {
 * @param	arg1	The first argument for the sys call. Passed for convenience. 
 * @param	arg2	The second argument from the sys call. Passed for convenience. 
 */
-void svc_c_handler(void *psp, int arg1, int arg2) {
+void svc_c_handler(void *psp/*, int arg1, int arg2*/) {
   stack_frame_t *s = (stack_frame_t *)psp;
   uint32_t *pc = (uint32_t *)(s -> pc -2);
   uint8_t svc_number = *(pc) & 0xFF;
@@ -132,11 +132,11 @@ void svc_c_handler(void *psp, int arg1, int arg2) {
       break;
 
     case SVC_SERVO_ENABLE:
-      out = sys_servo_enable((uint8_t)arg1, (unsigned char)arg2);
+      out = sys_servo_enable((uint8_t)s->r1, (unsigned char)s->r2);
       break;
 
     case SVC_SERVO_SET:
-      out = sys_servo_set((unsigned char)arg1, (unsigned char)arg2);
+      out = sys_servo_set((unsigned char)s->r1, (unsigned char)s->r2);
       break; 
 
     default:

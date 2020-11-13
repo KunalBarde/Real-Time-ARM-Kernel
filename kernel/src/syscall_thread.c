@@ -127,8 +127,9 @@ void update_kernel_sets() {
       
       case RUNNING:
       case RUNNABLE:
+        if (cur_set_idx < 0 || cur_set_idx >= 16) breakpoint();
         ksb->ready_set[cur_set_idx] = i;
-        ksb->wait_set[cur_set_idx] = -1;
+        ksb->wait_set[cur_set_idx] = -1; //problem line 
         break;
 
       default: //init
@@ -138,9 +139,9 @@ void update_kernel_sets() {
     }
   }
   //Handle idle and default thread
-  uint8_t i_thread_state = tcb_buffer[ksb->max_threads].thread_state;
-  uint8_t d_thread_state = tcb_buffer[ksb->max_threads+1].thread_state;
-  
+  //uint8_t i_thread_state = tcb_buffer[ksb->max_threads].thread_state;
+  //uint8_t d_thread_state = tcb_buffer[ksb->max_threads+1].thread_state;
+  /*
   if(i_thread_state == WAITING) {
     ksb->ready_set[I_THREAD_SET_IDX] = -1;
     ksb->wait_set[I_THREAD_SET_IDX] = ksb->max_threads;
@@ -161,7 +162,7 @@ void update_kernel_sets() {
   } else {
     ksb->ready_set[D_THREAD_SET_IDX] = -1;
     ksb->wait_set[D_THREAD_SET_IDX] = -1;
-  } 
+  } */
 }
 
 /**
@@ -175,7 +176,10 @@ void update_thread_states(uint8_t curr_thread) {
   //Yields upon finishing execution
   if(tcb_buffer[curr_thread].duration >= tcb_buffer[curr_thread].C) {
     //breakpoint();
-    tcb_buffer[curr_thread].thread_state = WAITING;
+    if(curr_thread != ksb->max_threads) {
+      tcb_buffer[curr_thread].thread_state = WAITING;
+      //breakpoint();
+    }
   }
   //breakpoint();
   for(uint8_t i = 0; i < ksb->u_thread_ct; i++) {
@@ -208,6 +212,10 @@ void systick_c_handler() {
   //breakpoint();
   
   //Set PendSV to pending
+  /*if(tcb_buffer[curr_thread].duration >= tcb_buffer[curr_thread].C) {
+    if(curr_thread != ksb->max_threads) breakpoint();
+  }*/
+  
   pend_pendsv();
   return;
 }
@@ -312,6 +320,7 @@ void *rms(void *curr_context_ptr) {
     int curr_buf_idx = ksb->ready_set[ready_idx];
 
     if(curr_buf_idx > -1) { //Found highest priority runnable task
+      //breakpoint();
       running_buf_idx = curr_buf_idx;
       break;
     }
@@ -350,6 +359,7 @@ void *rms(void *curr_context_ptr) {
   set_svc_status(tcb_buffer[running_buf_idx].svc_state);
   //ASSERT(0);
   //breakpoint();
+  //if(running_buf_idx !=1) breakpoint();
   return tcb_buffer[running_buf_idx].kernel_stack_ptr;
 }
 
@@ -455,7 +465,8 @@ int sys_thread_init(
 
   /* Move idle thread to runnable*/
   if(idle_fn == NULL) {
-    sys_thread_create(wait_for_interrupt, I_THREAD_PRIORITY, 0, 1, NULL);
+    breakpoint();
+    sys_thread_create(&wait_for_interrupt, I_THREAD_PRIORITY, 0, 1, NULL);
     return 0;
   }
   breakpoint();
@@ -621,6 +632,9 @@ void sys_thread_kill(){
  */
 void sys_wait_until_next_period(){
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
+  //if(ksb->running_thread == ksb->max_threads) 
+  //  tcb_buffer[ksb->running_thread].thread_state = WAITING;
+  //else 
   tcb_buffer[ksb->running_thread].thread_state = WAITING;
   pend_pendsv();
   return;

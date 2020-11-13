@@ -3,11 +3,13 @@
 #include <unistd.h>
 #include <errno.h>
 
-void kernel_buffer_init(rbuf_t *buffer, unsigned init_size) {
+//void kernel_buffer_init(rbuf_t *buffer, unsigned init_size) {
+void kernel_buffer_init(rbuf_t *buffer, unsigned init_size, volatile char *payload){
    buffer->head = 0;
    buffer->n_elems = 0;
    buffer->tail = 0;
    buffer->size = init_size;
+   buffer->payload = payload;
 }
 
 int put(rbuf_t *buffer, char c) {
