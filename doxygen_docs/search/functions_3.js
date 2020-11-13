@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['round_5frobin',['round_robin',['../syscall__thread_8c.html#ac2fb597a83ed183c240fb7c9d6e1b3f7',1,'syscall_thread.c']]]
+  ['pendsv_5fc_5fhandler',['pendsv_c_handler',['../syscall__thread_8c.html#ab66dd67d5d707d20135483b2c17b3b89',1,'syscall_thread.c']]]
 ];

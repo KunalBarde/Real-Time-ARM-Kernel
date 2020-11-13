@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['mm_5fc_5fhandler',['mm_c_handler',['../mpu_8c.html#a91bea6c5bee9301515785e2d8a754b82',1,'mpu.c']]],
-  ['mm_5flog2ceil_5fsize',['mm_log2ceil_size',['../mpu_8c.html#aef45fdec219c3ac6237f90b805ea6bff',1,'mpu.c']]],
-  ['mm_5fregion_5fdisable',['mm_region_disable',['../mpu_8c.html#af59a5684ba88f773a08878c311160bef',1,'mpu.c']]],
-  ['mm_5fregion_5fenable',['mm_region_enable',['../mpu_8c.html#aa911f88ae5abc2cf28a3ff0c2de2e395',1,'mpu.c']]]
+  ['k_5ffree',['k_free',['../kmalloc_8c.html#a2a2afced6eea8b4a00f5c93bb9d3d99d',1,'kmalloc.c']]],
+  ['k_5fmalloc_5faligned',['k_malloc_aligned',['../kmalloc_8c.html#a4f1b7f27d7638ba3c0fb4ce04f68eabd',1,'kmalloc.c']]],
+  ['k_5fmalloc_5finit',['k_malloc_init',['../kmalloc_8c.html#a2a98e94d23449411afcfe5800387b50c',1,'kmalloc.c']]],
+  ['k_5fmalloc_5funaligned',['k_malloc_unaligned',['../kmalloc_8c.html#abb82f6b4092b7d9c2edfe892cbad43a2',1,'kmalloc.c']]],
+  ['kernel_5fmain',['kernel_main',['../kernel_8c.html#a3e51d9a8bcacab5e0c6d6907d660a23c',1,'kernel.c']]]
 ];

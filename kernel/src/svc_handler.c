@@ -49,8 +49,6 @@ typedef struct {
 * @brief	C handler of svc calls. Will map an svc asm call to the correct c sys call. 
 
 * @param	psp	The psp of the svc call. Will be used to access the svc instruction itself from the pc. As well as accessing for accessing arguments
-* @param	arg1	The first argument for the sys call. Passed for convenience. 
-* @param	arg2	The second argument from the sys call. Passed for convenience. 
 */
 void svc_c_handler(void *psp/*, int arg1, int arg2*/) {
   stack_frame_t *s = (stack_frame_t *)psp;

@@ -56,6 +56,10 @@ extern char
   __thread_k_stacks_top;
 //@}
 
+
+/**
+ * @brief	Default idle function for needed for sleeping the processor when all other threads are waiting. Used if the user idle function exits or is never provided in thread_init. 
+ */
 extern void default_idle();
 
 /**
@@ -277,23 +281,6 @@ void *round_robin(void *curr_context_ptr) {
   set_svc_status(tcb_buffer[running_buf_idx].svc_state);
  // breakpoint();
   return tcb_buffer[running_buf_idx].kernel_stack_ptr;
-}
-
-int8_t poll_next_thread() {
-  uint32_t min_prior = 0x8FFFFFFF; 
-  int8_t idx = -1;
-  
-  for(size_t i = 0; i < MAX_U_THREADS; i++) {
-    if(tcb_buffer[i].thread_state == RUNNABLE) {
-      if(tcb_buffer[i].priority < min_prior) {
-        breakpoint();
-        min_prior = tcb_buffer[i].priority;
-        idx = i;
-      }
-    }
-  }
-  breakpoint();
-  return idx;
 }
 
 /**

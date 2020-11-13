@@ -123,9 +123,9 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ac96986d4a2ce4694a5c224f418c22169"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="svc__handler_8c.html#ac96986d4a2ce4694a5c224f418c22169">svc_c_handler</a> (void *psp, int arg1, int arg2)</td></tr>
-<tr class="memdesc:ac96986d4a2ce4694a5c224f418c22169"><td class="mdescLeft">&#160;</td><td class="mdescRight">C handler of svc calls. Will map an svc asm call to the correct c sys call.  <a href="#ac96986d4a2ce4694a5c224f418c22169">More...</a><br /></td></tr>
-<tr class="separator:ac96986d4a2ce4694a5c224f418c22169"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a122ee86e40592aa9131d081329af6609"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="svc__handler_8c.html#a122ee86e40592aa9131d081329af6609">svc_c_handler</a> (void *psp)</td></tr>
+<tr class="memdesc:a122ee86e40592aa9131d081329af6609"><td class="mdescLeft">&#160;</td><td class="mdescRight">C handler of svc calls. Will map an svc asm call to the correct c sys call.  <a href="#a122ee86e40592aa9131d081329af6609">More...</a><br /></td></tr>
+<tr class="separator:a122ee86e40592aa9131d081329af6609"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>C SVC handler for redirecting asm svc calls to c implementations of those system calls. </p>
@@ -146,7 +146,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="ac96986d4a2ce4694a5c224f418c22169"></a>
+<a class="anchor" id="a122ee86e40592aa9131d081329af6609"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -154,24 +154,8 @@ Functions</h2></td></tr>
           <td class="memname">void svc_c_handler </td>
           <td>(</td>
           <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>psp</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>psp</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>arg1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>arg2</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -180,8 +164,6 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">psp</td><td>The psp of the svc call. Will be used to access the svc instruction itself from the pc. As well as accessing for accessing arguments </td></tr>
-    <tr><td class="paramname">arg1</td><td>The first argument for the sys call. Passed for convenience. </td></tr>
-    <tr><td class="paramname">arg2</td><td>The second argument from the sys call. Passed for convenience. </td></tr>
   </table>
   </dd>
 </dl>

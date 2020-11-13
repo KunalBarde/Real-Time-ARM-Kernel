@@ -23,6 +23,7 @@ var searchData=
   ['rbar_5fregion',['RBAR_REGION',['../mpu_8c.html#aa0830813e9a3a7a84ec641f6b1577f51',1,'mpu.c']]],
   ['rbar_5fvalid',['RBAR_VALID',['../mpu_8c.html#abd40d803e2141ab228d295379c27874d',1,'mpu.c']]],
   ['region_5fnumber_5fmax',['REGION_NUMBER_MAX',['../mpu_8c.html#ab7d38c5290ace45e26844f4d2fb4589a',1,'mpu.c']]],
+  ['rms',['rms',['../syscall__thread_8c.html#a3ea5383a4af7e9e48e7f21996b50f9d3',1,'syscall_thread.c']]],
   ['rnr',['RNR',['../structmpu__t.html#a70cebc567ad6c370064393800af9bef8',1,'mpu_t']]],
   ['rnr_5fregion',['RNR_REGION',['../mpu_8c.html#ad186e82b9d9db9a4b69388cc08d2a909',1,'mpu.c']]],
   ['round_5frobin',['round_robin',['../syscall__thread_8c.html#ac2fb597a83ed183c240fb7c9d6e1b3f7',1,'syscall_thread.c']]],

@@ -16,7 +16,7 @@ var searchData=
   ['stk_5fctrl',['stk_ctrl',['../structsys__tick__reg__map.html#a8c6da5bc39020c41784c6444ec348f07',1,'sys_tick_reg_map']]],
   ['stk_5fload',['stk_load',['../structsys__tick__reg__map.html#aa4e08ecf9d937e5ee6613d91c413aadd',1,'sys_tick_reg_map']]],
   ['stk_5fval',['stk_val',['../structsys__tick__reg__map.html#ade3aca02e1cbc2a4b7fe188c2f9df6f2',1,'sys_tick_reg_map']]],
-  ['svc_5fc_5fhandler',['svc_c_handler',['../svc__handler_8c.html#ac96986d4a2ce4694a5c224f418c22169',1,'svc_handler.c']]],
+  ['svc_5fc_5fhandler',['svc_c_handler',['../svc__handler_8c.html#a122ee86e40592aa9131d081329af6609',1,'svc_handler.c']]],
   ['svc_5fhandler_2ec',['svc_handler.c',['../svc__handler_8c.html',1,'']]],
   ['sys_5fexit',['sys_exit',['../syscall_8c.html#a1c0b6529c2b4ef268480a55f1314a400',1,'syscall.c']]],
   ['sys_5fget_5fpriority',['sys_get_priority',['../syscall__thread_8c.html#a8b4f86fe10ac2c90ce8158872aac7ce2',1,'syscall_thread.c']]],

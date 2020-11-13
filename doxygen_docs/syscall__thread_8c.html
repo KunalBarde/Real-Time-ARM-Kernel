@@ -142,6 +142,8 @@ Macros</h2></td></tr>
 <tr class="separator:a3c653106823557e94a6a201319056ed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41816ab1942f7d02b1bf9cce2d621a80"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a41816ab1942f7d02b1bf9cce2d621a80">I_THREAD_PRIORITY</a>&#160;&#160;&#160;14</td></tr>
 <tr class="separator:a41816ab1942f7d02b1bf9cce2d621a80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac41cde0035942afb6226f9ceaad4fcf9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#ac41cde0035942afb6226f9ceaad4fcf9">D_THREAD_PRIORITY</a>&#160;&#160;&#160;15</td></tr>
+<tr class="separator:ac41cde0035942afb6226f9ceaad4fcf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5889105dcd019008c9448dff61323f6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#ab5889105dcd019008c9448dff61323f6">INIT</a>&#160;&#160;&#160;0</td></tr>
 <tr class="separator:ab5889105dcd019008c9448dff61323f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13ee57d95da6b6509d43bb1b3f67bb02"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a13ee57d95da6b6509d43bb1b3f67bb02">WAITING</a>&#160;&#160;&#160;1</td></tr>
@@ -153,6 +155,10 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a84de83d8cbea30290aab3c7eee772049"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a84de83d8cbea30290aab3c7eee772049"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a84de83d8cbea30290aab3c7eee772049">default_idle</a> ()</td></tr>
+<tr class="memdesc:a84de83d8cbea30290aab3c7eee772049"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default idle function for needed for sleeping the processor when all other threads are waiting. Used if the user idle function exits or is never provided in thread_init. <br /></td></tr>
+<tr class="separator:a84de83d8cbea30290aab3c7eee772049"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25ba3ad8a12b82367579d5895804211f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a25ba3ad8a12b82367579d5895804211f">ub_test</a> (float T, float C)</td></tr>
 <tr class="memdesc:a25ba3ad8a12b82367579d5895804211f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a UB schedulability test on a new thread being added to the task set.  <a href="#a25ba3ad8a12b82367579d5895804211f">More...</a><br /></td></tr>
 <tr class="separator:a25ba3ad8a12b82367579d5895804211f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -160,13 +166,19 @@ Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#ac2b092cdef9377874d2a424271fd8e4c">update_kernel_sets</a> ()</td></tr>
 <tr class="memdesc:ac2b092cdef9377874d2a424271fd8e4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates kernel ready and waiting set structures to reflect thread states accurately. <br /></td></tr>
 <tr class="separator:ac2b092cdef9377874d2a424271fd8e4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a525baffbc746d9676d45fa131d1b9b7d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a525baffbc746d9676d45fa131d1b9b7d">update_thread_states</a> (uint8_t curr_thread)</td></tr>
+<tr class="memdesc:a525baffbc746d9676d45fa131d1b9b7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Responsible for the enforcement of RMS. Will move threads between RUNNABLE and WAITING states as necessary and will handle the necessary book keeping.  <a href="#a525baffbc746d9676d45fa131d1b9b7d">More...</a><br /></td></tr>
+<tr class="separator:a525baffbc746d9676d45fa131d1b9b7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc96a6564aa346ba124293a6604a0427"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abc96a6564aa346ba124293a6604a0427"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#abc96a6564aa346ba124293a6604a0427">systick_c_handler</a> ()</td></tr>
-<tr class="memdesc:abc96a6564aa346ba124293a6604a0427"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handler called in occassion of sys-tick interrupt. <br /></td></tr>
+<tr class="memdesc:abc96a6564aa346ba124293a6604a0427"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handler called in occassion of sys-tick interrupt Implements RMS Scheduling. <br /></td></tr>
 <tr class="separator:abc96a6564aa346ba124293a6604a0427"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2fb597a83ed183c240fb7c9d6e1b3f7"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#ac2fb597a83ed183c240fb7c9d6e1b3f7">round_robin</a> (void *curr_context_ptr)</td></tr>
 <tr class="memdesc:ac2fb597a83ed183c240fb7c9d6e1b3f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of round robin scheduler.  <a href="#ac2fb597a83ed183c240fb7c9d6e1b3f7">More...</a><br /></td></tr>
 <tr class="separator:ac2fb597a83ed183c240fb7c9d6e1b3f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ea5383a4af7e9e48e7f21996b50f9d3"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a3ea5383a4af7e9e48e7f21996b50f9d3">rms</a> (void *curr_context_ptr)</td></tr>
+<tr class="memdesc:a3ea5383a4af7e9e48e7f21996b50f9d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">RMS scheduler implementation.  <a href="#a3ea5383a4af7e9e48e7f21996b50f9d3">More...</a><br /></td></tr>
+<tr class="separator:a3ea5383a4af7e9e48e7f21996b50f9d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab66dd67d5d707d20135483b2c17b3b89"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#ab66dd67d5d707d20135483b2c17b3b89">pendsv_c_handler</a> (void *context_ptr)</td></tr>
 <tr class="memdesc:ab66dd67d5d707d20135483b2c17b3b89"><td class="mdescLeft">&#160;</td><td class="mdescRight">PendSV interrupt handler. Runs a scheduler and then dispatches a new thread for running.  <a href="#ab66dd67d5d707d20135483b2c17b3b89">More...</a><br /></td></tr>
 <tr class="separator:ab66dd67d5d707d20135483b2c17b3b89"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -249,6 +261,19 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
       </table>
 </div><div class="memdoc">
 <p>Thread control block buffer size (in number of tcbs) </p>
+
+</div>
+</div>
+<a class="anchor" id="ac41cde0035942afb6226f9ceaad4fcf9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define D_THREAD_PRIORITY&#160;&#160;&#160;15</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Priority of default thread </p>
 
 </div>
 </div>
@@ -431,6 +456,31 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pointer to the next thread's stack-saved context. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a3ea5383a4af7e9e48e7f21996b50f9d3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* rms </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>curr_context_ptr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>RMS scheduler implementation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">curr_context_ptr</td><td>Pointer to the stack saved context fo the current thread.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the stack-saved context of the next thread to be run as determined by the RMS algorithm. </dd></dl>
 
 </div>
 </div>
@@ -682,6 +732,30 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>0 if schedulable, -1 otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a525baffbc746d9676d45fa131d1b9b7d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void update_thread_states </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>curr_thread</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Responsible for the enforcement of RMS. Will move threads between RUNNABLE and WAITING states as necessary and will handle the necessary book keeping. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">curr_thread</td><td>Tcb_buffer idx of the currently running thread. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
