@@ -117,6 +117,7 @@ int sys_read(int file, char *ptr, int len){
 * @param	status	Exit status. 0 indicates normal (no error).
 */
 void sys_exit(int status){
+  //breakpoint();
   led_set_display(status);
   printk("%d\n", status);
   uart_flush();

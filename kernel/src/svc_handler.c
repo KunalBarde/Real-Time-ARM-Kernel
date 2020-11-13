@@ -96,6 +96,7 @@ void svc_c_handler(void *psp/*, int arg1, int arg2*/) {
       break;
 
     case SVC_THR_KILL:
+      //breakpoint();
       sys_thread_kill();
       break;
 

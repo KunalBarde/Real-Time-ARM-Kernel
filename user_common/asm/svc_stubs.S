@@ -75,9 +75,12 @@ _times:
 _getpid:
   bkpt
 
+.type _kill, %function
 .global _kill
 _kill:
   SVC SVC_THR_KILL
+  
+  bx lr
   bkpt
 
 .global _exit

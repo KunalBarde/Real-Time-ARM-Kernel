@@ -157,8 +157,12 @@ Macros</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:a84de83d8cbea30290aab3c7eee772049"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a84de83d8cbea30290aab3c7eee772049"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a84de83d8cbea30290aab3c7eee772049">default_idle</a> ()</td></tr>
-<tr class="memdesc:a84de83d8cbea30290aab3c7eee772049"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default idle function for needed for sleeping the processor when all other threads are waiting. Used if the user idle function exits or is never provided in thread_init. <br /></td></tr>
+<tr class="memdesc:a84de83d8cbea30290aab3c7eee772049"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default idle function asm stub needed for sleeping the processor when all other threads are waiting. Used if the user idle function exits or is never provided in thread_init. <br /></td></tr>
 <tr class="separator:a84de83d8cbea30290aab3c7eee772049"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4f4984cff982459b6a165f56e86a1cb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae4f4984cff982459b6a165f56e86a1cb"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#ae4f4984cff982459b6a165f56e86a1cb">_kill</a> ()</td></tr>
+<tr class="memdesc:ae4f4984cff982459b6a165f56e86a1cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sys_kill asm svc stub. Used for having finished threads automatically call sys_kill on themselves upon returning from their work. <br /></td></tr>
+<tr class="separator:ae4f4984cff982459b6a165f56e86a1cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25ba3ad8a12b82367579d5895804211f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a25ba3ad8a12b82367579d5895804211f">ub_test</a> (float T, float C)</td></tr>
 <tr class="memdesc:a25ba3ad8a12b82367579d5895804211f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a UB schedulability test on a new thread being added to the task set.  <a href="#a25ba3ad8a12b82367579d5895804211f">More...</a><br /></td></tr>
 <tr class="separator:a25ba3ad8a12b82367579d5895804211f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -204,7 +208,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
 <tr class="separator:aa8933e910725546aa9e052369db9cf81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a601e5d8e922ccdec535527e8d8724d78"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a601e5d8e922ccdec535527e8d8724d78"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a601e5d8e922ccdec535527e8d8724d78">sys_thread_kill</a> ()</td></tr>
-<tr class="memdesc:a601e5d8e922ccdec535527e8d8724d78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kill the currently running thread. <br /></td></tr>
+<tr class="memdesc:a601e5d8e922ccdec535527e8d8724d78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kill the currently running thread. If it is the idle thread, the default thread shall be run instead. If it is the last remaining user thread, the scheduler shall restore to the default thread. <br /></td></tr>
 <tr class="separator:a601e5d8e922ccdec535527e8d8724d78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a3a3fb472158a93e59df836b9935b54"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2a3a3fb472158a93e59df836b9935b54"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a2a3a3fb472158a93e59df836b9935b54">sys_wait_until_next_period</a> ()</td></tr>

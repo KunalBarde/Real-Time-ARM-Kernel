@@ -58,9 +58,14 @@ extern char
 
 
 /**
- * @brief	Default idle function for needed for sleeping the processor when all other threads are waiting. Used if the user idle function exits or is never provided in thread_init. 
+ * @brief	Default idle function asm stub needed for sleeping the processor when all other threads are waiting. Used if the user idle function exits or is never provided in thread_init. 
  */
 extern void default_idle();
+
+/**
+ * @brief	Sys_kill asm svc stub. Used for having finished threads automatically call sys_kill on themselves upon returning from their work. 
+ */
+extern void _kill();
 
 /**
  * @brief      Precalculated values for UB test.
@@ -122,7 +127,7 @@ int ub_test(float T, float C) {
 void update_kernel_sets() {
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
   //breakpoint();
-  for(uint32_t i = 0; i < ksb->u_thread_ct; i++) {
+  for(uint32_t i = 0; i < ksb->max_threads; i++) { //TODO" update to all threads
     int8_t cur_set_idx = tcb_buffer[i].priority;
     //breakpoint();
     switch(tcb_buffer[i].thread_state) {
@@ -133,7 +138,7 @@ void update_kernel_sets() {
       
       case RUNNING:
       case RUNNABLE:
-        if (cur_set_idx < 0 || cur_set_idx >= 16) breakpoint();
+        
         ksb->ready_set[cur_set_idx] = i;
         ksb->wait_set[cur_set_idx] = -1; //problem line 
         break;
@@ -182,13 +187,13 @@ void update_thread_states(uint8_t curr_thread) {
   //Yields upon finishing execution
   if(tcb_buffer[curr_thread].duration >= tcb_buffer[curr_thread].C) {
     //breakpoint();
-    if(curr_thread != ksb->max_threads) {
+    if(curr_thread < ksb->max_threads) { //Only user threads can be downgraded
       tcb_buffer[curr_thread].thread_state = WAITING;
       //breakpoint();
     }
   }
   //breakpoint();
-  for(uint8_t i = 0; i < ksb->u_thread_ct; i++) {
+  for(uint8_t i = 0; i < ksb->max_threads; i++) { //TODO: update
     if(tcb_buffer[i].thread_state != INIT) {
       tcb_buffer[i].period_ct++;
       if(tcb_buffer[i].period_ct >= tcb_buffer[i].T) {
@@ -298,9 +303,10 @@ void *rms(void *curr_context_ptr) {
   uint8_t running_thread_state = tcb_buffer[running_buf_idx].thread_state;
 
   //Save current context
-  tcb_buffer[running_buf_idx].kernel_stack_ptr = curr_context_ptr;
-  tcb_buffer[running_buf_idx].svc_state = get_svc_status();
-  
+  //if(curr_context_ptr != NULL) {
+    tcb_buffer[running_buf_idx].kernel_stack_ptr = curr_context_ptr;
+    tcb_buffer[running_buf_idx].svc_state = get_svc_status();
+  //}
   int32_t old_running_buf_idx = running_buf_idx;
 
   int ready_idx = 0;
@@ -326,7 +332,7 @@ void *rms(void *curr_context_ptr) {
     }
     
     if(!waiting) { //Swap to default thread
-      breakpoint();
+      //breakpoint();
       running_buf_idx = ksb->max_threads+1;
     } else { //Swap to idle
       //breakpoint();
@@ -338,7 +344,7 @@ void *rms(void *curr_context_ptr) {
   tcb_buffer[running_buf_idx].thread_state = RUNNING;
 
   //If the current thread didn't yield, add old task back to ready set
-  if(running_thread_state != WAITING) 
+  if(running_thread_state > WAITING) //Running or runnable  
     tcb_buffer[old_running_buf_idx].thread_state = RUNNABLE;
 
   //Set new running thread 
@@ -363,9 +369,10 @@ void *pendsv_c_handler(void *context_ptr) {
   //breakpoint();
   update_kernel_sets(); //Update waiting and ready sets
   
+  //Uncomment to switch to round robin scheduler implementation 
 //  context_ptr = round_robin(context_ptr);
   context_ptr = rms(context_ptr);
-  //breakpoint();
+
   return context_ptr;
 }
 
@@ -483,16 +490,32 @@ int sys_thread_create(
   //breakpoint();
   uint8_t new_buf_idx;
   if(priority == I_THREAD_PRIORITY) { //Idle thread alloc
-
     //Idle thread idx is always upper bound
     new_buf_idx = ksb->max_threads;
-  } else { //Normal user thread
-    new_buf_idx = ksb->u_thread_ct;
-   
-    //Attempted to allocate more threads than promised in init
-    if(new_buf_idx == ksb->max_threads) return -1;
-  }
 
+  } else { //Normal user thread
+    //new_buf_idx = ksb->u_thread_ct;
+    uint8_t i = 0;
+    uint8_t found_vacancy = 0;
+    for(; i < ksb->max_threads; i++) {
+       if(tcb_buffer[i].thread_state == INIT) {
+         if(!found_vacancy) {
+           new_buf_idx = i;
+           found_vacancy = 1;
+         }
+       } else if(tcb_buffer[i].priority == priority) {
+         return -1; //Non-unique priority detected
+       }
+       
+      //if(tcb_buffer[i].priority == priority) return -1; 
+    }
+
+    //Attempted to allocate more threads than promised in init
+    if(!found_vacancy) return -1;
+   
+   
+    //if(new_buf_idx == ksb->max_threads) return -1;
+  }
   
   
   uint32_t user_stack_ptr = (uint32_t)tcb_buffer[new_buf_idx].user_stack_ptr - sizeof(interrupt_stack_frame);
@@ -509,7 +532,7 @@ int sys_thread_create(
   interrupt_frame->r2 = 0;
   interrupt_frame->r3 = 0;
   interrupt_frame->r12 = 0;
-  //interrupt_frame
+  interrupt_frame->lr = (uint32_t)&_kill;
   interrupt_frame->pc = (uint32_t)fn;
   interrupt_frame->xPSR = XPSR_INIT;
 
@@ -535,7 +558,7 @@ int sys_thread_create(
   thread_frame->r10 = 0;
   thread_frame->r11 = 0;
   thread_frame->r14 = LR_RETURN_TO_USER_PSP;
-  //breakpoint();
+  
   if(priority != I_THREAD_PRIORITY) ksb->u_thread_ct++;
     
   return 0;
@@ -556,7 +579,6 @@ int sys_scheduler_start( uint32_t frequency ){
   breakpoint();
 
   pend_pendsv(); //Begin first thread
-  
   return 0;
 }
 
@@ -593,16 +615,17 @@ uint32_t sys_thread_time(){
 }
 
 /** 
- * @brief	Kill the currently running thread.
+ * @brief	Kill the currently running thread. If it is the idle thread, the default thread shall be run instead. If it is the last remaining user thread, the scheduler shall restore to the default thread. 
  */
 void sys_thread_kill(){
-  breakpoint();
+  //breakpoint();
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
 
   //Check if idle thread
   if(ksb->running_thread == ksb->max_threads) {
-    tcb_buffer[ksb->max_threads].thread_state = INIT;
+    //tcb_buffer[ksb->max_threads].thread_state = INIT;
     sys_thread_create(&default_idle, I_THREAD_PRIORITY, 0, 1, NULL);
+    pend_pendsv();
   }
 
   //Check if default thread
@@ -610,10 +633,12 @@ void sys_thread_kill(){
     sys_exit(0);
     return;
   }
-
+  //breakpoint();
   tcb_buffer[ksb->running_thread].thread_state = INIT;
   if(ksb->running_thread != ksb->max_threads) ksb->u_thread_ct--;
   pend_pendsv();
+  //wait_for_interrupt();
+  //pendsv_c_handler(NULL);
   return;
 }
 
@@ -625,8 +650,10 @@ void sys_wait_until_next_period(){
   //if(ksb->running_thread == ksb->max_threads) 
   //  tcb_buffer[ksb->running_thread].thread_state = WAITING;
   //else 
+  //breakpoint();
   tcb_buffer[ksb->running_thread].thread_state = WAITING;
   pend_pendsv();
+  
   return;
 }
 
