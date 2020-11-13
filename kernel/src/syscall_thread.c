@@ -140,12 +140,12 @@ void update_kernel_sets() {
       case RUNNABLE:
         
         ksb->ready_set[cur_set_idx] = i;
-        ksb->wait_set[cur_set_idx] = -1; //problem line 
+        ksb->wait_set[cur_set_idx] = -1; 
         break;
 
       default: //init
-        ksb->ready_set[cur_set_idx] = -1;
-        ksb->wait_set[cur_set_idx] = -1;
+        //ksb->ready_set[cur_set_idx] = -1;
+        //ksb->wait_set[cur_set_idx] = -1;
         break;
     }
   }
@@ -174,6 +174,7 @@ void update_kernel_sets() {
     ksb->ready_set[D_THREAD_SET_IDX] = -1;
     ksb->wait_set[D_THREAD_SET_IDX] = -1;
   } */
+  //breakpoint();
 }
 
 /**
@@ -461,11 +462,11 @@ int sys_thread_init(
 
   /* Move idle thread to runnable*/
   if(idle_fn == NULL) {
-    breakpoint();
+    //breakpoint();
     sys_thread_create(&default_idle, I_THREAD_PRIORITY, 0, 1, NULL);
     return 0;
   }
-  breakpoint();
+  //breakpoint();
   sys_thread_create(idle_fn, I_THREAD_PRIORITY, 0, 1, NULL);
   return 0;
 }
@@ -558,7 +559,7 @@ int sys_thread_create(
   thread_frame->r10 = 0;
   thread_frame->r11 = 0;
   thread_frame->r14 = LR_RETURN_TO_USER_PSP;
-  
+  //breakpoint();
   if(priority != I_THREAD_PRIORITY) ksb->u_thread_ct++;
     
   return 0;
@@ -576,7 +577,7 @@ int sys_scheduler_start( uint32_t frequency ){
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
   ksb -> sys_tick_ct = 0;
   timer_start(timer_period);
-  breakpoint();
+  //breakpoint();
 
   pend_pendsv(); //Begin first thread
   return 0;
@@ -635,6 +636,9 @@ void sys_thread_kill(){
   }
   //breakpoint();
   tcb_buffer[ksb->running_thread].thread_state = INIT;
+  int8_t priority = tcb_buffer[ksb->running_thread].priority;
+  ksb->ready_set[priority] = -1;
+  ksb->wait_set[priority]=-1;
   if(ksb->running_thread != ksb->max_threads) ksb->u_thread_ct--;
   pend_pendsv();
   //wait_for_interrupt();
