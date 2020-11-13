@@ -134,6 +134,14 @@ wait_until_next_period:
   bx lr
   bkpt 
 
+.type default_idle, %function
+.global default_idle
+default_idle:
+  
+  wfi
+  b default_idle
+  bkpt
+
 .global get_time 
 get_time:
   SVC SVC_TIME
@@ -163,3 +171,4 @@ servo_set:
   SVC SVC_SERVO_SET
   bx lr
   bkpt
+

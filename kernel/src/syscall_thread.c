@@ -56,6 +56,8 @@ extern char
   __thread_k_stacks_top;
 //@}
 
+extern void default_idle();
+
 /**
  * @brief      Precalculated values for UB test.
  */
@@ -466,7 +468,7 @@ int sys_thread_init(
   /* Move idle thread to runnable*/
   if(idle_fn == NULL) {
     breakpoint();
-    sys_thread_create(&wait_for_interrupt, I_THREAD_PRIORITY, 0, 1, NULL);
+    sys_thread_create(&default_idle, I_THREAD_PRIORITY, 0, 1, NULL);
     return 0;
   }
   breakpoint();
@@ -520,6 +522,7 @@ int sys_thread_create(
   interrupt_frame->r2 = 0;
   interrupt_frame->r3 = 0;
   interrupt_frame->r12 = 0;
+  //interrupt_frame
   interrupt_frame->pc = (uint32_t)fn;
   interrupt_frame->xPSR = XPSR_INIT;
 
@@ -612,7 +615,7 @@ void sys_thread_kill(){
   //Check if idle thread
   if(ksb->running_thread == ksb->max_threads) {
     tcb_buffer[ksb->max_threads].thread_state = INIT;
-    sys_thread_create(wait_for_interrupt, I_THREAD_PRIORITY, 0, 1, NULL);
+    sys_thread_create(&default_idle, I_THREAD_PRIORITY, 0, 1, NULL);
   }
 
   //Check if default thread
