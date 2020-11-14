@@ -116,14 +116,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Macros</h2></td></tr>
 <tr class="memitem:a4c48df8fe3dae4ee6226135fda89fd82"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kernel_8c.html#a4c48df8fe3dae4ee6226135fda89fd82">SERVO_BAUD</a>&#160;&#160;&#160;160</td></tr>
 <tr class="separator:a4c48df8fe3dae4ee6226135fda89fd82"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fac9153314479ad0ad495d752f0224a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kernel_8c.html#a1fac9153314479ad0ad495d752f0224a">UART_BAUD</a>&#160;&#160;&#160;0x8B</td></tr>
-<tr class="separator:a1fac9153314479ad0ad495d752f0224a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a3e51d9a8bcacab5e0c6d6907d660a23c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3e51d9a8bcacab5e0c6d6907d660a23c"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kernel_8c.html#a3e51d9a8bcacab5e0c6d6907d660a23c">kernel_main</a> (void)</td></tr>
-<tr class="memdesc:a3e51d9a8bcacab5e0c6d6907d660a23c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel main function. <br /></td></tr>
+<tr class="memdesc:a3e51d9a8bcacab5e0c6d6907d660a23c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Kernel main function. Initializes necessary hardware driver libraries and then breaks to user mode. <br /></td></tr>
 <tr class="separator:a3e51d9a8bcacab5e0c6d6907d660a23c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -141,19 +139,6 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kerne
       </table>
 </div><div class="memdoc">
 <p>Period of the sys_tick interrupt firing. Configured to allow manual pwm control of the servo. </p>
-
-</div>
-</div>
-<a class="anchor" id="a1fac9153314479ad0ad495d752f0224a"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define UART_BAUD&#160;&#160;&#160;0x8B</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Precomputed value for configuring at 115200 baud. </p>
 
 </div>
 </div>

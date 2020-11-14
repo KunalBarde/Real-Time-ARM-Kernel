@@ -1,9 +1,20 @@
-/* Implementation of kernel buffer API */
+/**
+ * @brief Implementation of kernel buffer API for use with uart interrupts. 
+
+ * @file	kernel_buffer.c
+ * @author	Kunal Barde
+ */
 #include <kernel_buffer.h>
 #include <unistd.h>
 #include <errno.h>
 
-//void kernel_buffer_init(rbuf_t *buffer, unsigned init_size) {
+/**
+ * @brief	Initialize an rbuf_t. 
+ 
+ * @param[in]	buffer	Allocated buffer which should be initialized with the correct values. 
+ * @param[in]	init_size	Size of the desired buffer. Should match len(payload)
+ * @param[in]	payload	(char*) Allocated memory to be used to story the rbuf_t payload. 
+ */
 void kernel_buffer_init(rbuf_t *buffer, unsigned init_size, volatile char *payload){
    buffer->head = 0;
    buffer->n_elems = 0;
@@ -12,6 +23,14 @@ void kernel_buffer_init(rbuf_t *buffer, unsigned init_size, volatile char *paylo
    buffer->payload = payload;
 }
 
+/**
+ * @brief	Put a char in to a buffer. 
+ 
+ * @param[in]	buffer	The buffer which the char should be added to. 
+ * @param[in]	c	Char to add. 
+
+ * @return	0 on success. -1 otherwise. 
+ */
 int put(rbuf_t *buffer, char c) {
    
    /* Check if buffer is full */
@@ -29,6 +48,14 @@ int put(rbuf_t *buffer, char c) {
    return 0;
 }
 
+/** 
+ * @brief	Poll a buffer for a single char. 
+
+ * @param[in]	buffer	The buffer to be polled.
+ * @param[out]	err	(int *) 0 if a char was successfully retrieved, 0 otherwise. 
+
+ * @return	retrieved cahr. 
+ */
 char poll(rbuf_t *buffer, int *err) {
 
    /* Check if buffer is empty */

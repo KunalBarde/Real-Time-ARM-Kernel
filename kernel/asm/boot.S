@@ -124,16 +124,26 @@ _bus_fault_ :
 _usage_fault_ : 
   bkpt
 
+#The pendsv interrupt handler. 
 .thumb_func
 _pend_sv_ : 
 
-  mrs r0, msp
+  #Retrieve value of the msp and psp
+  mrs r0, msp 
   mrs r1, psp
+
+  #Push all relevant registers to the stack
   stmdb r0!, {r1, r4-r11, lr}
-  mov sp, r0
+
+  #Updated to the kernel space stacker pointer correctly to prevent corruption during pend sv
+  mov sp, r0 
+
+  #Enter the pendsv c handler
   bl pendsv_c_handler
-  
-  ldmia r0!, {r1, r4-r11, lr}
+
+  #Load the registers from the thread stack from returned by the scheduler   
+  ldmia r0!, {r1, r4-r11, lr} 
+
   msr psp, r1
   msr msp, r0 
   bx lr
@@ -181,6 +191,7 @@ _sys_tick_asm_:
   bl systick_c_handler
   bkpt
 
+#The assembly svc handler. Responsible for retrieving the value from special register psp and placing it into r0 as the first argument for the svc c handler.  
 .thumb_func
 .global _svc_asm_handler_
 _svc_asm_handler_:

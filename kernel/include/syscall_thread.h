@@ -26,45 +26,31 @@ typedef enum { PER_THREAD = 1, KERNEL_ONLY = 0 } protection_mode;
 typedef struct {
   void *user_stack_ptr; /**< User stack pointer, probably not needed  */
   void *kernel_stack_ptr; /**< Kernel stack pointer. Points to context of the thread on the thread's stack*/
-  uint32_t priority;
-  uint32_t C;
-  uint32_t T;
-  uint32_t duration;
-  uint32_t total_time;
-  uint32_t period_ct;
-  float U; //TODO Check if needed 
-  int svc_state;
-  uint8_t thread_state;
+  uint32_t priority; /**< Thread static priority*/
+  uint32_t C; /**< Thread worst case runtime. */
+  uint32_t T; /**< Thread execution period*/
+  uint32_t duration; /**< Current execution elapsed time. */
+  uint32_t total_time; /**< Total cpu time consumed over all executions. */
+  uint32_t period_ct; /**< Number of ticks into current period.*/
+  float U; /**< Thread utilization.*/
+  int svc_state; /**< Thread svc state. */
+  uint8_t thread_state; /**< Thread current state. */
 }tcb_t;
 
-/** 
- * @struct	Struct representing stack-saved thread context. 
- */ 
-/*typedef struct {
-  uint32_t r14; < LR 
-  uint32_t r11;
-  uint32_t r10;
-  uint32_t r9;
-  uint32_t r8;
-  uint32_t r7;
-  uint32_t r6;
-  uint32_t r5;
-  uint32_t r4;
-  uint32_t psp;
-}thread_stack_frame;*/
-
-
+/**
+ * @struct	Struct representing a kernel stack-saved thread context 
+ */
 typedef struct {
-  uint32_t psp;
-  uint32_t r4;
-  uint32_t r5;
-  uint32_t r6;
-  uint32_t r7;
-  uint32_t r8;
-  uint32_t r9;
-  uint32_t r10;
-  uint32_t r11;
-  uint32_t r14;
+  uint32_t psp; /**< @brief Register value for psp */
+  uint32_t r4; /**< @brief Register value for r4 */
+  uint32_t r5; /**< @brief Register value for r5 */
+  uint32_t r6; /**< @brief Register value for r6 */
+  uint32_t r7; /**< @brief Register value for r7 */
+  uint32_t r8; /**< @brief Register value for r8 */
+  uint32_t r9; /**< @brief Register value for r9 */
+  uint32_t r10; /**< @brief Register value for r10 */
+  uint32_t r11; /**< @brief Register value for r11 */
+  uint32_t r14; /**< @brief Register value for r14 (lr) */
 }thread_stack_frame;
 
 /**
@@ -198,8 +184,6 @@ void sys_wait_until_next_period( void );
 * @brief      Kills current running thread. Aborts program if current thread is
 *             main thread or the idle thread or if current thread exited
 *             while holding a mutex.
-*
-* @return     Does not return.
 */
 void sys_thread_kill( void );
 

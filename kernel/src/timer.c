@@ -37,7 +37,7 @@ typedef struct {
 *  @return	0 on success, -1 otherwise. 
 */
 int timer_start(int frequency){
-  
+  if(frequency < 0) return -1;
   sys_tick_reg_map *reg_map = (sys_tick_reg_map *)SYS_TICK_BASE;
   
   /* Set reload value as specified by specific frequency */ 

@@ -6,6 +6,8 @@ var searchData=
   ['k_5fmalloc_5finit',['k_malloc_init',['../kmalloc_8c.html#a2a98e94d23449411afcfe5800387b50c',1,'kmalloc.c']]],
   ['k_5fmalloc_5funaligned',['k_malloc_unaligned',['../kmalloc_8c.html#abb82f6b4092b7d9c2edfe892cbad43a2',1,'kmalloc.c']]],
   ['kernel_2ec',['kernel.c',['../kernel_8c.html',1,'']]],
+  ['kernel_5fbuffer_2ec',['kernel_buffer.c',['../kernel__buffer_8c.html',1,'']]],
+  ['kernel_5fbuffer_5finit',['kernel_buffer_init',['../kernel__buffer_8c.html#af2ec5af7d35c4d3042e29ff0c4062223',1,'kernel_buffer.c']]],
   ['kernel_5fmain',['kernel_main',['../kernel_8c.html#a3e51d9a8bcacab5e0c6d6907d660a23c',1,'kernel.c']]],
   ['kmalloc_2ec',['kmalloc.c',['../kmalloc_8c.html',1,'']]]
 ];

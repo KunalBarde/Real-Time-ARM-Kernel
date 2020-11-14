@@ -3,7 +3,7 @@
  *
  * @brief      C SVC handler for redirecting asm svc calls to c implementations of those system calls. 
  *
- * @date       
+ * @date       11/13/2020
  *
  * @author Nick Toldalagi, Kunal Barde 
  */
@@ -17,9 +17,6 @@
 #include <syscall_thread.h>
 #include <svc_num.h>
 #include <arm.h>
-
-/** Used for designating non-implemented portions of code for the compiler. */
-#define UNUSED __attribute__((unused))
 
 /**
 * Struct representing auto-saved stack frame. Includes r0-r3, r12, lr, pc, PSR. 
@@ -50,13 +47,12 @@ typedef struct {
 
 * @param	psp	The psp of the svc call. Will be used to access the svc instruction itself from the pc. As well as accessing for accessing arguments
 */
-void svc_c_handler(void *psp/*, int arg1, int arg2*/) {
+void svc_c_handler(void *psp) {
   stack_frame_t *s = (stack_frame_t *)psp;
   uint32_t *pc = (uint32_t *)(s -> pc -2);
   uint8_t svc_number = *(pc) & 0xFF;
 
   int out = 0;
-  //breakpoint();
 
   switch (svc_number) {
     case SVC_SBRK:
@@ -96,7 +92,6 @@ void svc_c_handler(void *psp/*, int arg1, int arg2*/) {
       break;
 
     case SVC_THR_KILL:
-      //breakpoint();
       sys_thread_kill();
       break;
 

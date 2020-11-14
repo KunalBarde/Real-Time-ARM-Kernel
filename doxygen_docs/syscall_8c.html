@@ -92,7 +92,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#define-members">Macros</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
@@ -111,19 +110,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;arm.h&gt;</code><br />
 <code>#include &lt;debug.h&gt;</code><br />
 </div><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
-Macros</h2></td></tr>
-<tr class="memitem:addf5ec070e9499d36b7f2009ce736076"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall_8c.html#addf5ec070e9499d36b7f2009ce736076">UNUSED</a>&#160;&#160;&#160;__attribute__((unused))</td></tr>
-<tr class="separator:addf5ec070e9499d36b7f2009ce736076"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a6bfcf212a3d9602a29db52f5b87da6f8"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall_8c.html#a6bfcf212a3d9602a29db52f5b87da6f8">sys_sbrk</a> (<a class="el" href="uart_8c.html#addf5ec070e9499d36b7f2009ce736076">UNUSED</a> int incr)</td></tr>
-<tr class="memdesc:a6bfcf212a3d9602a29db52f5b87da6f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">sbrk system call implementation. Attempts to increase available heap size by an increment.  <a href="#a6bfcf212a3d9602a29db52f5b87da6f8">More...</a><br /></td></tr>
-<tr class="separator:a6bfcf212a3d9602a29db52f5b87da6f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3577e240851e777f18919f91ba5d3a44"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall_8c.html#a3577e240851e777f18919f91ba5d3a44">sys_write</a> (<a class="el" href="uart_8c.html#addf5ec070e9499d36b7f2009ce736076">UNUSED</a> int file, <a class="el" href="uart_8c.html#addf5ec070e9499d36b7f2009ce736076">UNUSED</a> char *ptr, <a class="el" href="uart_8c.html#addf5ec070e9499d36b7f2009ce736076">UNUSED</a> int len)</td></tr>
-<tr class="memdesc:a3577e240851e777f18919f91ba5d3a44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of sys call write. Maps to user calls of write.  <a href="#a3577e240851e777f18919f91ba5d3a44">More...</a><br /></td></tr>
-<tr class="separator:a3577e240851e777f18919f91ba5d3a44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f5ec70f8f9ae7913a4a99473bd347c0"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall_8c.html#a7f5ec70f8f9ae7913a4a99473bd347c0">sys_sbrk</a> (int incr)</td></tr>
+<tr class="memdesc:a7f5ec70f8f9ae7913a4a99473bd347c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">sbrk system call implementation. Attempts to increase available heap size by an increment.  <a href="#a7f5ec70f8f9ae7913a4a99473bd347c0">More...</a><br /></td></tr>
+<tr class="separator:a7f5ec70f8f9ae7913a4a99473bd347c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad47bc183d8d0ce684a447ed8fc4df22d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall_8c.html#ad47bc183d8d0ce684a447ed8fc4df22d">sys_write</a> (int file, char *ptr, int len)</td></tr>
+<tr class="memdesc:ad47bc183d8d0ce684a447ed8fc4df22d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of sys call write. Maps to user calls of write.  <a href="#ad47bc183d8d0ce684a447ed8fc4df22d">More...</a><br /></td></tr>
+<tr class="separator:ad47bc183d8d0ce684a447ed8fc4df22d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1580a2b60d1de6953680eb981f43f30"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall_8c.html#af1580a2b60d1de6953680eb981f43f30">sys_read</a> (int file, char *ptr, int len)</td></tr>
 <tr class="memdesc:af1580a2b60d1de6953680eb981f43f30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of system call read. Maps to user call of read().  <a href="#af1580a2b60d1de6953680eb981f43f30">More...</a><br /></td></tr>
 <tr class="separator:af1580a2b60d1de6953680eb981f43f30"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -142,21 +136,7 @@ Variables</h2></td></tr>
 <div class="textblock"><p>Implementation of kernel space syscalls. </p>
 <dl class="section date"><dt>Date</dt><dd>11/3/2020</dd></dl>
 <dl class="section author"><dt>Author</dt><dd>Nick Toldalagi, Kunal Barde </dd></dl>
-</div><h2 class="groupheader">Macro Definition Documentation</h2>
-<a class="anchor" id="addf5ec070e9499d36b7f2009ce736076"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define UNUSED&#160;&#160;&#160;__attribute__((unused))</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Used for designating non-implemented portions of code for the compiler. </p>
-
-</div>
-</div>
-<h2 class="groupheader">Function Documentation</h2>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a1c0b6529c2b4ef268480a55f1314a400"></a>
 <div class="memitem">
 <div class="memproto">
@@ -224,14 +204,14 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a6bfcf212a3d9602a29db52f5b87da6f8"></a>
+<a class="anchor" id="a7f5ec70f8f9ae7913a4a99473bd347c0"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void* sys_sbrk </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="uart_8c.html#addf5ec070e9499d36b7f2009ce736076">UNUSED</a> int&#160;</td>
+          <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>incr</em></td><td>)</td>
           <td></td>
         </tr>
@@ -249,26 +229,26 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3577e240851e777f18919f91ba5d3a44"></a>
+<a class="anchor" id="ad47bc183d8d0ce684a447ed8fc4df22d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">int sys_write </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="uart_8c.html#addf5ec070e9499d36b7f2009ce736076">UNUSED</a> int&#160;</td>
+          <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>file</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="uart_8c.html#addf5ec070e9499d36b7f2009ce736076">UNUSED</a> char *&#160;</td>
+          <td class="paramtype">char *&#160;</td>
           <td class="paramname"><em>ptr</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="uart_8c.html#addf5ec070e9499d36b7f2009ce736076">UNUSED</a> int&#160;</td>
+          <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>len</em>&#160;</td>
         </tr>
         <tr>

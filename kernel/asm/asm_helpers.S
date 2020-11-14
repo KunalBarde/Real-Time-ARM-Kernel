@@ -3,7 +3,7 @@
 .thumb
 
 .section .text
-
+/**@brief asm function for switching the system to user mode from kernel_main.*/
 .thumb_func
 .global enter_user_mode
 enter_user_mode:

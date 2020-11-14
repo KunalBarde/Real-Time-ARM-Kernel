@@ -24,18 +24,12 @@
 #define SERVO_BAUD 160
 
 /**
-* Precomputed value for configuring at 115200 baud. 
-*/
-#define UART_BAUD 0x8B
-
-/**
-*  @brief	Kernel main function
+*  @brief	Kernel main function. Initializes necessary hardware driver libraries and then breaks to user mode. 
 */
 int kernel_main( void ) {
   init_349(); // DO NOT REMOVE THIS LINE
-  uart_init(UART_BAUD);
+  uart_init(USART_DIV);
   led_driver_init();
   enter_user_mode();
-  /* kernel main loop */
   return 0;
 }

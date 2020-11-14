@@ -17,9 +17,6 @@
 #include <nvic.h>
 #include <debug.h>
 
-/** Used for designating non-implemented portions of code for the compiler. */
-#define UNUSED __attribute__((unused))
-
 /**
 * UART irq number.
 */
@@ -43,11 +40,11 @@ static volatile char recv_buffer_payload[BUFFER_SIZE]= {0};
 static volatile char transmit_buffer_payload[BUFFER_SIZE] = {0};
 
 /**
-* @ brief	Initialize interrupt-based UART. 
+* @brief	Initialize interrupt-based UART. 
 
-* @ param	The baud at which to initialize UART. 
+* @param[in]	baud	The baud at which to initialize UART. 
 */
-void uart_init(UNUSED int baud){
+void uart_init(int baud){
     
     //Init PA_2 UART_2 TX
     gpio_init(GPIO_A, 2, MODE_ALT, OUTPUT_PUSH_PULL, OUTPUT_SPEED_LOW, PUPD_NONE, ALT7);
@@ -68,7 +65,7 @@ void uart_init(UNUSED int baud){
     rcc->apb1_enr |= APBCLK_UART_EN;
     uart->CR1 |= UART_TE;
     uart->CR1 |= UART_RE;
-    uart->BRR = USART_DIV;
+    uart->BRR = baud;
     uart->CR1 |= UART_EN;
     uart->CR1 |= UART_RXNE;
     return;
@@ -81,13 +78,13 @@ void uart_init(UNUSED int baud){
 
 * @return	0 on success, -1 otherwise. 
 */
-int uart_put_byte(UNUSED char c){
-   //int state = save_interrupt_state_and_disable();
+int uart_put_byte(char c){
    struct uart_reg_map *uart = UART2_BASE;
+
    rbuf_t *ring_buffer = (rbuf_t *)transmit_buffer;
    int enq_result = put(ring_buffer, c); 
    uart->CR1 |= UART_TXE;
-   //restore_interrupt_state(state);
+
    return enq_result;
 }
 
@@ -98,8 +95,7 @@ int uart_put_byte(UNUSED char c){
 
 * @return	0 on success or -1 if a poll of the ring buffer failed to retrieve a byte.  
 */
-int uart_get_byte(UNUSED char *c){
-   UNUSED struct uart_reg_map *uart = UART2_BASE;
+int uart_get_byte(char *c){
    rbuf_t *ring_buffer = (rbuf_t *)recv_buffer;
    int err = 0;
    char polled_byte = poll(ring_buffer, &err);
@@ -115,13 +111,15 @@ int uart_get_byte(UNUSED char *c){
 */
 void uart_irq_handler(){
    struct uart_reg_map *uart =  UART2_BASE;
-   /* Disable Interrupts (Entering Critical Section) */
+
    char transmit_byte, recv_byte;
    int err = 0;
    size_t sent_byte_count = 0;
    size_t recv_byte_count = 0;
+
    rbuf_t *recv_kernel_buffer = (rbuf_t *)recv_buffer;
    rbuf_t *transmit_kernel_buffer = (rbuf_t *)transmit_buffer;
+
    int read_ready = uart->SR & UART_RXNE;
    int transmit_ready = uart->SR & UART_TXE;
    /* transmit_ready TDR is empty, read_ready RDR is not empty */ 
@@ -142,6 +140,7 @@ void uart_irq_handler(){
       }
    } 
    
+   /* Recieve if ready */
    if(read_ready) {
       while(recv_byte_count < THRESHOLD) {
          if(!(uart->SR & UART_RXNE)) break;

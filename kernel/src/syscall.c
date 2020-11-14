@@ -18,9 +18,6 @@
 #include <arm.h>
 #include <debug.h>
 
-/** Used for designating non-implemented portions of code for the compiler. */
-#define UNUSED __attribute__((unused))
-
 /** Bottom of user heap */
 extern char __heap_low[];
 
@@ -37,7 +34,7 @@ static char *heap_brk = 0;
 
 * @return	(void*)-1 if the heap cannot be extended by the requested increment, otherwise a void pointer to the newly designated memory of size incr.  
 */
-void *sys_sbrk(UNUSED int incr){
+void *sys_sbrk(int incr){
   char *tmp;
   if(!heap_brk) {
      heap_brk = __heap_low;
@@ -61,7 +58,7 @@ void *sys_sbrk(UNUSED int incr){
 
 * @return	-1 on failure, otherwise the number of byte sucessfully written to stdout. 
 */
-int sys_write(UNUSED int file, UNUSED char *ptr, UNUSED int len){
+int sys_write(int file, char *ptr, int len){
   if(file == 1) {
  
     int state = save_interrupt_state_and_disable();
@@ -117,7 +114,6 @@ int sys_read(int file, char *ptr, int len){
 * @param	status	Exit status. 0 indicates normal (no error).
 */
 void sys_exit(int status){
-  //breakpoint();
   led_set_display(status);
   printk("%d\n", status);
   uart_flush();
