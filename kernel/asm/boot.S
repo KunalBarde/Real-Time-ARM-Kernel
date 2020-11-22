@@ -114,6 +114,8 @@ _hard_fault_ :
 
 .thumb_func
 _mm_fault_:
+  mrs r0, psp
+  b mm_c_handler
   bkpt
 
 .thumb_func

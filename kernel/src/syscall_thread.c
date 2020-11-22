@@ -28,7 +28,7 @@
 
 #define BUFFER_SIZE MAX_TOTAL_THREADS /**< Thread control block buffer size (in number of tcbs)*/
 #define WORD_SIZE 4 /**< System word size*/
-#define K_BLOCK_SIZE (sizeof(k_threading_state_t)) /**< sizeof(k_thread_state_t)*/
+
 #define TCB_BUFFER_SIZE (sizeof(tcb_t) * (BUFFER_SIZE)) /**< Thread control block buffer size (in bytes)*/
 
 #define I_THREAD_SET_IDX 14 /**<Idle thread index into kernel buffers*/
@@ -82,7 +82,7 @@ float ub_table[] = {
 /* Kernel Data Structures */
 
 /* Global threading state */
-static volatile char kernel_threading_state[K_BLOCK_SIZE];
+volatile char kernel_threading_state[K_BLOCK_SIZE];
 
 /* Initially all threads should be in the wait set */
 static volatile signed char kernel_wait_set[BUFFER_SIZE] = {0};
@@ -312,6 +312,18 @@ void *rms(void *curr_context_ptr) {
   //Restore status and return new context pointer
   set_svc_status(tcb_buffer[running_buf_idx].svc_state);
 
+  protection_mode prot_mode = ksb->mem_prot;
+
+  void *user_stack_ptr = tcb_buffer[ksb->running_thread].user_stack_ptr;
+  void *kernel_stack_ptr = tcb_buffer[ksb->running_thread].kernel_stack_ptr;
+
+  if(prot_mode == KERNEL_ONLY) {
+    mm_enable_user_stacks(user_stack_ptr, kernel_stack_ptr, -1);
+  } else {
+    mm_disable_user_stacks();
+    mm_enable_user_stacks(user_stack_ptr, kernel_stack_ptr, ksb->running_thread);
+  }
+
   return tcb_buffer[running_buf_idx].kernel_stack_ptr;
 }
 
@@ -402,6 +414,9 @@ int sys_thread_init(
      tcb_buffer[i].svc_state = 0;
      tcb_buffer[i].U = 0;
   }
+
+  ksb->thread_u_stacks_bottom = (void *)user_stack_brk;
+  ksb->thread_k_stacks_bottom = (void *)kernel_stack_brk;
   
   //idle thread is always next thread after last user thread in tcb_buffer. Default follows. 
   uint8_t i_thread_buf_idx = ksb->max_threads;
@@ -413,6 +428,7 @@ int sys_thread_init(
   tcb_buffer[i_thread_buf_idx].U = 0;
   tcb_buffer[i_thread_buf_idx].thread_state = WAITING;
   
+
   /* Set kernel state for default thread 15 */
   tcb_buffer[d_thread_buf_idx].thread_state = RUNNABLE;
   tcb_buffer[d_thread_buf_idx].svc_state = 0;

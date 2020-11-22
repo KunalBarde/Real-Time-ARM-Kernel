@@ -13,6 +13,7 @@
 #include "printk.h"
 #include "syscall.h"
 #include "mpu.h"
+#include "syscall_thread.h"
 
 /**Compiler macro used to indicate arguments which should be temporarily ignored as they are unused*/
 #define UNUSED __attribute__((unused))
@@ -103,6 +104,14 @@ typedef struct {
 /**@brief Systen control block MMIO location.*/
 #define SCB_BASE ( ( volatile system_control_block_t * )0xE000ED24 )
 
+/**@brief Enable memory faults */
+#define MEMFAULT_EN 0x1 << 16
+
+/**@brief Memory region attribute read only. */
+#define READ_ONLY 0
+/**@brief Memory region attribute is executable by user */
+#define EXECUTABLE 1
+
 /**@brief Stacking error.*/
 #define MSTKERR 0x1 << 4
 /**@brief Unstacking error.*/
@@ -113,6 +122,30 @@ typedef struct {
 #define IACCVIOL 0x1 << 0
 /**@brief Indicates the MMFAR is valid.*/
 #define MMARVALID 0x1 << 7
+
+#define WORD_SIZE 4
+
+/**
+ * @brief	User memory region addresses
+ */
+//@{
+extern char
+  _swi_stub_start,
+  _u_rodata,
+  _u_data,
+  _u_bss,
+  __heap_low,
+  __psp_stack_bottom;
+//@}
+
+/**
+ * @brief	Thread stack memory region addresses
+ */
+//@{
+extern char
+  __thread_u_stacks_top, 
+  __thread_k_stacks_top;
+//@}
 
 /**
  * @brief	Memory managment interrupt c handler
@@ -133,19 +166,138 @@ void mm_c_handler( void *psp ) {
   // You cannot recover from stack overflow because the processor has
   // already pushed the exception context onto the stack, potentially
   // clobbering whatever is in the adjacent stack.
-  if ( 0/* TODO: insert condition for stack overflow here */ ) {
+  k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
+
+  uint32_t stack_size = ksb->stack_size;
+  uint32_t stack_size_bytes = (1<<(mm_log2ceil_size(stack_size*WORD_SIZE)));
+  
+  uint32_t process_bottom = (ksb->running_thread + 1)*stack_size_bytes;
+  if ((uint32_t)psp < process_bottom) {
     DEBUG_PRINT( "Stack Overflow, aborting\n" );
+    breakpoint();
     sys_exit( -1 );
   }
 
   // Other errors can be recovered from by killing the offending
   // thread. Standard thread killing rules apply. You should halt
   // if the thread is the main or idle thread!
-  
+
+  if (ksb->running_thread >= ksb->max_threads) { //Idle or main
+    breakpoint();
+    sys_exit(-1);
+  }
   // TODO: You decide how to kill the thread.
   // Set the pc? Call a syscall? Context swap?
   (void) psp;
   (void) status;
+  sys_thread_kill();
+}
+
+/**
+ * @brief	Enables mpu function and background region protection. 
+ */
+void mm_enable_mpu(int enable, UNUSED int background) {
+  breakpoint();
+  //Enable mem fault
+  volatile system_control_block_t *scb = SCB_BASE;
+  scb -> SHCRS |= MEMFAULT_EN; 
+
+  volatile mpu_t *mpu = MPU_BASE;
+  if(enable) 
+    mpu -> CTRL |= (CTRL_ENABLE_PROTECTION | CTRL_ENABLE_BG_REGION);
+  else 
+    mpu -> CTRL &= ~CTRL_ENABLE_PROTECTION;
+
+  
+  /**if(background)
+    mpu -> CTRL |= CTRL_ENABLE_BG_REGION;
+  else 
+    mpu -> CTRL &= ~CTRL_ENABLE_BG_REGION;**/
+
+  breakpoint();
+}
+
+int mm_enable_user_access() {
+//User code: _user_text_start 16KB
+//User Ro data: _u_rodata 2KB
+//User data: _u_data 1KB
+//User bss: _u_bss 1KB
+//User heap: __heap_low 4KB
+//Default thread: __thread_u_stacks_low
+  breakpoint();
+  void *user_text_start = (void *)&_swi_stub_start;
+  void *user_rodata = (void *)&_u_rodata;
+  void *user_data = (void *)&_u_data;
+  void *user_bss = (void *)&_u_bss;
+  void *heap_low = (void *)&__heap_low;
+  void *user_stack = (void *)&__psp_stack_bottom;
+  int err = 0;
+
+  //User code
+  err |= mm_region_enable(0, user_text_start, mm_log2ceil_size(16000), EXECUTABLE, READ_ONLY);
+  //breakpoint();
+  //User rodata
+  err |= mm_region_enable(1, user_rodata, mm_log2ceil_size(2000), !EXECUTABLE, READ_ONLY);
+  //breakpoint();
+  //User data
+  err |= mm_region_enable(2, user_data, mm_log2ceil_size(1000), !EXECUTABLE, !READ_ONLY);
+  //breakpoint();
+  //User bss
+  err |= mm_region_enable(3, user_bss, mm_log2ceil_size(1000), !EXECUTABLE, !READ_ONLY);
+  //breakpoint();
+  //User heap
+  err |= mm_region_enable(4, heap_low, mm_log2ceil_size(4000), !EXECUTABLE, !READ_ONLY);
+  //breakpoint();
+  //Default user stack
+  err |= mm_region_enable(5, user_stack, mm_log2ceil_size(2000), !EXECUTABLE, !READ_ONLY);
+  //breakpoint();
+  return err; 
+}
+
+/** 
+ * @brief	Enable user thread stack access based on memory access mode. 
+ */
+int mm_enable_user_stacks(void *process_stack, void *kernel_stack, int thread_num) {
+  k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
+
+  uint32_t stack_size = ksb->stack_size;
+  uint32_t stack_size_bytes = (1<<(mm_log2ceil_size(stack_size*WORD_SIZE)));
+
+  uint32_t log2_stack_size = mm_log2ceil_size(stack_size_bytes);
+  uint32_t log2_all_stacks_size = mm_log2ceil_size(stack_size_bytes*15);
+
+  if(thread_num < 0) { //Kernel only
+    if(mm_region_enable(6, ksb->thread_u_stacks_bottom, log2_all_stacks_size, !EXECUTABLE, !READ_ONLY) < 0) return -1;
+
+    if(mm_region_enable(7, ksb->thread_k_stacks_bottom, 
+log2_all_stacks_size, !EXECUTABLE, !READ_ONLY) < 0) return -1;
+
+  } else { //Per thread
+    uint32_t user_stack_top = (uint32_t)&__thread_u_stacks_top;
+    uint32_t kernel_stack_top = (uint32_t)&__thread_k_stacks_top;
+   
+    uint32_t process_bottom = user_stack_top - ((user_stack_top - (uint32_t)process_stack)/stack_size_bytes + 1)*stack_size_bytes;
+    uint32_t kernel_bottom = kernel_stack_top - ((kernel_stack_top - (uint32_t)kernel_stack)/stack_size_bytes + 1)*stack_size_bytes;
+    //breakpoint();
+    if(mm_region_enable(6, (void *)process_bottom, log2_stack_size, !EXECUTABLE, !READ_ONLY) < 0) return -1;
+    //breakpoint();
+    if(mm_region_enable(7, (void *)kernel_bottom, log2_stack_size, !EXECUTABLE, !READ_ONLY) < 0) return -1;
+  }
+  return 0;
+}
+
+void mm_disable_user_stacks() {
+  mm_region_disable(6);
+  mm_region_disable(7);
+}
+
+/**
+ * @brief	Disable user accessible memory regions. All memory under background protection now. 
+ */ 
+void mm_disable_user_access() {
+  for(int i = 0; i < 8; i++) {
+    mm_region_disable(i);
+  }
 }
 
 /**
@@ -174,6 +326,7 @@ int mm_region_enable(
   }
 
   if ((uint32_t)base_address & ((1 << size_log2) - 1)) {
+    breakpoint();
     printk("Misaligned region\n");
     return -1;
   }

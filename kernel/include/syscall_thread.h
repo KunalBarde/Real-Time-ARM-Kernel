@@ -20,6 +20,7 @@
  */
 typedef enum { PER_THREAD = 1, KERNEL_ONLY = 0 } protection_mode;
 
+
 /**
  * @struct	Thread control block struct. 	
  */
@@ -81,8 +82,14 @@ typedef struct {
   uint32_t u_thread_ct; /**< Number of currently allocated user threads */
   uint32_t max_threads; /**< Maximum number of allocatable user threads. Determined by user at thread initialization */
   uint32_t max_mutexes;
+  void *thread_u_stacks_bottom;
+  void *thread_k_stacks_bottom;
   protection_mode mem_prot;
 }k_threading_state_t;
+
+#define K_BLOCK_SIZE (sizeof(k_threading_state_t)) /**< sizeof(k_thread_state_t)*/
+
+extern volatile char kernel_threading_state[K_BLOCK_SIZE];
 
 /**
  * @brief      The SysTick interrupt handler.

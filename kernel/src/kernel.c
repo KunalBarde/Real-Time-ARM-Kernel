@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <led_driver.h>
 #include <servok.h>
+#include <mpu.h>
 
 /**
 * Period of the sys_tick interrupt firing. Configured to allow manual pwm control of the servo. 
@@ -30,6 +31,9 @@ int kernel_main( void ) {
   init_349(); // DO NOT REMOVE THIS LINE
   uart_init(USART_DIV);
   led_driver_init();
+  mm_enable_mpu(1, 1);
+  mm_enable_user_access();
   enter_user_mode();
+  mm_disable_user_access();
   return 0;
 }
