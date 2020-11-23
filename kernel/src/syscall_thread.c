@@ -14,6 +14,7 @@
 #include "mpu.h"
 #include <timer.h>
 #include <arm.h>
+#include <printk.h>
 
 /** @brief      Initial XPSR value, all 0s except thumb bit. */
 #define XPSR_INIT 0x1000000
@@ -527,7 +528,7 @@ int sys_thread_create(
   tcb_buffer[new_buf_idx].U = (float)C/(float)T;
   tcb_buffer[new_buf_idx].thread_state = RUNNABLE;
   tcb_buffer[new_buf_idx].priority = priority;
-  tcb_buffer[new_buf_idx].priority = inherited_prior;
+//  tcb_buffer[new_buf_idx].priority = inherited_prior;
   tcb_buffer[new_buf_idx].period_ct = 0;
   tcb_buffer[new_buf_idx].duration = 0;
   tcb_buffer[new_buf_idx].total_time = 0;
@@ -637,7 +638,7 @@ void sys_thread_kill(){
 void sys_wait_until_next_period(){
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
   if(!check_no_locks(ksb->running_thread))
-    DEBUG_PRINT( "Warning, thread yielding while holding resources.\n" );
+    printk( "Warning, thread yielding while holding resources.\n" );
   tcb_buffer[ksb->running_thread].thread_state = WAITING;
   pend_pendsv();
   
@@ -654,25 +655,24 @@ kmutex_t *sys_mutex_init( uint32_t max_prio ) {
   if((free_mutex = ksb->u_mutex_ct) >= ksb->max_mutexes)
     return NULL;
   
-  mutex_buffer[free_mutex].max_prio = max_prio;
+  mutex_buffer[free_mutex].max_prior = max_prio;
   mutex_buffer[free_mutex].mutex_num = free_mutex;
   ksb->u_mutex_ct++;
-  return &(mutex_buffer[free_mutex]);
+  return (kmutex_t *)&(mutex_buffer[free_mutex]);
 }
 
 /**
  * @brief	TODO Add description
  */
 void sys_mutex_lock( kmutex_t *mutex ) {
-  if(ksb->running_thread == ksb->max_threads) 
-    DEBUG_PRINT( "Idle thread attempting to lock mutex \n" );
-
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
+  if(ksb->running_thread == ksb->max_threads) 
+    printk( "Idle thread attempting to lock mutex \n" );
 
   uint32_t mutex_num = mutex -> mutex_num;
   uint32_t curr_ceil = tcb_buffer[ksb->running_thread].inherited_prior;
-  if(mutex->max_prio < curr_ceil) {
-    DEBUG_PRINT( "Warning! Thread attempted to lock mutex with insufficient ceiling. Killing thread...\n" );
+  if(mutex->max_prior < curr_ceil) {
+    printk( "Warning! Thread attempted to lock mutex with insufficient ceiling. Killing thread...\n" );
     sys_thread_kill();
   }
 
@@ -682,19 +682,21 @@ void sys_mutex_lock( kmutex_t *mutex ) {
   } else {
     //Lock
     mutex_states |= 0x1 << mutex_num;
-    mutex->locked_by->ksb->running_thread;
+    mutex->locked_by = ksb->running_thread;
     ksb->priority_ceiling = mutex->max_prior;
     return;
   }
 
   //Wait to acquire
-  while(!acquire_mutex(curr_ceil, mutex->max_prior));
+  while(!acquire_mutex(curr_ceil, mutex->max_prior, mutex_num));
 }
 
-int acquire_mutex(uint32_t curr_ceil, uint32_t max_prior) {
+int acquire_mutex(uint32_t curr_ceil, uint32_t max_prior, uint8_t mutex_num) {
+  kmutex_t *mutex = (kmutex_t *)&mutex_buffer[mutex_num];
+  k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
   if((uint32_t)ksb->priority_ceiling > curr_ceil) {
     mutex_states |= 0x1 << mutex_num;
-    mutex->locked_by->ksb->running_thread;
+    mutex->locked_by = ksb->running_thread;
     ksb->priority_ceiling = max_prior;
     return 1;
   }
@@ -704,7 +706,6 @@ int acquire_mutex(uint32_t curr_ceil, uint32_t max_prior) {
 
 //Raising blocking threads inherited priority to match at least current blocked threads
 void raise_blocking_priority(uint32_t curr_ceil) {
-  k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
   int32_t blocking_thread_idx = find_highest_locker();
   if(blocking_thread_idx < 0) breakpoint();
 

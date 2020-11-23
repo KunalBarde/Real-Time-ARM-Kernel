@@ -197,4 +197,12 @@ void sys_wait_until_next_period( void );
 */
 void sys_thread_kill( void );
 
+int check_no_locks(uint32_t n);
+
+void raise_blocking_priority(uint32_t curr_ceil);
+
+int acquire_mutex(uint32_t curr_ceil, uint32_t max_prior, uint8_t mutex_num);
+
+int32_t find_highest_locker();
+
 #endif /* _SYSCALL_THREAD_H_ */

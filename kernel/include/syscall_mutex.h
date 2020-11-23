@@ -17,7 +17,8 @@
  */
 typedef struct {
   volatile uint32_t locked_by; /**< TCB_buf index of locking thread*/
-  volatile uint32_t prio_ceil; 
+  volatile uint32_t prio_ceil;
+  volatile uint32_t max_prior; 
   // You may fill in additional fields in this struct if you require.
   volatile uint32_t mutex_num;
 } kmutex_t;
