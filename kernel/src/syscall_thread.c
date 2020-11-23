@@ -378,7 +378,7 @@ int sys_thread_init(
   
   if(stack_consumption > user_stack_thresh || stack_consumption > kernel_stack_thresh)
      return -1; 
-
+  breakpoint();
   /* Initialize kernel data structures for threading */  
   ksb = (k_threading_state_t *)kernel_threading_state;
 
@@ -415,8 +415,8 @@ int sys_thread_init(
      tcb_buffer[i].U = 0;
   }
 
-  ksb->thread_u_stacks_bottom = (void *)user_stack_brk;
-  ksb->thread_k_stacks_bottom = (void *)kernel_stack_brk;
+  ksb->thread_u_stacks_bottom = (void *)&__thread_u_stacks_low;
+  ksb->thread_k_stacks_bottom = (void *)&__thread_k_stacks_low;
   
   //idle thread is always next thread after last user thread in tcb_buffer. Default follows. 
   uint8_t i_thread_buf_idx = ksb->max_threads;

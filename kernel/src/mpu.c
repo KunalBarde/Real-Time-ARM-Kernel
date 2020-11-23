@@ -144,7 +144,9 @@ extern char
 //@{
 extern char
   __thread_u_stacks_top, 
-  __thread_k_stacks_top;
+  __thread_k_stacks_top,
+  __thread_u_stacks_low,
+  __thread_k_stacks_low;
 //@}
 
 /**
@@ -264,17 +266,19 @@ int mm_enable_user_stacks(void *process_stack, void *kernel_stack, int thread_nu
   uint32_t stack_size_bytes = (1<<(mm_log2ceil_size(stack_size*WORD_SIZE)));
 
   uint32_t log2_stack_size = mm_log2ceil_size(stack_size_bytes);
-  uint32_t log2_all_stacks_size = mm_log2ceil_size(stack_size_bytes*15);
+  UNUSED uint32_t log2_all_stacks_size = mm_log2ceil_size(stack_size_bytes*(ksb->u_thread_ct+2));
+
+  uint32_t user_stack_top = (uint32_t)&__thread_u_stacks_top;
+  uint32_t kernel_stack_top = (uint32_t)&__thread_k_stacks_top;
 
   if(thread_num < 0) { //Kernel only
-    if(mm_region_enable(6, ksb->thread_u_stacks_bottom, log2_all_stacks_size, !EXECUTABLE, !READ_ONLY) < 0) return -1;
+    //breakpoint();
+    if(mm_region_enable(6, (void *)&__thread_u_stacks_low, 15, !EXECUTABLE, !READ_ONLY) < 0) return -1;
 
-    if(mm_region_enable(7, ksb->thread_k_stacks_bottom, 
-log2_all_stacks_size, !EXECUTABLE, !READ_ONLY) < 0) return -1;
+    if(mm_region_enable(7, (void *)&__thread_k_stacks_low, 
+15, !EXECUTABLE, !READ_ONLY) < 0) return -1;
 
   } else { //Per thread
-    uint32_t user_stack_top = (uint32_t)&__thread_u_stacks_top;
-    uint32_t kernel_stack_top = (uint32_t)&__thread_k_stacks_top;
    
     uint32_t process_bottom = user_stack_top - ((user_stack_top - (uint32_t)process_stack)/stack_size_bytes + 1)*stack_size_bytes;
     uint32_t kernel_bottom = kernel_stack_top - ((kernel_stack_top - (uint32_t)kernel_stack)/stack_size_bytes + 1)*stack_size_bytes;
