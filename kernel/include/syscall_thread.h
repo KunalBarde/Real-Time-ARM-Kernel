@@ -28,6 +28,7 @@ typedef struct {
   void *user_stack_ptr; /**< User stack pointer, probably not needed  */
   void *kernel_stack_ptr; /**< Kernel stack pointer. Points to context of the thread on the thread's stack*/
   uint32_t priority; /**< Thread static priority*/
+  uint32_t inherited_prior;
   uint32_t C; /**< Thread worst case runtime. */
   uint32_t T; /**< Thread execution period*/
   uint32_t duration; /**< Current execution elapsed time. */
@@ -82,9 +83,11 @@ typedef struct {
   uint32_t u_thread_ct; /**< Number of currently allocated user threads */
   uint32_t max_threads; /**< Maximum number of allocatable user threads. Determined by user at thread initialization */
   uint32_t max_mutexes;
+  uint32_t u_mutex_ct;
   void *thread_u_stacks_bottom;
   void *thread_k_stacks_bottom;
   protection_mode mem_prot;
+  int32_t priority_ceiling;
 }k_threading_state_t;
 
 #define K_BLOCK_SIZE (sizeof(k_threading_state_t)) /**< sizeof(k_thread_state_t)*/
