@@ -309,6 +309,7 @@ void *rms(void *curr_context_ptr) {
   }
 
   if(blocked) {
+    //breakpoint();
     blocked = 0;
     running_buf_idx = find_highest_locker();
   }
@@ -535,7 +536,7 @@ int sys_thread_create(
   tcb_buffer[new_buf_idx].U = (float)C/(float)T;
   tcb_buffer[new_buf_idx].thread_state = RUNNABLE;
   tcb_buffer[new_buf_idx].priority = priority;
-//  tcb_buffer[new_buf_idx].priority = inherited_prior;
+  tcb_buffer[new_buf_idx].inherited_prior = priority;
   tcb_buffer[new_buf_idx].period_ct = 0;
   tcb_buffer[new_buf_idx].duration = 0;
   tcb_buffer[new_buf_idx].total_time = 0;
@@ -679,13 +680,13 @@ void sys_mutex_lock( kmutex_t *mutex ) {
   if(ksb->running_thread == ksb->max_threads) 
     DEBUG_PRINT( "Idle thread attempting to lock mutex \n" );
     //printk( "Idle thread attempting to lock mutex \n" );
-
+  
   uint32_t mutex_num = mutex -> mutex_num;
-  uint32_t curr_ceil = tcb_buffer[ksb->running_thread].inherited_prior;
+  uint32_t curr_ceil = tcb_buffer[ksb->running_thread].priority;
   if(mutex->max_prior > curr_ceil) {
     DEBUG_PRINT( "Warning! Thread attempted to lock mutex with insufficient ceiling. Killing thread...\n" );
    // printk( "Warning! Thread attempted to lock mutex with insufficient ceiling. Killing thread...\n" );
-    //breakpoint();
+    breakpoint();
     sys_thread_kill();
   }
 
@@ -695,14 +696,23 @@ void sys_mutex_lock( kmutex_t *mutex ) {
     return;
   }
 
+  int32_t priority_ceiling = ksb->priority_ceiling; 
+  uint32_t max_prior = mutex->max_prior;
   //Attempt to lock
-  if((uint32_t)ksb->priority_ceiling <= curr_ceil) {
+  if((uint32_t)priority_ceiling <= curr_ceil) {
+    //Check if nested
+    if(ksb->running_thread == find_highest_locker()) {
+      mutex_states |= 0x1 << mutex_num;
+      mutex->locked_by = ksb->running_thread;
+      ksb->priority_ceiling = (max_prior < (uint32_t)priority_ceiling) ? (int32_t)mutex->max_prior : priority_ceiling;
+      return;
+    }
     raise_blocking_priority(curr_ceil);
   } else {
     //Lock
     mutex_states |= 0x1 << mutex_num;
     mutex->locked_by = ksb->running_thread;
-    ksb->priority_ceiling = mutex->max_prior;
+    ksb->priority_ceiling = (max_prior < (uint32_t)priority_ceiling) ? (int32_t)mutex->max_prior : priority_ceiling;
     return;
   }
 
@@ -816,5 +826,6 @@ void sys_mutex_unlock( kmutex_t *mutex ) {
   ksb->priority_ceiling = find_highest_locked();
 
   tcb_buffer[locked_by].inherited_prior = tcb_buffer[locked_by].priority;
+  pend_pendsv();
 
 }
