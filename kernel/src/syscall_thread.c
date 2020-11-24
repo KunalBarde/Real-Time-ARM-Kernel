@@ -12,6 +12,7 @@
 #include "syscall_mutex.h"
 #include "syscall.h"
 #include "mpu.h"
+#include <debug.h>
 #include <timer.h>
 #include <arm.h>
 #include <printk.h>
@@ -638,7 +639,8 @@ void sys_thread_kill(){
 void sys_wait_until_next_period(){
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
   if(!check_no_locks(ksb->running_thread))
-    printk( "Warning, thread yielding while holding resources.\n" );
+    DEBUG_PRINT( "Warning, thread yielding while holding resources.\n" );
+    //printk( "Warning, thread yielding while holding resources.\n" );
   tcb_buffer[ksb->running_thread].thread_state = WAITING;
   pend_pendsv();
   
@@ -665,15 +667,26 @@ kmutex_t *sys_mutex_init( uint32_t max_prio ) {
  * @brief	TODO Add description
  */
 void sys_mutex_lock( kmutex_t *mutex ) {
+  
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
+  //breakpoint();
   if(ksb->running_thread == ksb->max_threads) 
-    printk( "Idle thread attempting to lock mutex \n" );
+    DEBUG_PRINT( "Idle thread attempting to lock mutex \n" );
+    //printk( "Idle thread attempting to lock mutex \n" );
 
   uint32_t mutex_num = mutex -> mutex_num;
   uint32_t curr_ceil = tcb_buffer[ksb->running_thread].inherited_prior;
-  if(mutex->max_prior < curr_ceil) {
-    printk( "Warning! Thread attempted to lock mutex with insufficient ceiling. Killing thread...\n" );
+  if(mutex->max_prior > curr_ceil) {
+    DEBUG_PRINT( "Warning! Thread attempted to lock mutex with insufficient ceiling. Killing thread...\n" );
+   // printk( "Warning! Thread attempted to lock mutex with insufficient ceiling. Killing thread...\n" );
+    //breakpoint();
     sys_thread_kill();
+  }
+
+  //Locked and being locked by same thread
+  if(mutex->locked_by == ksb->running_thread && (mutex_states & (0x1 << mutex_num))) {
+    DEBUG_PRINT( "Warning! Attempted to lock previously locked mutex.\n" );
+    return;
   }
 
   //Attempt to lock
@@ -771,9 +784,15 @@ void sys_mutex_unlock( kmutex_t *mutex ) {
   uint32_t mutex_num = mutex->mutex_num;
   uint32_t locked_by = mutex->locked_by;
 
+  //Unlocked and being 
+  if(!(mutex_states & (0x1 << mutex_num))) {
+    DEBUG_PRINT( "Warning! Attempted to unlock previously unlocked mutex.\n");
+    return;
+  }
+
   //Unlock
   mutex_states &= ~(0x1 << mutex_num);
-  
+
   //Update priority ceiling and inherited priority
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
   ksb->priority_ceiling = find_highest_locked();

@@ -15,6 +15,7 @@
 #include <printk.h>
 #include <syscall.h>
 #include <syscall_thread.h>
+#include <syscall_mutex.h>
 #include <svc_num.h>
 #include <arm.h>
 
@@ -100,13 +101,15 @@ void svc_c_handler(void *psp) {
       break;
 
     case SVC_MUT_INIT:
-      out = -1;
+      out = (int)sys_mutex_init((uint32_t)s->r0);
       break;
 
     case SVC_MUT_LOK:
+      sys_mutex_lock((kmutex_t *)s->r0);
       break;
 
     case SVC_MUT_ULK:
+      sys_mutex_unlock((kmutex_t *)s->r0);
       break;
 
     case SVC_WAIT:
