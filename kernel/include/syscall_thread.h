@@ -36,6 +36,7 @@ typedef struct {
   uint32_t period_ct; /**< Number of ticks into current period.*/
   float U; /**< Thread utilization.*/
   int svc_state; /**< Thread svc state. */
+  uint8_t blocked;
   uint8_t thread_state; /**< Thread current state. */
 }tcb_t;
 

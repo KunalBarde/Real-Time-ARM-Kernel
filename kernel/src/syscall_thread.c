@@ -343,6 +343,88 @@ void *rms(void *curr_context_ptr) {
 }
 
 /**
+ * @brief	PCP scheduler implementation. 
+ 
+ * @param[in]	curr_context_ptr	Pointer to the stack saved context fo the current thread. 
+
+ * @return	A pointer to the stack-saved context of the next thread to be run as determined by the PCP algorithm. 
+ */
+void *pcp(void *curr_context_ptr) { 
+  
+  k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
+
+  int32_t running_buf_idx = ksb->running_thread;
+  uint8_t running_thread_state = tcb_buffer[running_buf_idx].thread_state;
+
+  //Save current context
+  tcb_buffer[running_buf_idx].kernel_stack_ptr = curr_context_ptr;
+  tcb_buffer[running_buf_idx].svc_state = get_svc_status();
+  
+  int32_t old_running_buf_idx = running_buf_idx;
+
+  int ready_idx = 0;
+  
+  for(; ready_idx < MAX_U_THREADS; ready_idx++) {//Search for highest priority RUNNABLE task 
+    int curr_buf_idx = ksb->ready_set[ready_idx];
+
+    if(curr_buf_idx > -1) { //Found 
+      running_buf_idx = curr_buf_idx;
+      break;
+    }
+  }
+  
+  
+  if(ready_idx == MAX_U_THREADS) { //Special case, nothing found in ready set
+    uint8_t waiting = 0;  
+    for(int i = 0; i < MAX_U_THREADS; i++) { //Check waiting set
+      if(ksb->wait_set[i] > -1) {
+        waiting = 1; 
+        break;
+      }
+    }
+    
+    if(!waiting) { //Swap to default thread, nothing in waiting set
+      running_buf_idx = ksb->max_threads+1;
+    } else { //Swap to idle, tasks in waiting set
+      running_buf_idx = ksb->max_threads;
+    } 
+  }
+
+  if((uint32_t)running_buf_idx >= (uint32_t)ksb->priority_ceiling && tcb_buffer[running_buf_idx].blocked) {
+    //breakpoint();
+    running_buf_idx = find_highest_locker();
+  }
+
+  //Remove new running task from ready set
+  tcb_buffer[running_buf_idx].thread_state = RUNNING;
+
+  //If the current thread didn't yield (was just RUNNING or RUNNABLE), add old task back to ready set
+  if(running_thread_state > WAITING) 
+    tcb_buffer[old_running_buf_idx].thread_state = RUNNABLE;
+
+  //Set new running thread 
+  ksb->running_thread = running_buf_idx;
+    
+  //Restore status and return new context pointer
+  set_svc_status(tcb_buffer[running_buf_idx].svc_state);
+
+  protection_mode prot_mode = ksb->mem_prot;
+
+  void *user_stack_ptr = tcb_buffer[ksb->running_thread].user_stack_ptr;
+  void *kernel_stack_ptr = tcb_buffer[ksb->running_thread].kernel_stack_ptr;
+
+  if(prot_mode == KERNEL_ONLY) {
+    mm_enable_user_stacks(user_stack_ptr, kernel_stack_ptr, -1);
+  } else {
+    mm_disable_user_stacks();
+    mm_enable_user_stacks(user_stack_ptr, kernel_stack_ptr, ksb->running_thread);
+  }
+
+  tcb_buffer[running_buf_idx].blocked = 0;
+  return tcb_buffer[running_buf_idx].kernel_stack_ptr;
+}
+
+/**
  * @brief	PendSV interrupt handler. Runs a scheduler and then dispatches a new thread for running. 
 
  * @param[in]	context_ptr	A pointer to the current thread's stack-saved context. 
@@ -354,7 +436,7 @@ void *pendsv_c_handler(void *context_ptr) {
   update_kernel_sets(); //Update waiting and ready sets
 
   context_ptr = rms(context_ptr);
-
+  //context_ptr = pcp(context_ptr);
   return context_ptr;
 }
 
@@ -430,6 +512,7 @@ int sys_thread_init(
      tcb_buffer[i].thread_state = INIT;
      tcb_buffer[i].svc_state = 0;
      tcb_buffer[i].U = 0;
+     tcb_buffer[i].blocked = 0;
   }
 
   ksb->thread_u_stacks_bottom = (void *)&__thread_u_stacks_low;
@@ -444,6 +527,7 @@ int sys_thread_init(
   tcb_buffer[i_thread_buf_idx].kernel_stack_ptr = (void *)kernel_stack_brk;
   tcb_buffer[i_thread_buf_idx].U = 0;
   tcb_buffer[i_thread_buf_idx].thread_state = WAITING;
+  tcb_buffer[i_thread_buf_idx].blocked = 0;
   
 
   /* Set kernel state for default thread 15 */
@@ -452,6 +536,7 @@ int sys_thread_init(
   tcb_buffer[d_thread_buf_idx].U = 0;
   tcb_buffer[d_thread_buf_idx].priority = D_THREAD_PRIORITY;
   tcb_buffer[d_thread_buf_idx].inherited_prior = D_THREAD_PRIORITY;
+  tcb_buffer[d_thread_buf_idx].blocked = 0;
 
   /* Move idle thread to runnable*/
   if(idle_fn == NULL) {
@@ -718,6 +803,7 @@ void sys_mutex_lock( kmutex_t *mutex ) {
 
   //Wait to acquire
   while(!acquire_mutex(curr_ceil, mutex->max_prior, mutex_num)) {
+    tcb_buffer[ksb->running_thread].blocked = 1;
     blocked = 1;
     pend_pendsv();
   }

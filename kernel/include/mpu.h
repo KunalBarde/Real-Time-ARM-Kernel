@@ -16,7 +16,7 @@
  */
 uint32_t mm_log2ceil_size(uint32_t n);
 
-void mm_enable_mpu(int enable, int background);
+void mm_enable_mpu(int enable);
 
 int mm_enable_user_access();
 
