@@ -44,6 +44,7 @@
 #define RUNNABLE 2 /**< Runnable state for a thread*/
 #define RUNNING 3 /**< Running state for thread*/
 
+static volatile char blocked = 0;
 
 /**
  * @brief      Heap high and low pointers.
@@ -305,6 +306,11 @@ void *rms(void *curr_context_ptr) {
     } else { //Swap to idle, tasks in waiting set
       running_buf_idx = ksb->max_threads;
     } 
+  }
+
+  if(blocked) {
+    blocked = 0;
+    running_buf_idx = find_highest_locker();
   }
 
   //Remove new running task from ready set
@@ -701,7 +707,10 @@ void sys_mutex_lock( kmutex_t *mutex ) {
   }
 
   //Wait to acquire
-  while(!acquire_mutex(curr_ceil, mutex->max_prior, mutex_num));
+  while(!acquire_mutex(curr_ceil, mutex->max_prior, mutex_num)) {
+    blocked = 1;
+    pend_pendsv();
+  }
 }
 
 int acquire_mutex(uint32_t curr_ceil, uint32_t max_prior, uint8_t mutex_num) {
@@ -784,19 +793,28 @@ void sys_mutex_unlock( kmutex_t *mutex ) {
   uint32_t mutex_num = mutex->mutex_num;
   uint32_t locked_by = mutex->locked_by;
 
+
+
   //Unlocked and being 
   if(!(mutex_states & (0x1 << mutex_num))) {
     DEBUG_PRINT( "Warning! Attempted to unlock previously unlocked mutex.\n");
     return;
+  }
+  
+  k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
+  
+  //Check unlock by another mutex
+  if(ksb->running_thread != mutex->locked_by) {
+    blocked = 1;
+    pend_pendsv();
   }
 
   //Unlock
   mutex_states &= ~(0x1 << mutex_num);
 
   //Update priority ceiling and inherited priority
-  k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
   ksb->priority_ceiling = find_highest_locked();
-  
+
   tcb_buffer[locked_by].inherited_prior = tcb_buffer[locked_by].priority;
 
 }
