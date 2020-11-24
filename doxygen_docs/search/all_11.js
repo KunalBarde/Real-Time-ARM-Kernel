@@ -1,15 +1,11 @@
 var searchData=
 [
-  ['uart_2ec',['uart.c',['../uart_8c.html',1,'']]],
-  ['uart_5fflush',['uart_flush',['../uart_8c.html#aecd88b3e19a9769077a88de54aa2940d',1,'uart.c']]],
-  ['uart_5fget_5fbyte',['uart_get_byte',['../uart_8c.html#aa5d6bdc53bbbc07df19d7112b0475679',1,'uart.c']]],
-  ['uart_5finit',['uart_init',['../uart_8c.html#a43046d2083138223b81739dab2a13585',1,'uart.c']]],
-  ['uart_5firq',['UART_IRQ',['../uart_8c.html#a833c8df01544588f5a71e2cbff8aa266',1,'uart.c']]],
-  ['uart_5firq_5fhandler',['uart_irq_handler',['../uart_8c.html#a3f0c0eeba37ad41ca9517b73fe3fce3b',1,'uart.c']]],
-  ['uart_5fput_5fbyte',['uart_put_byte',['../uart_8c.html#a3eb93066c4e2af03dc437d670a1c073d',1,'uart.c']]],
-  ['ub_5ftable',['ub_table',['../syscall__thread_8c.html#a187e79dd2a6a18d6bbbc4f2509eb668b',1,'syscall_thread.c']]],
-  ['ub_5ftest',['ub_test',['../syscall__thread_8c.html#a25ba3ad8a12b82367579d5895804211f',1,'syscall_thread.c']]],
-  ['unused',['UNUSED',['../kmalloc_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;kmalloc.c'],['../mpu_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;mpu.c'],['../servok_8c.html#addf5ec070e9499d36b7f2009ce736076',1,'UNUSED():&#160;servok.c']]],
-  ['update_5fkernel_5fsets',['update_kernel_sets',['../syscall__thread_8c.html#ac2b092cdef9377874d2a424271fd8e4c',1,'syscall_thread.c']]],
-  ['update_5fthread_5fstates',['update_thread_states',['../syscall__thread_8c.html#a525baffbc746d9676d45fa131d1b9b7d',1,'syscall_thread.c']]]
+  ['tcb_5fbuffer_5fsize',['TCB_BUFFER_SIZE',['../syscall__thread_8c.html#adc3b22f32fd639dd22bbb76ca248b9f8',1,'syscall_thread.c']]],
+  ['thread_5fkill',['thread_kill',['../syscall__thread_8c.html#aeb03d48542c5c84a2c9d297267e3553a',1,'syscall_thread.c']]],
+  ['threshold',['THRESHOLD',['../uart_8c.html#a4679d8ea8690999a6c6c7c0cb245c879',1,'uart.c']]],
+  ['timer_2ec',['timer.c',['../timer_8c.html',1,'']]],
+  ['timer_5fstart',['timer_start',['../timer_8c.html#a46a015d768b5e22ce898c2773b870399',1,'timer.c']]],
+  ['timer_5fstop',['timer_stop',['../timer_8c.html#aa04078f48a0e8f5b6860a393ad06b535',1,'timer.c']]],
+  ['trise',['TRISE',['../structi2c__reg__map.html#a3eca1cb14d750537977aff68d875eb58',1,'i2c_reg_map']]],
+  ['typer',['TYPER',['../structmpu__t.html#aabdc3891da092aeecfc8f0f91c6b2ba6',1,'mpu_t']]]
 ];

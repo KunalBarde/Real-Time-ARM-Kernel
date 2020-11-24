@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['default_5fidle',['default_idle',['../syscall__thread_8c.html#a84de83d8cbea30290aab3c7eee772049',1,'syscall_thread.c']]]
+  ['acquire_5fmutex',['acquire_mutex',['../syscall__thread_8c.html#adc9d6010ec5fc0965665a7070cef0e99',1,'syscall_thread.c']]]
 ];

@@ -84,28 +84,28 @@ float ub_table[] = {
 
 /* Kernel Data Structures */
 
-/* Global threading state */
+/** @brief Global threading state */
 volatile char kernel_threading_state[K_BLOCK_SIZE];
 
-/* Initially all threads should be in the wait set */
+/** @brief Initially all threads should be in the wait set */
 static volatile signed char kernel_wait_set[BUFFER_SIZE] = {0};
 
-/* Add threads to ready set once sys_thread_create is called */
+/** @brief Add threads to ready set once sys_thread_create is called */
 static volatile signed char kernel_ready_set[BUFFER_SIZE] = {0};
 
-/* PendSV handler moves threads to running */
+/** @brief PendSV handler moves threads to running */
 //static volatile char kernel_running_set[BUFFER_SIZE] = {0};
 
-/* Thread specific state */
+/** @brief Thread specific state */
 static volatile tcb_t tcb_buffer[BUFFER_SIZE];
 
-/* Static global thread id assignment */
+/** @brief Static global thread id assignment */
 static volatile int thread_idx = 0;
 
-/* Static global mutex locked states */
+/** @brief Static global mutex locked states */
 static volatile uint32_t mutex_states = 0;
 
-/* Mutex specific state */
+/** @brief Mutex specific state */
 static volatile kmutex_t mutex_buffer[32];
 
 /**
@@ -585,8 +585,8 @@ int sys_scheduler_start( uint32_t frequency ){
 uint32_t sys_get_priority(){
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
 
-  //return tcb_buffer[ksb->running_thread].inherited_prior;
-  return tcb_buffer[ksb->running_thread].priority;
+  return tcb_buffer[ksb->running_thread].inherited_prior;
+  //return tcb_buffer[ksb->running_thread].priority;
 }
 
 /** 
@@ -723,6 +723,15 @@ void sys_mutex_lock( kmutex_t *mutex ) {
   }
 }
 
+/**
+ * @brief	Helper polling function to check if a thread is able to acquire a specific mutex given its current priority.
+
+ * @param[in]	curr_ceil	Current static ceiling of acquiring thread.
+ * @param[in]	max_prior	Max_prior of the the thread to be acquired.
+ * @param[in]	mutex_num	Mutex id of the mutex to be acquired.
+
+ * @return	1 on success. 0 otherwise. 
+ */
 int acquire_mutex(uint32_t curr_ceil, uint32_t max_prior, uint8_t mutex_num) {
   kmutex_t *mutex = (kmutex_t *)&mutex_buffer[mutex_num];
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
@@ -736,7 +745,9 @@ int acquire_mutex(uint32_t curr_ceil, uint32_t max_prior, uint8_t mutex_num) {
   return 0;
 }
 
-//Raising blocking threads inherited priority to match at least current blocked threads
+/**
+ * @brief	Raises blocking thread's inherited priority to match at least current blocked thread's.
+ */
 void raise_blocking_priority(uint32_t curr_ceil) {
   int32_t blocking_thread_idx = find_highest_locker();
   if(blocking_thread_idx < 0) breakpoint();
@@ -785,6 +796,13 @@ int32_t find_highest_locker() {
   return highest_ind;
 }
 
+/**
+ * @brief	Check that thread with given thread id does not currently hold any locks. 
+
+ * @param[in]	thread_buf_idx	Thread id of thread to be checked.  
+
+ * @return	1 if no locks. 0 if it does hold a lock.
+ */
 int check_no_locks(uint32_t thread_buf_idx) {
 
   for(int i = 0; i < 32; i++) {

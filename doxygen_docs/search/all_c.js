@@ -1,5 +1,22 @@
 var searchData=
 [
-  ['oar1',['OAR1',['../structi2c__reg__map.html#a28b80e0ee8622858b4ea46021cfe3da0',1,'i2c_reg_map']]],
-  ['oar2',['OAR2',['../structi2c__reg__map.html#a8342e6d3c61031ef990b5de2399102bb',1,'i2c_reg_map']]]
+  ['max_5ftotal_5fthreads',['MAX_TOTAL_THREADS',['../syscall__thread_8c.html#a45f1a9a85716813c62bc2cfaaf1a88df',1,'syscall_thread.c']]],
+  ['max_5fu_5fthreads',['MAX_U_THREADS',['../syscall__thread_8c.html#aba34e0374496611ed0ad1d6c12c69840',1,'syscall_thread.c']]],
+  ['memfault_5fen',['MEMFAULT_EN',['../mpu_8c.html#aa42b1ca56234031dfe706ba315dcf7ac',1,'mpu.c']]],
+  ['mm_5fc_5fhandler',['mm_c_handler',['../mpu_8c.html#a91bea6c5bee9301515785e2d8a754b82',1,'mpu.c']]],
+  ['mm_5fdisable_5fuser_5faccess',['mm_disable_user_access',['../mpu_8c.html#a5e4f4fb754798352ef6b062a5b345781',1,'mpu.c']]],
+  ['mm_5fdisable_5fuser_5fstacks',['mm_disable_user_stacks',['../mpu_8c.html#a1022041b81c22a42458d5479991510f4',1,'mpu.c']]],
+  ['mm_5fenable_5fmpu',['mm_enable_mpu',['../mpu_8c.html#a598ec63d99915c54c38d36370df8f444',1,'mpu.c']]],
+  ['mm_5fenable_5fuser_5faccess',['mm_enable_user_access',['../mpu_8c.html#ab2eb2f443bbb103ebda86f86bf133c7d',1,'mpu.c']]],
+  ['mm_5fenable_5fuser_5fstacks',['mm_enable_user_stacks',['../mpu_8c.html#a798c0881db7dca6d03a42be10d37cba3',1,'mpu.c']]],
+  ['mm_5flog2ceil_5fsize',['mm_log2ceil_size',['../mpu_8c.html#aef45fdec219c3ac6237f90b805ea6bff',1,'mpu.c']]],
+  ['mm_5fregion_5fdisable',['mm_region_disable',['../mpu_8c.html#af59a5684ba88f773a08878c311160bef',1,'mpu.c']]],
+  ['mm_5fregion_5fenable',['mm_region_enable',['../mpu_8c.html#aa911f88ae5abc2cf28a3ff0c2de2e395',1,'mpu.c']]],
+  ['mmarvalid',['MMARVALID',['../mpu_8c.html#a49a795c37df53d736a30d36ac8a5c8ca',1,'mpu.c']]],
+  ['mmfar',['MMFAR',['../structsystem__control__block__t.html#a39cb9e1a18f318132b055b4f3ad996df',1,'system_control_block_t']]],
+  ['mpu_2ec',['mpu.c',['../mpu_8c.html',1,'']]],
+  ['mpu_5fbase',['MPU_BASE',['../mpu_8c.html#aa0805ccd2bc4e42d63adb0618d2af571',1,'mpu.c']]],
+  ['mpu_5ft',['mpu_t',['../structmpu__t.html',1,'']]],
+  ['mstkerr',['MSTKERR',['../mpu_8c.html#a9a934466ca47ca6102390fef1078cf85',1,'mpu.c']]],
+  ['munstkerr',['MUNSTKERR',['../mpu_8c.html#a3b380f684e8a18a6eba0f32a3e37ad3d',1,'mpu.c']]]
 ];

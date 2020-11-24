@@ -122,7 +122,7 @@ typedef struct {
 #define IACCVIOL 0x1 << 0
 /**@brief Indicates the MMFAR is valid.*/
 #define MMARVALID 0x1 << 7
-
+/**@brief System word size*/
 #define WORD_SIZE 4
 
 /**
@@ -197,8 +197,10 @@ void mm_c_handler( void *psp ) {
 
 /**
  * @brief	Enables mpu function and background region protection. 
+ 
+ * @param[in]	enable	if 1 enables mpu. If 0, disables.
  */
-void mm_enable_mpu(int enable, UNUSED int background) {
+void mm_enable_mpu(int enable) {
   breakpoint();
   //Enable mem fault
   volatile system_control_block_t *scb = SCB_BASE;
@@ -219,14 +221,13 @@ void mm_enable_mpu(int enable, UNUSED int background) {
   breakpoint();
 }
 
+/**
+ * @brief	Enable user space mpu protections against access kernel regions. Does not provide mpu protection of kernel stacks. 
+
+ * @return	0 if success. Anything else indicates an error. 
+ */
 int mm_enable_user_access() {
-//User code: _user_text_start 16KB
-//User Ro data: _u_rodata 2KB
-//User data: _u_data 1KB
-//User bss: _u_bss 1KB
-//User heap: __heap_low 4KB
-//Default thread: __thread_u_stacks_low
-  breakpoint();
+  
   void *user_text_start = (void *)&_swi_stub_start;
   void *user_rodata = (void *)&_u_rodata;
   void *user_data = (void *)&_u_data;
@@ -290,6 +291,9 @@ int mm_enable_user_stacks(void *process_stack, void *kernel_stack, int thread_nu
   return 0;
 }
 
+/**
+ * @brief	Disable current user thread stack regions. Always 6 and 7. 
+ */
 void mm_disable_user_stacks() {
   mm_region_disable(6);
   mm_region_disable(7);

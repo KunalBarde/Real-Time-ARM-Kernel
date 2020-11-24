@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['ub_5ftable',['ub_table',['../syscall__thread_8c.html#a187e79dd2a6a18d6bbbc4f2509eb668b',1,'syscall_thread.c']]]
+  ['trise',['TRISE',['../structi2c__reg__map.html#a3eca1cb14d750537977aff68d875eb58',1,'i2c_reg_map']]],
+  ['typer',['TYPER',['../structmpu__t.html#aabdc3891da092aeecfc8f0f91c6b2ba6',1,'mpu_t']]]
 ];

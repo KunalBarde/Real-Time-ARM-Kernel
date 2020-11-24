@@ -82,9 +82,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow4" class="tabs3">
     <ul class="tablist">
       <li><a href="#index__"><span>_</span></a></li>
+      <li><a href="#index_a"><span>a</span></a></li>
       <li><a href="#index_b"><span>b</span></a></li>
       <li><a href="#index_c"><span>c</span></a></li>
       <li><a href="#index_d"><span>d</span></a></li>
+      <li><a href="#index_e"><span>e</span></a></li>
+      <li><a href="#index_f"><span>f</span></a></li>
       <li><a href="#index_i"><span>i</span></a></li>
       <li><a href="#index_k"><span>k</span></a></li>
       <li><a href="#index_l"><span>l</span></a></li>
@@ -118,25 +121,52 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <h3><a class="anchor" id="index__"></a>- _ -</h3><ul>
 <li>__heap_low
-: <a class="el" href="syscall_8c.html#a06fc55a4a48496b5570b9833789b9092">syscall.c</a>
+: <a class="el" href="mpu_8c.html#a1a77ce5777a2790c24ac83283bed46da">mpu.c</a>
+, <a class="el" href="syscall_8c.html#a06fc55a4a48496b5570b9833789b9092">syscall.c</a>
 </li>
 <li>__heap_top
 : <a class="el" href="syscall_8c.html#aafb4019384ce24bc279858b50af5418d">syscall.c</a>
 </li>
+<li>__psp_stack_bottom
+: <a class="el" href="mpu_8c.html#a67605757032eb6f7a15a81b51bab312e">mpu.c</a>
+</li>
 <li>__thread_k_stacks_low
-: <a class="el" href="syscall__thread_8c.html#aed1e9fb5e74e0a3280d8d6b74d61146a">syscall_thread.c</a>
+: <a class="el" href="mpu_8c.html#aed1e9fb5e74e0a3280d8d6b74d61146a">mpu.c</a>
+, <a class="el" href="syscall__thread_8c.html#aed1e9fb5e74e0a3280d8d6b74d61146a">syscall_thread.c</a>
 </li>
 <li>__thread_k_stacks_top
-: <a class="el" href="syscall__thread_8c.html#a52f42f247ccf963d377b87cf4bc2ccca">syscall_thread.c</a>
+: <a class="el" href="mpu_8c.html#a52f42f247ccf963d377b87cf4bc2ccca">mpu.c</a>
+, <a class="el" href="syscall__thread_8c.html#a52f42f247ccf963d377b87cf4bc2ccca">syscall_thread.c</a>
 </li>
 <li>__thread_u_stacks_low
-: <a class="el" href="syscall__thread_8c.html#a965b457902b75612d5c4db04d78cb6e1">syscall_thread.c</a>
+: <a class="el" href="mpu_8c.html#a965b457902b75612d5c4db04d78cb6e1">mpu.c</a>
+, <a class="el" href="syscall__thread_8c.html#a965b457902b75612d5c4db04d78cb6e1">syscall_thread.c</a>
 </li>
 <li>__thread_u_stacks_top
-: <a class="el" href="syscall__thread_8c.html#a7df5a7143f4fb8f52024cc2eb04d179e">syscall_thread.c</a>
+: <a class="el" href="mpu_8c.html#a7df5a7143f4fb8f52024cc2eb04d179e">mpu.c</a>
+, <a class="el" href="syscall__thread_8c.html#a7df5a7143f4fb8f52024cc2eb04d179e">syscall_thread.c</a>
 </li>
 <li>_kill()
 : <a class="el" href="syscall__thread_8c.html#ae4f4984cff982459b6a165f56e86a1cb">syscall_thread.c</a>
+</li>
+<li>_swi_stub_start
+: <a class="el" href="mpu_8c.html#ad05a785f751e083e21e8b4b7b20ab0c2">mpu.c</a>
+</li>
+<li>_u_bss
+: <a class="el" href="mpu_8c.html#a45ac219ab9edce55a5afadb937a63d17">mpu.c</a>
+</li>
+<li>_u_data
+: <a class="el" href="mpu_8c.html#a480c4e3e301bef55d15fb79342469243">mpu.c</a>
+</li>
+<li>_u_rodata
+: <a class="el" href="mpu_8c.html#a76f437fd160565cb91f85da15b79c4fe">mpu.c</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_a"></a>- a -</h3><ul>
+<li>acquire_mutex()
+: <a class="el" href="syscall__thread_8c.html#adc9d6010ec5fc0965665a7070cef0e99">syscall_thread.c</a>
 </li>
 </ul>
 
@@ -150,6 +180,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <h3><a class="anchor" id="index_c"></a>- c -</h3><ul>
+<li>check_no_locks()
+: <a class="el" href="syscall__thread_8c.html#af355d2c3314d95df003e778293a5e2ff">syscall_thread.c</a>
+</li>
 <li>CTRL_ENABLE_BG_REGION
 : <a class="el" href="mpu_8c.html#a495309d6c4573f473ef08abe44a06335">mpu.c</a>
 </li>
@@ -175,6 +208,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </ul>
 
 
+<h3><a class="anchor" id="index_e"></a>- e -</h3><ul>
+<li>EXECUTABLE
+: <a class="el" href="mpu_8c.html#a7ff9beec60180e0b89c025f18d6d5179">mpu.c</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_f"></a>- f -</h3><ul>
+<li>find_highest_locked()
+: <a class="el" href="syscall__thread_8c.html#a69ee2f27a2d7df994f88dc12eb95e072">syscall_thread.c</a>
+</li>
+<li>find_highest_locker()
+: <a class="el" href="syscall__thread_8c.html#a5b3e46dcdb34dcd1fee359bfe9660263">syscall_thread.c</a>
+</li>
+</ul>
+
+
 <h3><a class="anchor" id="index_i"></a>- i -</h3><ul>
 <li>I_THREAD_PRIORITY
 : <a class="el" href="syscall__thread_8c.html#a41816ab1942f7d02b1bf9cce2d621a80">syscall_thread.c</a>
@@ -192,9 +242,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <h3><a class="anchor" id="index_k"></a>- k -</h3><ul>
-<li>K_BLOCK_SIZE
-: <a class="el" href="syscall__thread_8c.html#a6087150729ad1310e03aad022827c1c1">syscall_thread.c</a>
-</li>
 <li>k_free()
 : <a class="el" href="kmalloc_8c.html#a2a2afced6eea8b4a00f5c93bb9d3d99d">kmalloc.c</a>
 </li>
@@ -212,6 +259,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>kernel_main()
 : <a class="el" href="kernel_8c.html#a3e51d9a8bcacab5e0c6d6907d660a23c">kernel.c</a>
+</li>
+<li>kernel_threading_state
+: <a class="el" href="syscall__thread_8c.html#a42e71551f6fb0af701d53cde99ca3d82">syscall_thread.c</a>
 </li>
 </ul>
 
@@ -233,8 +283,26 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>MAX_U_THREADS
 : <a class="el" href="syscall__thread_8c.html#aba34e0374496611ed0ad1d6c12c69840">syscall_thread.c</a>
 </li>
+<li>MEMFAULT_EN
+: <a class="el" href="mpu_8c.html#aa42b1ca56234031dfe706ba315dcf7ac">mpu.c</a>
+</li>
 <li>mm_c_handler()
 : <a class="el" href="mpu_8c.html#a91bea6c5bee9301515785e2d8a754b82">mpu.c</a>
+</li>
+<li>mm_disable_user_access()
+: <a class="el" href="mpu_8c.html#a5e4f4fb754798352ef6b062a5b345781">mpu.c</a>
+</li>
+<li>mm_disable_user_stacks()
+: <a class="el" href="mpu_8c.html#a1022041b81c22a42458d5479991510f4">mpu.c</a>
+</li>
+<li>mm_enable_mpu()
+: <a class="el" href="mpu_8c.html#a598ec63d99915c54c38d36370df8f444">mpu.c</a>
+</li>
+<li>mm_enable_user_access()
+: <a class="el" href="mpu_8c.html#ab2eb2f443bbb103ebda86f86bf133c7d">mpu.c</a>
+</li>
+<li>mm_enable_user_stacks()
+: <a class="el" href="mpu_8c.html#a798c0881db7dca6d03a42be10d37cba3">mpu.c</a>
 </li>
 <li>mm_log2ceil_size()
 : <a class="el" href="mpu_8c.html#aef45fdec219c3ac6237f90b805ea6bff">mpu.c</a>
@@ -274,6 +342,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <h3><a class="anchor" id="index_r"></a>- r -</h3><ul>
+<li>raise_blocking_priority()
+: <a class="el" href="syscall__thread_8c.html#a71c82abd2f5ccdd63635261e9cb307a0">syscall_thread.c</a>
+</li>
 <li>RASR_AP_KERN
 : <a class="el" href="mpu_8c.html#ad6f6a98d899b10522314872460ff908e">mpu.c</a>
 </li>
@@ -300,6 +371,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>RBAR_VALID
 : <a class="el" href="mpu_8c.html#abd40d803e2141ab228d295379c27874d">mpu.c</a>
+</li>
+<li>READ_ONLY
+: <a class="el" href="mpu_8c.html#af035426824dc95b1a1ceb1b591e82a57">mpu.c</a>
 </li>
 <li>REGION_NUMBER_MAX
 : <a class="el" href="mpu_8c.html#ab7d38c5290ace45e26844f4d2fb4589a">mpu.c</a>
@@ -467,7 +541,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="syscall__thread_8c.html#a13ee57d95da6b6509d43bb1b3f67bb02">syscall_thread.c</a>
 </li>
 <li>WORD_SIZE
-: <a class="el" href="syscall__thread_8c.html#a92ed8507d1cd2331ad09275c5c4c1c89">syscall_thread.c</a>
+: <a class="el" href="mpu_8c.html#a92ed8507d1cd2331ad09275c5c4c1c89">mpu.c</a>
+, <a class="el" href="syscall__thread_8c.html#a92ed8507d1cd2331ad09275c5c4c1c89">syscall_thread.c</a>
 </li>
 </ul>
 

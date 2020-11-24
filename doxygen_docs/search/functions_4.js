@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['pendsv_5fc_5fhandler',['pendsv_c_handler',['../syscall__thread_8c.html#ab66dd67d5d707d20135483b2c17b3b89',1,'syscall_thread.c']]],
-  ['poll',['poll',['../kernel__buffer_8c.html#a56459d293972f4853e2f926ad1a950cd',1,'kernel_buffer.c']]],
-  ['put',['put',['../kernel__buffer_8c.html#afb31aaf8704dc404b14ce87ccae879ba',1,'kernel_buffer.c']]]
+  ['find_5fhighest_5flocked',['find_highest_locked',['../syscall__thread_8c.html#a69ee2f27a2d7df994f88dc12eb95e072',1,'syscall_thread.c']]],
+  ['find_5fhighest_5flocker',['find_highest_locker',['../syscall__thread_8c.html#a5b3e46dcdb34dcd1fee359bfe9660263',1,'syscall_thread.c']]]
 ];

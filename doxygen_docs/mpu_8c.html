@@ -107,6 +107,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &quot;printk.h&quot;</code><br />
 <code>#include &quot;syscall.h&quot;</code><br />
 <code>#include &quot;mpu.h&quot;</code><br />
+<code>#include &quot;syscall_thread.h&quot;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
@@ -137,6 +138,18 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#ad55a7ddb8d4b2398b0c1cfec76c0d9fd">SCB_BASE</a>&#160;&#160;&#160;( ( volatile <a class="el" href="structsystem__control__block__t.html">system_control_block_t</a> * )0xE000ED24 )</td></tr>
 <tr class="memdesc:ad55a7ddb8d4b2398b0c1cfec76c0d9fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Systen control block MMIO location. <br /></td></tr>
 <tr class="separator:ad55a7ddb8d4b2398b0c1cfec76c0d9fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa42b1ca56234031dfe706ba315dcf7ac"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa42b1ca56234031dfe706ba315dcf7ac"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#aa42b1ca56234031dfe706ba315dcf7ac">MEMFAULT_EN</a>&#160;&#160;&#160;0x1 &lt;&lt; 16</td></tr>
+<tr class="memdesc:aa42b1ca56234031dfe706ba315dcf7ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable memory faults. <br /></td></tr>
+<tr class="separator:aa42b1ca56234031dfe706ba315dcf7ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af035426824dc95b1a1ceb1b591e82a57"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af035426824dc95b1a1ceb1b591e82a57"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#af035426824dc95b1a1ceb1b591e82a57">READ_ONLY</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:af035426824dc95b1a1ceb1b591e82a57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Memory region attribute read only. <br /></td></tr>
+<tr class="separator:af035426824dc95b1a1ceb1b591e82a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ff9beec60180e0b89c025f18d6d5179"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7ff9beec60180e0b89c025f18d6d5179"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#a7ff9beec60180e0b89c025f18d6d5179">EXECUTABLE</a>&#160;&#160;&#160;1</td></tr>
+<tr class="memdesc:a7ff9beec60180e0b89c025f18d6d5179"><td class="mdescLeft">&#160;</td><td class="mdescRight">Memory region attribute is executable by user. <br /></td></tr>
+<tr class="separator:a7ff9beec60180e0b89c025f18d6d5179"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a934466ca47ca6102390fef1078cf85"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9a934466ca47ca6102390fef1078cf85"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#a9a934466ca47ca6102390fef1078cf85">MSTKERR</a>&#160;&#160;&#160;0x1 &lt;&lt; 4</td></tr>
 <tr class="memdesc:a9a934466ca47ca6102390fef1078cf85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stacking error. <br /></td></tr>
@@ -157,6 +170,10 @@ Macros</h2></td></tr>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#a49a795c37df53d736a30d36ac8a5c8ca">MMARVALID</a>&#160;&#160;&#160;0x1 &lt;&lt; 7</td></tr>
 <tr class="memdesc:a49a795c37df53d736a30d36ac8a5c8ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates the MMFAR is valid. <br /></td></tr>
 <tr class="separator:a49a795c37df53d736a30d36ac8a5c8ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92ed8507d1cd2331ad09275c5c4c1c89"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a92ed8507d1cd2331ad09275c5c4c1c89"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#a92ed8507d1cd2331ad09275c5c4c1c89">WORD_SIZE</a>&#160;&#160;&#160;4</td></tr>
+<tr class="memdesc:a92ed8507d1cd2331ad09275c5c4c1c89"><td class="mdescLeft">&#160;</td><td class="mdescRight">System word size. <br /></td></tr>
+<tr class="separator:a92ed8507d1cd2331ad09275c5c4c1c89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:a495309d6c4573f473ef08abe44a06335"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a495309d6c4573f473ef08abe44a06335"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#a495309d6c4573f473ef08abe44a06335">CTRL_ENABLE_BG_REGION</a>&#160;&#160;&#160;( 1&lt;&lt;2 )</td></tr>
@@ -212,6 +229,24 @@ Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#a91bea6c5bee9301515785e2d8a754b82">mm_c_handler</a> (void *psp)</td></tr>
 <tr class="memdesc:a91bea6c5bee9301515785e2d8a754b82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Memory managment interrupt c handler. <br /></td></tr>
 <tr class="separator:a91bea6c5bee9301515785e2d8a754b82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a598ec63d99915c54c38d36370df8f444"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#a598ec63d99915c54c38d36370df8f444">mm_enable_mpu</a> (int enable)</td></tr>
+<tr class="memdesc:a598ec63d99915c54c38d36370df8f444"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables mpu function and background region protection.  <a href="#a598ec63d99915c54c38d36370df8f444">More...</a><br /></td></tr>
+<tr class="separator:a598ec63d99915c54c38d36370df8f444"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2eb2f443bbb103ebda86f86bf133c7d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#ab2eb2f443bbb103ebda86f86bf133c7d">mm_enable_user_access</a> ()</td></tr>
+<tr class="memdesc:ab2eb2f443bbb103ebda86f86bf133c7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable user space mpu protections against access kernel regions. Does not provide mpu protection of kernel stacks.  <a href="#ab2eb2f443bbb103ebda86f86bf133c7d">More...</a><br /></td></tr>
+<tr class="separator:ab2eb2f443bbb103ebda86f86bf133c7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a798c0881db7dca6d03a42be10d37cba3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a798c0881db7dca6d03a42be10d37cba3"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#a798c0881db7dca6d03a42be10d37cba3">mm_enable_user_stacks</a> (void *process_stack, void *kernel_stack, int thread_num)</td></tr>
+<tr class="memdesc:a798c0881db7dca6d03a42be10d37cba3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable user thread stack access based on memory access mode. <br /></td></tr>
+<tr class="separator:a798c0881db7dca6d03a42be10d37cba3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1022041b81c22a42458d5479991510f4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1022041b81c22a42458d5479991510f4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#a1022041b81c22a42458d5479991510f4">mm_disable_user_stacks</a> ()</td></tr>
+<tr class="memdesc:a1022041b81c22a42458d5479991510f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable current user thread stack regions. Always 6 and 7. <br /></td></tr>
+<tr class="separator:a1022041b81c22a42458d5479991510f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e4f4fb754798352ef6b062a5b345781"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5e4f4fb754798352ef6b062a5b345781"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#a5e4f4fb754798352ef6b062a5b345781">mm_disable_user_access</a> ()</td></tr>
+<tr class="memdesc:a5e4f4fb754798352ef6b062a5b345781"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable user accessible memory regions. All memory under background protection now. <br /></td></tr>
+<tr class="separator:a5e4f4fb754798352ef6b062a5b345781"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa911f88ae5abc2cf28a3ff0c2de2e395"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#aa911f88ae5abc2cf28a3ff0c2de2e395">mm_region_enable</a> (uint32_t region_number, void *base_address, uint8_t size_log2, int execute, int user_write_access)</td></tr>
 <tr class="memdesc:aa911f88ae5abc2cf28a3ff0c2de2e395"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables a memory protection region. Regions must be aligned!  <a href="#aa911f88ae5abc2cf28a3ff0c2de2e395">More...</a><br /></td></tr>
 <tr class="separator:aa911f88ae5abc2cf28a3ff0c2de2e395"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -222,6 +257,51 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#aef45fdec219c3ac6237f90b805ea6bff">mm_log2ceil_size</a> (uint32_t n)</td></tr>
 <tr class="memdesc:aef45fdec219c3ac6237f90b805ea6bff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns ceiling (log_2 n). <br /></td></tr>
 <tr class="separator:aef45fdec219c3ac6237f90b805ea6bff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:ad05a785f751e083e21e8b4b7b20ab0c2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad05a785f751e083e21e8b4b7b20ab0c2"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#ad05a785f751e083e21e8b4b7b20ab0c2">_swi_stub_start</a></td></tr>
+<tr class="memdesc:ad05a785f751e083e21e8b4b7b20ab0c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">User memory region addresses. <br /></td></tr>
+<tr class="separator:ad05a785f751e083e21e8b4b7b20ab0c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76f437fd160565cb91f85da15b79c4fe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a76f437fd160565cb91f85da15b79c4fe"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#a76f437fd160565cb91f85da15b79c4fe">_u_rodata</a></td></tr>
+<tr class="memdesc:a76f437fd160565cb91f85da15b79c4fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">User memory region addresses. <br /></td></tr>
+<tr class="separator:a76f437fd160565cb91f85da15b79c4fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a480c4e3e301bef55d15fb79342469243"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a480c4e3e301bef55d15fb79342469243"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#a480c4e3e301bef55d15fb79342469243">_u_data</a></td></tr>
+<tr class="memdesc:a480c4e3e301bef55d15fb79342469243"><td class="mdescLeft">&#160;</td><td class="mdescRight">User memory region addresses. <br /></td></tr>
+<tr class="separator:a480c4e3e301bef55d15fb79342469243"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45ac219ab9edce55a5afadb937a63d17"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a45ac219ab9edce55a5afadb937a63d17"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#a45ac219ab9edce55a5afadb937a63d17">_u_bss</a></td></tr>
+<tr class="memdesc:a45ac219ab9edce55a5afadb937a63d17"><td class="mdescLeft">&#160;</td><td class="mdescRight">User memory region addresses. <br /></td></tr>
+<tr class="separator:a45ac219ab9edce55a5afadb937a63d17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a77ce5777a2790c24ac83283bed46da"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1a77ce5777a2790c24ac83283bed46da"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#a1a77ce5777a2790c24ac83283bed46da">__heap_low</a></td></tr>
+<tr class="memdesc:a1a77ce5777a2790c24ac83283bed46da"><td class="mdescLeft">&#160;</td><td class="mdescRight">User memory region addresses. <br /></td></tr>
+<tr class="separator:a1a77ce5777a2790c24ac83283bed46da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67605757032eb6f7a15a81b51bab312e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a67605757032eb6f7a15a81b51bab312e"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#a67605757032eb6f7a15a81b51bab312e">__psp_stack_bottom</a></td></tr>
+<tr class="memdesc:a67605757032eb6f7a15a81b51bab312e"><td class="mdescLeft">&#160;</td><td class="mdescRight">User memory region addresses. <br /></td></tr>
+<tr class="separator:a67605757032eb6f7a15a81b51bab312e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
+<tr class="memitem:a7df5a7143f4fb8f52024cc2eb04d179e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7df5a7143f4fb8f52024cc2eb04d179e"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#a7df5a7143f4fb8f52024cc2eb04d179e">__thread_u_stacks_top</a></td></tr>
+<tr class="memdesc:a7df5a7143f4fb8f52024cc2eb04d179e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Thread stack memory region addresses. <br /></td></tr>
+<tr class="separator:a7df5a7143f4fb8f52024cc2eb04d179e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52f42f247ccf963d377b87cf4bc2ccca"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a52f42f247ccf963d377b87cf4bc2ccca"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#a52f42f247ccf963d377b87cf4bc2ccca">__thread_k_stacks_top</a></td></tr>
+<tr class="memdesc:a52f42f247ccf963d377b87cf4bc2ccca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Thread stack memory region addresses. <br /></td></tr>
+<tr class="separator:a52f42f247ccf963d377b87cf4bc2ccca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a965b457902b75612d5c4db04d78cb6e1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a965b457902b75612d5c4db04d78cb6e1"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#a965b457902b75612d5c4db04d78cb6e1">__thread_u_stacks_low</a></td></tr>
+<tr class="memdesc:a965b457902b75612d5c4db04d78cb6e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Thread stack memory region addresses. <br /></td></tr>
+<tr class="separator:a965b457902b75612d5c4db04d78cb6e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed1e9fb5e74e0a3280d8d6b74d61146a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aed1e9fb5e74e0a3280d8d6b74d61146a"></a>
+char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mpu_8c.html#aed1e9fb5e74e0a3280d8d6b74d61146a">__thread_k_stacks_low</a></td></tr>
+<tr class="memdesc:aed1e9fb5e74e0a3280d8d6b74d61146a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Thread stack memory region addresses. <br /></td></tr>
+<tr class="separator:aed1e9fb5e74e0a3280d8d6b74d61146a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>MPU interface implementation for thread-wise memory protection. </p>
@@ -242,6 +322,49 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="a598ec63d99915c54c38d36370df8f444"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void mm_enable_mpu </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>enable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables mpu function and background region protection. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">enable</td><td>if 1 enables mpu. If 0, disables. </td></tr>
+  </table>
+  </dd>
+</dl>
+<p>if(background) mpu -&gt; CTRL |= CTRL_ENABLE_BG_REGION; else mpu -&gt; CTRL &amp;= ~CTRL_ENABLE_BG_REGION; </p>
+
+</div>
+</div>
+<a class="anchor" id="ab2eb2f443bbb103ebda86f86bf133c7d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int mm_enable_user_access </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enable user space mpu protections against access kernel regions. Does not provide mpu protection of kernel stacks. </p>
+<dl class="section return"><dt>Returns</dt><dd>0 if success. Anything else indicates an error. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="af59a5684ba88f773a08878c311160bef"></a>
 <div class="memitem">
 <div class="memproto">

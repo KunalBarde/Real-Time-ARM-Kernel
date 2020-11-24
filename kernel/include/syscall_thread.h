@@ -92,6 +92,9 @@ typedef struct {
 
 #define K_BLOCK_SIZE (sizeof(k_threading_state_t)) /**< sizeof(k_thread_state_t)*/
 
+/**
+ * @brief	Global threading state
+ */ 
 extern volatile char kernel_threading_state[K_BLOCK_SIZE];
 
 /**

@@ -107,8 +107,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &quot;syscall_mutex.h&quot;</code><br />
 <code>#include &quot;syscall.h&quot;</code><br />
 <code>#include &quot;mpu.h&quot;</code><br />
+<code>#include &lt;debug.h&gt;</code><br />
 <code>#include &lt;timer.h&gt;</code><br />
 <code>#include &lt;arm.h&gt;</code><br />
+<code>#include &lt;printk.h&gt;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
@@ -132,8 +134,6 @@ Macros</h2></td></tr>
 <tr class="separator:a6b20d41d6252e9871430c242cb1a56e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92ed8507d1cd2331ad09275c5c4c1c89"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a92ed8507d1cd2331ad09275c5c4c1c89">WORD_SIZE</a>&#160;&#160;&#160;4</td></tr>
 <tr class="separator:a92ed8507d1cd2331ad09275c5c4c1c89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6087150729ad1310e03aad022827c1c1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a6087150729ad1310e03aad022827c1c1">K_BLOCK_SIZE</a>&#160;&#160;&#160;(sizeof(k_threading_state_t))</td></tr>
-<tr class="separator:a6087150729ad1310e03aad022827c1c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc3b22f32fd639dd22bbb76ca248b9f8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#adc3b22f32fd639dd22bbb76ca248b9f8">TCB_BUFFER_SIZE</a>&#160;&#160;&#160;(sizeof(tcb_t) * (<a class="el" href="uart_8c.html#a6b20d41d6252e9871430c242cb1a56e7">BUFFER_SIZE</a>))</td></tr>
 <tr class="separator:adc3b22f32fd639dd22bbb76ca248b9f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fe78fd82e092286cded01150a302b2e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a7fe78fd82e092286cded01150a302b2e">I_THREAD_SET_IDX</a>&#160;&#160;&#160;14</td></tr>
@@ -222,6 +222,22 @@ kmutex_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a6a14ccbc1e43d61617b97ecd06cf65b9">sys_mutex_lock</a> (kmutex_t *mutex)</td></tr>
 <tr class="memdesc:a6a14ccbc1e43d61617b97ecd06cf65b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO Add description. <br /></td></tr>
 <tr class="separator:a6a14ccbc1e43d61617b97ecd06cf65b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc9d6010ec5fc0965665a7070cef0e99"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#adc9d6010ec5fc0965665a7070cef0e99">acquire_mutex</a> (uint32_t curr_ceil, uint32_t max_prior, uint8_t mutex_num)</td></tr>
+<tr class="memdesc:adc9d6010ec5fc0965665a7070cef0e99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper polling function to check if a thread is able to acquire a specific mutex given its current priority.  <a href="#adc9d6010ec5fc0965665a7070cef0e99">More...</a><br /></td></tr>
+<tr class="separator:adc9d6010ec5fc0965665a7070cef0e99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71c82abd2f5ccdd63635261e9cb307a0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a71c82abd2f5ccdd63635261e9cb307a0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a71c82abd2f5ccdd63635261e9cb307a0">raise_blocking_priority</a> (uint32_t curr_ceil)</td></tr>
+<tr class="memdesc:a71c82abd2f5ccdd63635261e9cb307a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Raises blocking thread's inherited priority to match at least current blocked thread's. <br /></td></tr>
+<tr class="separator:a71c82abd2f5ccdd63635261e9cb307a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69ee2f27a2d7df994f88dc12eb95e072"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a69ee2f27a2d7df994f88dc12eb95e072">find_highest_locked</a> ()</td></tr>
+<tr class="memdesc:a69ee2f27a2d7df994f88dc12eb95e072"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find max_prior of locked resource with the highest priority;.  <a href="#a69ee2f27a2d7df994f88dc12eb95e072">More...</a><br /></td></tr>
+<tr class="separator:a69ee2f27a2d7df994f88dc12eb95e072"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b3e46dcdb34dcd1fee359bfe9660263"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a5b3e46dcdb34dcd1fee359bfe9660263">find_highest_locker</a> ()</td></tr>
+<tr class="memdesc:a5b3e46dcdb34dcd1fee359bfe9660263"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find thread ID of thread blocking the resource with the highest priority;.  <a href="#a5b3e46dcdb34dcd1fee359bfe9660263">More...</a><br /></td></tr>
+<tr class="separator:a5b3e46dcdb34dcd1fee359bfe9660263"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af355d2c3314d95df003e778293a5e2ff"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#af355d2c3314d95df003e778293a5e2ff">check_no_locks</a> (uint32_t thread_buf_idx)</td></tr>
+<tr class="memdesc:af355d2c3314d95df003e778293a5e2ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check that thread with given thread id does not currently hold any locks.  <a href="#af355d2c3314d95df003e778293a5e2ff">More...</a><br /></td></tr>
+<tr class="separator:af355d2c3314d95df003e778293a5e2ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55db4294dd5ed35ee5b2b1b1043ddbdd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a55db4294dd5ed35ee5b2b1b1043ddbdd"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a55db4294dd5ed35ee5b2b1b1043ddbdd">sys_mutex_unlock</a> (kmutex_t *mutex)</td></tr>
 <tr class="memdesc:a55db4294dd5ed35ee5b2b1b1043ddbdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO Add description. <br /></td></tr>
@@ -232,6 +248,10 @@ Variables</h2></td></tr>
 <tr class="memitem:a187e79dd2a6a18d6bbbc4f2509eb668b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a187e79dd2a6a18d6bbbc4f2509eb668b">ub_table</a> []</td></tr>
 <tr class="memdesc:a187e79dd2a6a18d6bbbc4f2509eb668b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Precalculated values for UB test.  <a href="#a187e79dd2a6a18d6bbbc4f2509eb668b">More...</a><br /></td></tr>
 <tr class="separator:a187e79dd2a6a18d6bbbc4f2509eb668b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42e71551f6fb0af701d53cde99ca3d82"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a42e71551f6fb0af701d53cde99ca3d82"></a>
+volatile char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a42e71551f6fb0af701d53cde99ca3d82">kernel_threading_state</a> [K_BLOCK_SIZE]</td></tr>
+<tr class="memdesc:a42e71551f6fb0af701d53cde99ca3d82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global threading state. <br /></td></tr>
+<tr class="separator:a42e71551f6fb0af701d53cde99ca3d82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:a965b457902b75612d5c4db04d78cb6e1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a965b457902b75612d5c4db04d78cb6e1"></a>
 char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a965b457902b75612d5c4db04d78cb6e1">__thread_u_stacks_low</a></td></tr>
@@ -333,19 +353,6 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
 
 </div>
 </div>
-<a class="anchor" id="a6087150729ad1310e03aad022827c1c1"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define K_BLOCK_SIZE&#160;&#160;&#160;(sizeof(k_threading_state_t))</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>sizeof(k_thread_state_t) </p>
-
-</div>
-</div>
 <a class="anchor" id="a45f1a9a85716813c62bc2cfaaf1a88df"></a>
 <div class="memitem">
 <div class="memproto">
@@ -438,6 +445,110 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="adc9d6010ec5fc0965665a7070cef0e99"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int acquire_mutex </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>curr_ceil</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>max_prior</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>mutex_num</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Helper polling function to check if a thread is able to acquire a specific mutex given its current priority. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">curr_ceil</td><td>Current static ceiling of acquiring thread. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">max_prior</td><td>Max_prior of the the thread to be acquired. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mutex_num</td><td>Mutex id of the mutex to be acquired.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 on success. 0 otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af355d2c3314d95df003e778293a5e2ff"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int check_no_locks </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>thread_buf_idx</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check that thread with given thread id does not currently hold any locks. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">thread_buf_idx</td><td>Thread id of thread to be checked.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 if no locks. 0 if it does hold a lock. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a69ee2f27a2d7df994f88dc12eb95e072"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t find_highest_locked </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Find max_prior of locked resource with the highest priority;. </p>
+<dl class="section return"><dt>Returns</dt><dd>-1 if no locked mutexes found. Else it is max_prior of the locked mutex with the highest max_prior </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a5b3e46dcdb34dcd1fee359bfe9660263"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t find_highest_locker </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Find thread ID of thread blocking the resource with the highest priority;. </p>
+<dl class="section return"><dt>Returns</dt><dd>-1 if no locking thread found. Else it is the thread ID of the thread blocking the mutex with the largest max_priority </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="ab66dd67d5d707d20135483b2c17b3b89"></a>
 <div class="memitem">
 <div class="memproto">

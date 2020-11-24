@@ -1,22 +1,12 @@
 var searchData=
 [
-  ['svc_5fc_5fhandler',['svc_c_handler',['../svc__handler_8c.html#a122ee86e40592aa9131d081329af6609',1,'svc_handler.c']]],
-  ['sys_5fexit',['sys_exit',['../syscall_8c.html#a1c0b6529c2b4ef268480a55f1314a400',1,'syscall.c']]],
-  ['sys_5fget_5fpriority',['sys_get_priority',['../syscall__thread_8c.html#a8b4f86fe10ac2c90ce8158872aac7ce2',1,'syscall_thread.c']]],
-  ['sys_5fget_5ftime',['sys_get_time',['../syscall__thread_8c.html#a341334c885696457b6f66bb8acda5b22',1,'syscall_thread.c']]],
-  ['sys_5fmutex_5finit',['sys_mutex_init',['../syscall__thread_8c.html#a12d3058e8c4464d614c9506562710e91',1,'syscall_thread.c']]],
-  ['sys_5fmutex_5flock',['sys_mutex_lock',['../syscall__thread_8c.html#a6a14ccbc1e43d61617b97ecd06cf65b9',1,'syscall_thread.c']]],
-  ['sys_5fmutex_5funlock',['sys_mutex_unlock',['../syscall__thread_8c.html#a55db4294dd5ed35ee5b2b1b1043ddbdd',1,'syscall_thread.c']]],
-  ['sys_5fread',['sys_read',['../syscall_8c.html#af1580a2b60d1de6953680eb981f43f30',1,'syscall.c']]],
-  ['sys_5fsbrk',['sys_sbrk',['../syscall_8c.html#a7f5ec70f8f9ae7913a4a99473bd347c0',1,'syscall.c']]],
-  ['sys_5fscheduler_5fstart',['sys_scheduler_start',['../syscall__thread_8c.html#a0726d2166701a485c555e6b7f7af3b60',1,'syscall_thread.c']]],
-  ['sys_5fservo_5fenable',['sys_servo_enable',['../servok_8c.html#a9d36b278ab88d4e5a32f7da0ac9d954d',1,'servok.c']]],
-  ['sys_5fservo_5fset',['sys_servo_set',['../servok_8c.html#aab0a71094fd2dda9f507eaac8fd7c3af',1,'servok.c']]],
-  ['sys_5fthread_5fcreate',['sys_thread_create',['../syscall__thread_8c.html#a7456217e2b43c86404a72acac2df684f',1,'syscall_thread.c']]],
-  ['sys_5fthread_5finit',['sys_thread_init',['../syscall__thread_8c.html#a7cf395a32723974af129b9bf11689e8a',1,'syscall_thread.c']]],
-  ['sys_5fthread_5fkill',['sys_thread_kill',['../syscall__thread_8c.html#a601e5d8e922ccdec535527e8d8724d78',1,'syscall_thread.c']]],
-  ['sys_5fthread_5ftime',['sys_thread_time',['../syscall__thread_8c.html#aa8933e910725546aa9e052369db9cf81',1,'syscall_thread.c']]],
-  ['sys_5fwait_5funtil_5fnext_5fperiod',['sys_wait_until_next_period',['../syscall__thread_8c.html#a2a3a3fb472158a93e59df836b9935b54',1,'syscall_thread.c']]],
-  ['sys_5fwrite',['sys_write',['../syscall_8c.html#ad47bc183d8d0ce684a447ed8fc4df22d',1,'syscall.c']]],
-  ['systick_5fc_5fhandler',['systick_c_handler',['../syscall__thread_8c.html#abc96a6564aa346ba124293a6604a0427',1,'syscall_thread.c']]]
+  ['mm_5fc_5fhandler',['mm_c_handler',['../mpu_8c.html#a91bea6c5bee9301515785e2d8a754b82',1,'mpu.c']]],
+  ['mm_5fdisable_5fuser_5faccess',['mm_disable_user_access',['../mpu_8c.html#a5e4f4fb754798352ef6b062a5b345781',1,'mpu.c']]],
+  ['mm_5fdisable_5fuser_5fstacks',['mm_disable_user_stacks',['../mpu_8c.html#a1022041b81c22a42458d5479991510f4',1,'mpu.c']]],
+  ['mm_5fenable_5fmpu',['mm_enable_mpu',['../mpu_8c.html#a598ec63d99915c54c38d36370df8f444',1,'mpu.c']]],
+  ['mm_5fenable_5fuser_5faccess',['mm_enable_user_access',['../mpu_8c.html#ab2eb2f443bbb103ebda86f86bf133c7d',1,'mpu.c']]],
+  ['mm_5fenable_5fuser_5fstacks',['mm_enable_user_stacks',['../mpu_8c.html#a798c0881db7dca6d03a42be10d37cba3',1,'mpu.c']]],
+  ['mm_5flog2ceil_5fsize',['mm_log2ceil_size',['../mpu_8c.html#aef45fdec219c3ac6237f90b805ea6bff',1,'mpu.c']]],
+  ['mm_5fregion_5fdisable',['mm_region_disable',['../mpu_8c.html#af59a5684ba88f773a08878c311160bef',1,'mpu.c']]],
+  ['mm_5fregion_5fenable',['mm_region_enable',['../mpu_8c.html#aa911f88ae5abc2cf28a3ff0c2de2e395',1,'mpu.c']]]
 ];

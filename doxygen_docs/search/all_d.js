@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['pc',['pc',['../structstack__frame__t.html#a44c60c37cc08ba57f6e4b54e57befb29',1,'stack_frame_t']]],
-  ['pendsv_5fc_5fhandler',['pendsv_c_handler',['../syscall__thread_8c.html#ab66dd67d5d707d20135483b2c17b3b89',1,'syscall_thread.c']]],
-  ['poll',['poll',['../kernel__buffer_8c.html#a56459d293972f4853e2f926ad1a950cd',1,'kernel_buffer.c']]],
-  ['put',['put',['../kernel__buffer_8c.html#afb31aaf8704dc404b14ce87ccae879ba',1,'kernel_buffer.c']]]
+  ['oar1',['OAR1',['../structi2c__reg__map.html#a28b80e0ee8622858b4ea46021cfe3da0',1,'i2c_reg_map']]],
+  ['oar2',['OAR2',['../structi2c__reg__map.html#a8342e6d3c61031ef990b5de2399102bb',1,'i2c_reg_map']]]
 ];

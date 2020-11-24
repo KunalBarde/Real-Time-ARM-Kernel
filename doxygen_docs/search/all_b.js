@@ -1,16 +1,6 @@
 var searchData=
 [
-  ['max_5ftotal_5fthreads',['MAX_TOTAL_THREADS',['../syscall__thread_8c.html#a45f1a9a85716813c62bc2cfaaf1a88df',1,'syscall_thread.c']]],
-  ['max_5fu_5fthreads',['MAX_U_THREADS',['../syscall__thread_8c.html#aba34e0374496611ed0ad1d6c12c69840',1,'syscall_thread.c']]],
-  ['mm_5fc_5fhandler',['mm_c_handler',['../mpu_8c.html#a91bea6c5bee9301515785e2d8a754b82',1,'mpu.c']]],
-  ['mm_5flog2ceil_5fsize',['mm_log2ceil_size',['../mpu_8c.html#aef45fdec219c3ac6237f90b805ea6bff',1,'mpu.c']]],
-  ['mm_5fregion_5fdisable',['mm_region_disable',['../mpu_8c.html#af59a5684ba88f773a08878c311160bef',1,'mpu.c']]],
-  ['mm_5fregion_5fenable',['mm_region_enable',['../mpu_8c.html#aa911f88ae5abc2cf28a3ff0c2de2e395',1,'mpu.c']]],
-  ['mmarvalid',['MMARVALID',['../mpu_8c.html#a49a795c37df53d736a30d36ac8a5c8ca',1,'mpu.c']]],
-  ['mmfar',['MMFAR',['../structsystem__control__block__t.html#a39cb9e1a18f318132b055b4f3ad996df',1,'system_control_block_t']]],
-  ['mpu_2ec',['mpu.c',['../mpu_8c.html',1,'']]],
-  ['mpu_5fbase',['MPU_BASE',['../mpu_8c.html#aa0805ccd2bc4e42d63adb0618d2af571',1,'mpu.c']]],
-  ['mpu_5ft',['mpu_t',['../structmpu__t.html',1,'']]],
-  ['mstkerr',['MSTKERR',['../mpu_8c.html#a9a934466ca47ca6102390fef1078cf85',1,'mpu.c']]],
-  ['munstkerr',['MUNSTKERR',['../mpu_8c.html#a3b380f684e8a18a6eba0f32a3e37ad3d',1,'mpu.c']]]
+  ['lr',['lr',['../structstack__frame__t.html#a9dd1373e67f877d0fa645c640a17bbd5',1,'stack_frame_t']]],
+  ['lr_5freturn_5fto_5fkernel_5fmsp',['LR_RETURN_TO_KERNEL_MSP',['../syscall__thread_8c.html#abf65de8424a7c25ac572b36b251eb976',1,'syscall_thread.c']]],
+  ['lr_5freturn_5fto_5fuser_5fpsp',['LR_RETURN_TO_USER_PSP',['../syscall__thread_8c.html#a8a6ea3d12a6db3f3a0b8afcb52881c2a',1,'syscall_thread.c']]]
 ];
