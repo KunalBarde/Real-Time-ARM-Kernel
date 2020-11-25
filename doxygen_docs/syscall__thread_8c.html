@@ -183,6 +183,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
 <tr class="memitem:a3ea5383a4af7e9e48e7f21996b50f9d3"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a3ea5383a4af7e9e48e7f21996b50f9d3">rms</a> (void *curr_context_ptr)</td></tr>
 <tr class="memdesc:a3ea5383a4af7e9e48e7f21996b50f9d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">RMS scheduler implementation.  <a href="#a3ea5383a4af7e9e48e7f21996b50f9d3">More...</a><br /></td></tr>
 <tr class="separator:a3ea5383a4af7e9e48e7f21996b50f9d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae54a32219d284492dbb7850f0331cb02"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#ae54a32219d284492dbb7850f0331cb02">pcp</a> (void *curr_context_ptr)</td></tr>
+<tr class="memdesc:ae54a32219d284492dbb7850f0331cb02"><td class="mdescLeft">&#160;</td><td class="mdescRight">PCP scheduler implementation.  <a href="#ae54a32219d284492dbb7850f0331cb02">More...</a><br /></td></tr>
+<tr class="separator:ae54a32219d284492dbb7850f0331cb02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab66dd67d5d707d20135483b2c17b3b89"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#ab66dd67d5d707d20135483b2c17b3b89">pendsv_c_handler</a> (void *context_ptr)</td></tr>
 <tr class="memdesc:ab66dd67d5d707d20135483b2c17b3b89"><td class="mdescLeft">&#160;</td><td class="mdescRight">PendSV interrupt handler. Runs a scheduler and then dispatches a new thread for running.  <a href="#ab66dd67d5d707d20135483b2c17b3b89">More...</a><br /></td></tr>
 <tr class="separator:ab66dd67d5d707d20135483b2c17b3b89"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -214,13 +217,11 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a2a3a3fb472158a93e59df836b9935b54">sys_wait_until_next_period</a> ()</td></tr>
 <tr class="memdesc:a2a3a3fb472158a93e59df836b9935b54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Have the current thread wait until the next period of execution. <br /></td></tr>
 <tr class="separator:a2a3a3fb472158a93e59df836b9935b54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12d3058e8c4464d614c9506562710e91"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a12d3058e8c4464d614c9506562710e91"></a>
-kmutex_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a12d3058e8c4464d614c9506562710e91">sys_mutex_init</a> (uint32_t max_prio)</td></tr>
-<tr class="memdesc:a12d3058e8c4464d614c9506562710e91"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO ADD Description. <br /></td></tr>
+<tr class="memitem:a12d3058e8c4464d614c9506562710e91"><td class="memItemLeft" align="right" valign="top">kmutex_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a12d3058e8c4464d614c9506562710e91">sys_mutex_init</a> (uint32_t max_prio)</td></tr>
+<tr class="memdesc:a12d3058e8c4464d614c9506562710e91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize a mutex.  <a href="#a12d3058e8c4464d614c9506562710e91">More...</a><br /></td></tr>
 <tr class="separator:a12d3058e8c4464d614c9506562710e91"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a14ccbc1e43d61617b97ecd06cf65b9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6a14ccbc1e43d61617b97ecd06cf65b9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a6a14ccbc1e43d61617b97ecd06cf65b9">sys_mutex_lock</a> (kmutex_t *mutex)</td></tr>
-<tr class="memdesc:a6a14ccbc1e43d61617b97ecd06cf65b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO Add description. <br /></td></tr>
+<tr class="memitem:a6a14ccbc1e43d61617b97ecd06cf65b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a6a14ccbc1e43d61617b97ecd06cf65b9">sys_mutex_lock</a> (kmutex_t *mutex)</td></tr>
+<tr class="memdesc:a6a14ccbc1e43d61617b97ecd06cf65b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lock mutex. Will hang until the mutex has been acquired.  <a href="#a6a14ccbc1e43d61617b97ecd06cf65b9">More...</a><br /></td></tr>
 <tr class="separator:a6a14ccbc1e43d61617b97ecd06cf65b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc9d6010ec5fc0965665a7070cef0e99"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#adc9d6010ec5fc0965665a7070cef0e99">acquire_mutex</a> (uint32_t curr_ceil, uint32_t max_prior, uint8_t mutex_num)</td></tr>
 <tr class="memdesc:adc9d6010ec5fc0965665a7070cef0e99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper polling function to check if a thread is able to acquire a specific mutex given its current priority.  <a href="#adc9d6010ec5fc0965665a7070cef0e99">More...</a><br /></td></tr>
@@ -238,9 +239,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
 <tr class="memitem:af355d2c3314d95df003e778293a5e2ff"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#af355d2c3314d95df003e778293a5e2ff">check_no_locks</a> (uint32_t thread_buf_idx)</td></tr>
 <tr class="memdesc:af355d2c3314d95df003e778293a5e2ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check that thread with given thread id does not currently hold any locks.  <a href="#af355d2c3314d95df003e778293a5e2ff">More...</a><br /></td></tr>
 <tr class="separator:af355d2c3314d95df003e778293a5e2ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55db4294dd5ed35ee5b2b1b1043ddbdd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a55db4294dd5ed35ee5b2b1b1043ddbdd"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a55db4294dd5ed35ee5b2b1b1043ddbdd">sys_mutex_unlock</a> (kmutex_t *mutex)</td></tr>
-<tr class="memdesc:a55db4294dd5ed35ee5b2b1b1043ddbdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO Add description. <br /></td></tr>
+<tr class="memitem:a55db4294dd5ed35ee5b2b1b1043ddbdd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="syscall__thread_8c.html#a55db4294dd5ed35ee5b2b1b1043ddbdd">sys_mutex_unlock</a> (kmutex_t *mutex)</td></tr>
+<tr class="memdesc:a55db4294dd5ed35ee5b2b1b1043ddbdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unlock specific mutex. Will hang until it has been sucessfully unlocked.  <a href="#a55db4294dd5ed35ee5b2b1b1043ddbdd">More...</a><br /></td></tr>
 <tr class="separator:a55db4294dd5ed35ee5b2b1b1043ddbdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
@@ -549,6 +549,31 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
 
 </div>
 </div>
+<a class="anchor" id="ae54a32219d284492dbb7850f0331cb02"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void* pcp </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>curr_context_ptr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>PCP scheduler implementation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">curr_context_ptr</td><td>Pointer to the stack saved context fo the current thread.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the stack-saved context of the next thread to be run as determined by the PCP algorithm. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="ab66dd67d5d707d20135483b2c17b3b89"></a>
 <div class="memitem">
 <div class="memproto">
@@ -657,6 +682,79 @@ char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sysc
 
 <p>Returns number of system ticks since scheduler was initialized. </p>
 <dl class="section return"><dt>Returns</dt><dd>The number of system ticks since this scheduler was initialized. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a12d3058e8c4464d614c9506562710e91"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">kmutex_t* sys_mutex_init </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>max_prio</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialize a mutex. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">max_prio</td><td>The maximum priority of this mutex. 0 is the highest priority. Will not be checked for validity until thread attempts to lock the mutex.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the newly created mutex struct. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a6a14ccbc1e43d61617b97ecd06cf65b9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sys_mutex_lock </td>
+          <td>(</td>
+          <td class="paramtype">kmutex_t *&#160;</td>
+          <td class="paramname"><em>mutex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Lock mutex. Will hang until the mutex has been acquired. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">mutex</td><td>Mutex to be acquired. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a55db4294dd5ed35ee5b2b1b1043ddbdd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void sys_mutex_unlock </td>
+          <td>(</td>
+          <td class="paramtype">kmutex_t *&#160;</td>
+          <td class="paramname"><em>mutex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Unlock specific mutex. Will hang until it has been sucessfully unlocked. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">mutex</td><td>Mutex to be unlocked. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

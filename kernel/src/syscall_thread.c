@@ -309,7 +309,6 @@ void *rms(void *curr_context_ptr) {
   }
 
   if(blocked) {
-    //breakpoint();
     blocked = 0;
     running_buf_idx = find_highest_locker();
   }
@@ -391,7 +390,6 @@ void *pcp(void *curr_context_ptr) {
   }
 
   if((uint32_t)running_buf_idx >= (uint32_t)ksb->priority_ceiling && tcb_buffer[running_buf_idx].blocked) {
-    //breakpoint();
     running_buf_idx = find_highest_locker();
   }
 
@@ -435,8 +433,8 @@ void *pendsv_c_handler(void *context_ptr) {
 
   update_kernel_sets(); //Update waiting and ready sets
 
-  context_ptr = rms(context_ptr);
-  //context_ptr = pcp(context_ptr);
+  //context_ptr = rms(context_ptr);
+  context_ptr = pcp(context_ptr);
   return context_ptr;
 }
 
@@ -475,7 +473,7 @@ int sys_thread_init(
   
   if(stack_consumption > user_stack_thresh || stack_consumption > kernel_stack_thresh)
      return -1; 
-  breakpoint();
+
   /* Initialize kernel data structures for threading */  
   ksb = (k_threading_state_t *)kernel_threading_state;
 
@@ -495,7 +493,7 @@ int sys_thread_init(
   ksb->u_mutex_ct = 0;
   ksb->priority_ceiling = -1;
 
-  ksb->stack_size = stack_size;
+  ksb->stack_size = stack_size_bytes;
   ksb->max_threads = max_threads;
   ksb->max_mutexes = max_mutexes;
   ksb->mem_prot = memory_protection;
@@ -595,7 +593,14 @@ int sys_thread_create(
     //Attempted to allocate more threads than promised in init
     if(!found_vacancy) return -1;
   }
+
+  uint32_t user_stack_brk = (uint32_t)&__thread_u_stacks_top;
+  uint32_t kernel_stack_brk = (uint32_t)&__thread_k_stacks_top;
   
+  uint32_t stack_size = ksb->stack_size;
+
+  tcb_buffer[new_buf_idx].kernel_stack_ptr = (void *)(kernel_stack_brk - new_buf_idx*stack_size);
+  tcb_buffer[new_buf_idx].user_stack_ptr = (void *)(user_stack_brk - new_buf_idx*stack_size);
   
   uint32_t user_stack_ptr = (uint32_t)tcb_buffer[new_buf_idx].user_stack_ptr - sizeof(interrupt_stack_frame);
   interrupt_stack_frame *interrupt_frame = (interrupt_stack_frame *)user_stack_ptr;
@@ -671,7 +676,6 @@ uint32_t sys_get_priority(){
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
 
   return tcb_buffer[ksb->running_thread].inherited_prior;
-  //return tcb_buffer[ksb->running_thread].priority;
 }
 
 /** 
@@ -732,7 +736,7 @@ void sys_wait_until_next_period(){
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
   if(!check_no_locks(ksb->running_thread))
     DEBUG_PRINT( "Warning, thread yielding while holding resources.\n" );
-    //printk( "Warning, thread yielding while holding resources.\n" );
+
   tcb_buffer[ksb->running_thread].thread_state = WAITING;
   pend_pendsv();
   
@@ -740,7 +744,11 @@ void sys_wait_until_next_period(){
 }
 
 /**
- * @brief	TODO ADD Description
+ * @brief	Initialize a mutex. 
+
+ * @param[in]	max_prio	The maximum priority of this mutex. 0 is the highest priority. Will not be checked for validity until thread attempts to lock the mutex. 
+
+ * @return	A pointer to the newly created mutex struct. 
  */ 
 kmutex_t *sys_mutex_init( uint32_t max_prio ) {
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
@@ -756,12 +764,14 @@ kmutex_t *sys_mutex_init( uint32_t max_prio ) {
 }
 
 /**
- * @brief	TODO Add description
+ * @brief	Lock mutex. Will hang until the mutex has been acquired. 
+
+ * @param[in]	mutex	Mutex to be acquired. 
  */
 void sys_mutex_lock( kmutex_t *mutex ) {
   
   k_threading_state_t *ksb = (k_threading_state_t *)kernel_threading_state;
-  //breakpoint();
+
   if(ksb->running_thread == ksb->max_threads) 
     DEBUG_PRINT( "Idle thread attempting to lock mutex \n" );
     //printk( "Idle thread attempting to lock mutex \n" );
@@ -770,8 +780,7 @@ void sys_mutex_lock( kmutex_t *mutex ) {
   uint32_t curr_ceil = tcb_buffer[ksb->running_thread].priority;
   if(mutex->max_prior > curr_ceil) {
     DEBUG_PRINT( "Warning! Thread attempted to lock mutex with insufficient ceiling. Killing thread...\n" );
-   // printk( "Warning! Thread attempted to lock mutex with insufficient ceiling. Killing thread...\n" );
-    breakpoint();
+
     sys_thread_kill();
   }
 
@@ -836,7 +845,6 @@ int acquire_mutex(uint32_t curr_ceil, uint32_t max_prior, uint8_t mutex_num) {
  */
 void raise_blocking_priority(uint32_t curr_ceil) {
   int32_t blocking_thread_idx = find_highest_locker();
-  if(blocking_thread_idx < 0) breakpoint();
 
   //Check if update needed 
   if(tcb_buffer[blocking_thread_idx].inherited_prior > curr_ceil)
@@ -901,13 +909,13 @@ int check_no_locks(uint32_t thread_buf_idx) {
 }
 
 /**
- * @brief	TODO Add description
+ * @brief	Unlock specific mutex. Will hang until it has been sucessfully unlocked.
+ 
+ * @param[in]	mutex	Mutex to be unlocked. 
  */ 
 void sys_mutex_unlock( kmutex_t *mutex ) {
   uint32_t mutex_num = mutex->mutex_num;
   uint32_t locked_by = mutex->locked_by;
-
-
 
   //Unlocked and being 
   if(!(mutex_states & (0x1 << mutex_num))) {

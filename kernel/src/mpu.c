@@ -176,22 +176,13 @@ void mm_c_handler( void *psp ) {
   uint32_t process_bottom = (ksb->running_thread + 1)*stack_size_bytes;
   if ((uint32_t)psp < process_bottom) {
     DEBUG_PRINT( "Stack Overflow, aborting\n" );
-    breakpoint();
     sys_exit( -1 );
   }
 
-  // Other errors can be recovered from by killing the offending
-  // thread. Standard thread killing rules apply. You should halt
-  // if the thread is the main or idle thread!
-
   if (ksb->running_thread >= ksb->max_threads) { //Idle or main
-    breakpoint();
     sys_exit(-1);
   }
-  // TODO: You decide how to kill the thread.
-  // Set the pc? Call a syscall? Context swap?
-  (void) psp;
-  (void) status;
+
   sys_thread_kill();
 }
 
@@ -201,7 +192,7 @@ void mm_c_handler( void *psp ) {
  * @param[in]	enable	if 1 enables mpu. If 0, disables.
  */
 void mm_enable_mpu(int enable) {
-  breakpoint();
+
   //Enable mem fault
   volatile system_control_block_t *scb = SCB_BASE;
   scb -> SHCRS |= MEMFAULT_EN; 
@@ -211,14 +202,6 @@ void mm_enable_mpu(int enable) {
     mpu -> CTRL |= (CTRL_ENABLE_PROTECTION | CTRL_ENABLE_BG_REGION);
   else 
     mpu -> CTRL &= ~CTRL_ENABLE_PROTECTION;
-
-  
-  /**if(background)
-    mpu -> CTRL |= CTRL_ENABLE_BG_REGION;
-  else 
-    mpu -> CTRL &= ~CTRL_ENABLE_BG_REGION;**/
-
-  breakpoint();
 }
 
 /**
@@ -238,22 +221,22 @@ int mm_enable_user_access() {
 
   //User code
   err |= mm_region_enable(0, user_text_start, mm_log2ceil_size(16000), EXECUTABLE, READ_ONLY);
-  //breakpoint();
+
   //User rodata
   err |= mm_region_enable(1, user_rodata, mm_log2ceil_size(2000), !EXECUTABLE, READ_ONLY);
-  //breakpoint();
+
   //User data
   err |= mm_region_enable(2, user_data, mm_log2ceil_size(1000), !EXECUTABLE, !READ_ONLY);
-  //breakpoint();
+
   //User bss
   err |= mm_region_enable(3, user_bss, mm_log2ceil_size(1000), !EXECUTABLE, !READ_ONLY);
-  //breakpoint();
+
   //User heap
   err |= mm_region_enable(4, heap_low, mm_log2ceil_size(4000), !EXECUTABLE, !READ_ONLY);
-  //breakpoint();
+
   //Default user stack
   err |= mm_region_enable(5, user_stack, mm_log2ceil_size(2000), !EXECUTABLE, !READ_ONLY);
-  //breakpoint();
+
   return err; 
 }
 
@@ -273,7 +256,7 @@ int mm_enable_user_stacks(void *process_stack, void *kernel_stack, int thread_nu
   uint32_t kernel_stack_top = (uint32_t)&__thread_k_stacks_top;
 
   if(thread_num < 0) { //Kernel only
-    //breakpoint();
+
     if(mm_region_enable(6, (void *)&__thread_u_stacks_low, 15, !EXECUTABLE, !READ_ONLY) < 0) return -1;
 
     if(mm_region_enable(7, (void *)&__thread_k_stacks_low, 
@@ -283,9 +266,9 @@ int mm_enable_user_stacks(void *process_stack, void *kernel_stack, int thread_nu
    
     uint32_t process_bottom = user_stack_top - ((user_stack_top - (uint32_t)process_stack)/stack_size_bytes + 1)*stack_size_bytes;
     uint32_t kernel_bottom = kernel_stack_top - ((kernel_stack_top - (uint32_t)kernel_stack)/stack_size_bytes + 1)*stack_size_bytes;
-    //breakpoint();
+
     if(mm_region_enable(6, (void *)process_bottom, log2_stack_size, !EXECUTABLE, !READ_ONLY) < 0) return -1;
-    //breakpoint();
+
     if(mm_region_enable(7, (void *)kernel_bottom, log2_stack_size, !EXECUTABLE, !READ_ONLY) < 0) return -1;
   }
   return 0;
@@ -334,7 +317,6 @@ int mm_region_enable(
   }
 
   if ((uint32_t)base_address & ((1 << size_log2) - 1)) {
-    breakpoint();
     printk("Misaligned region\n");
     return -1;
   }
